@@ -30,9 +30,23 @@ class HomeController extends Controller
         $recruitmentBatch = Setting::get('recruitment_batch', 'Gelombang I');
         $recruitmentDeadline = Setting::get('recruitment_deadline', '31 Oktober 2026');
 
+        $featuredProjects = \App\Models\Project::with('division')
+            ->where('is_featured', true)
+            ->latest()
+            ->take(6)
+            ->get();
+
+        $upcomingEvents = \App\Models\Event::with('division')
+            ->where('status', 'upcoming')
+            ->orderBy('event_date')
+            ->take(3)
+            ->get();
+
         return view('home.index', compact(
             'divisions',
             'latestPosts',
+            'featuredProjects',
+            'upcomingEvents',
             'stats',
             'recruitmentStatus',
             'recruitmentBatch',
