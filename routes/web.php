@@ -63,4 +63,20 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/recruitment', [RecruitmentAdminController::class, 'index'])->name('recruitment.index');
     Route::get('/recruitment/{recruitment}', [RecruitmentAdminController::class, 'show'])->name('recruitment.show');
     Route::put('/recruitment/{recruitment}/status', [RecruitmentAdminController::class, 'updateStatus'])->name('recruitment.updateStatus');
+
+    // Ecosystem Modules
+    Route::resource('projects', \App\Http\Controllers\Admin\ProjectAdminController::class)->except(['show']);
+    Route::resource('events', \App\Http\Controllers\Admin\EventAdminController::class)->except(['show']);
+
+    Route::get('/officers', [\App\Http\Controllers\Admin\OfficerAdminController::class, 'index'])->name('officers.index');
+    Route::post('/officers', [\App\Http\Controllers\Admin\OfficerAdminController::class, 'store'])->name('officers.store');
+    Route::delete('/officers/{officer}', [\App\Http\Controllers\Admin\OfficerAdminController::class, 'destroy'])->name('officers.destroy');
+
+    Route::get('/certificates', [\App\Http\Controllers\Admin\CertificateAdminController::class, 'index'])->name('certificates.index');
+    Route::post('/certificates', [\App\Http\Controllers\Admin\CertificateAdminController::class, 'store'])->name('certificates.store');
+    Route::delete('/certificates/{certificate}', [\App\Http\Controllers\Admin\CertificateAdminController::class, 'destroy'])->name('certificates.destroy');
+
+    Route::get('/galleries', [\App\Http\Controllers\Admin\GalleryAdminController::class, 'index'])->name('galleries.index');
+    Route::post('/galleries', [\App\Http\Controllers\Admin\GalleryAdminController::class, 'store'])->name('galleries.store');
+    Route::delete('/galleries/{gallery}', [\App\Http\Controllers\Admin\GalleryAdminController::class, 'destroy'])->name('galleries.destroy');
 });

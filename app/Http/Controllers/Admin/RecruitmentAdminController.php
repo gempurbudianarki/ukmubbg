@@ -62,8 +62,21 @@ class RecruitmentAdminController extends Controller
 
         $validated = $request->validate([
             'status' => 'required|in:pending,interview,accepted,rejected',
+            'selection_stage' => 'nullable|in:administrasi,wawancara,diterima,ditolak',
+            'interview_schedule' => 'nullable|date',
+            'interview_location' => 'nullable|string|max:255',
             'admin_notes' => 'nullable|string',
         ]);
+
+        if (empty($validated['selection_stage'])) {
+            $validated['selection_stage'] = match ($validated['status']) {
+                'pending' => 'administrasi',
+                'interview' => 'wawancara',
+                'accepted' => 'diterima',
+                'rejected' => 'ditolak',
+                default => 'administrasi',
+            };
+        }
 
         $recruitment->update($validated);
 
