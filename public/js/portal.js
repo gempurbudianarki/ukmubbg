@@ -59,5 +59,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-    });
+    // 5. Terminal Tabs Switcher
+    window.switchTermTab = function(btn, tabId) {
+        document.querySelectorAll('.terminal-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const bodyOverview = document.getElementById('term-body-overview');
+        const bodyDivisions = document.getElementById('term-body-divisions');
+
+        if (tabId === 'overview') {
+            if (bodyOverview) bodyOverview.style.display = 'block';
+            if (bodyDivisions) bodyDivisions.style.display = 'none';
+        } else {
+            if (bodyOverview) bodyOverview.style.display = 'none';
+            if (bodyDivisions) bodyDivisions.style.display = 'block';
+        }
+    };
 });

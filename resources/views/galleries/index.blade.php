@@ -29,21 +29,10 @@
         <!-- Gallery Grid -->
         <div class="projects-grid">
             @forelse ($galleries as $gallery)
-                <div class="project-card" style="border-radius: var(--radius-lg); overflow: hidden;">
-                    <div style="height: 220px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); display: flex; align-items: center; justify-content: center; position: relative;">
-                        @if ($gallery->image_path && file_exists(public_path('storage/' . $gallery->image_path)))
-                            <img src="{{ asset('storage/' . $gallery->image_path) }}" alt="{{ $gallery->title }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        @else
-                            <div style="color: var(--slate-400); display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <span style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">
-                                    {{ $gallery->category }}
-                                </span>
-                            </div>
-                        @endif
-                        <span class="badge badge-neutral" style="position: absolute; top: 1rem; right: 1rem; background: rgba(15, 23, 42, 0.75); color: #ffffff; border: none; font-size: 0.725rem;">
+                <div class="project-card" style="border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;">
+                    <div style="height: 240px; background: #0f172a; position: relative; overflow: hidden;">
+                        <img src="{{ $gallery->image_url }}" alt="{{ $gallery->title }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
+                        <span class="badge badge-neutral" style="position: absolute; top: 1rem; right: 1rem; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); color: #ffffff; border: 1px solid rgba(255,255,255,0.15); font-size: 0.725rem;">
                             {{ $gallery->category }}
                         </span>
                     </div>

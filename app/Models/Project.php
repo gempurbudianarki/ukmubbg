@@ -32,4 +32,23 @@ class Project extends Model
     {
         return $this->belongsTo(Division::class);
     }
+
+    public function getThumbnailUrlAttribute(): string
+    {
+        if ($this->thumbnail) {
+            if (str_starts_with($this->thumbnail, 'http') || str_starts_with($this->thumbnail, 'images/')) {
+                return asset($this->thumbnail);
+            }
+            return asset('storage/' . $this->thumbnail);
+        }
+
+        $slug = $this->division?->slug ?? '';
+        return match ($slug) {
+            'pemrograman' => asset('images/project_web.jpg'),
+            'multimedia' => asset('images/project_multimedia.jpg'),
+            'iot' => asset('images/project_iot.jpg'),
+            'cyber-security' => asset('images/project_cyber.jpg'),
+            default => asset('images/project_web.jpg'),
+        };
+    }
 }

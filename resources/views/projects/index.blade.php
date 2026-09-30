@@ -43,18 +43,8 @@
             @forelse ($projects as $project)
                 <div class="project-card">
                     <div class="project-thumb">
-                        @if ($project->thumbnail)
-                            <img src="{{ asset('storage/' . $project->thumbnail) }}" alt="{{ $project->title }}">
-                        @else
-                            <div style="color: var(--slate-400); display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                                </svg>
-                                <span style="font-size: 0.775rem; font-weight: 600; text-transform: uppercase;">
-                                    {{ $project->division ? $project->division->name : 'Multi-Divisi' }}
-                                </span>
-                            </div>
-                        @endif
+                        <img src="{{ $project->thumbnail_url }}" alt="{{ $project->title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="project-thumb-overlay"></div>
                     </div>
 
                     <div class="project-body">

@@ -28,55 +28,65 @@
 
             <div class="events-grid">
                 @forelse ($upcomingEvents as $event)
-                    <div class="event-card">
-                        <div>
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                <div class="event-date-box">
+                    <div class="event-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                        <div style="height: 180px; position: relative; overflow: hidden;">
+                            <img src="{{ $event->banner_url }}" alt="{{ $event->title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.75) 100%);"></div>
+                            
+                            <div style="position: absolute; top: 0.85rem; left: 0.85rem;">
+                                <div class="event-date-box" style="box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
                                     <span class="event-day">{{ $event->event_date->format('d') }}</span>
                                     <span class="event-month">{{ $event->event_date->format('M') }}</span>
                                 </div>
-                                <span class="badge {{ $event->location_type === 'online' ? 'badge-info' : 'badge-neutral' }}" style="text-transform: capitalize;">
+                            </div>
+
+                            <div style="position: absolute; top: 0.85rem; right: 0.85rem;">
+                                <span class="badge {{ $event->location_type === 'online' ? 'badge-info' : 'badge-neutral' }}" style="background: rgba(15,23,42,0.85); color: #ffffff; backdrop-filter: blur(8px);">
                                     {{ $event->location_type }}
                                 </span>
                             </div>
-
-                            <div style="margin: 0.75rem 0 0.4rem;">
-                                @if ($event->division)
-                                    <span class="badge" style="background: {{ $event->division->color_accent }}15; color: {{ $event->division->color_accent }}; font-size: 0.7rem;">
-                                        {{ $event->division->name }}
-                                    </span>
-                                @else
-                                    <span class="badge badge-neutral" style="font-size: 0.7rem;">Agenda Umum UKM</span>
-                                @endif
-                            </div>
-
-                            <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--slate-900); margin-bottom: 0.5rem; line-height: 1.35;">
-                                {{ $event->title }}
-                            </h3>
-
-                            <p style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6; margin-bottom: 1.25rem;">
-                                {{ $event->description }}
-                            </p>
                         </div>
 
-                        <div>
-                            <div style="font-size: 0.8rem; color: var(--slate-600); margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem; padding: 0.85rem; background: var(--slate-50); border-radius: var(--radius-sm);">
-                                <div><strong>Lokasi:</strong> {{ $event->location_venue }}</div>
-                                <div><strong>Waktu:</strong> {{ substr($event->time_start, 0, 5) }} - {{ $event->time_end ? substr($event->time_end, 0, 5) : 'Selesai' }} WIB</div>
-                                @if ($event->max_participants)
-                                    <div><strong>Kuota:</strong> Terbatas untuk {{ $event->max_participants }} peserta</div>
-                                @endif
+                        <div style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; flex: 1;">
+                            <div>
+                                <div style="margin-bottom: 0.5rem;">
+                                    @if ($event->division)
+                                        <span class="badge" style="background: {{ $event->division->color_accent }}15; color: {{ $event->division->color_accent }}; font-size: 0.725rem;">
+                                            {{ $event->division->name }}
+                                        </span>
+                                    @else
+                                        <span class="badge badge-neutral" style="font-size: 0.725rem;">Agenda Umum UKM</span>
+                                    @endif
+                                </div>
+
+                                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--slate-900); margin-bottom: 0.5rem; line-height: 1.35;">
+                                    {{ $event->title }}
+                                </h3>
+
+                                <p style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6; margin-bottom: 1.25rem;">
+                                    {{ $event->description }}
+                                </p>
                             </div>
 
-                            @if ($event->registration_link)
-                                <a href="{{ $event->registration_link }}" target="_blank" class="btn btn-accent btn-sm" style="width: 100%;">
-                                    Daftar / Booking Kursi &rarr;
-                                </a>
-                            @else
-                                <span class="btn btn-glass btn-sm" style="width: 100%; cursor: default;">
-                                    Pendaftaran di Tempat (OTS)
-                                </span>
-                            @endif
+                            <div>
+                                <div style="font-size: 0.8rem; color: var(--slate-600); margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem; padding: 0.85rem; background: var(--slate-50); border-radius: var(--radius-sm);">
+                                    <div><strong>Lokasi:</strong> {{ $event->location_venue }}</div>
+                                    <div><strong>Waktu:</strong> {{ substr($event->time_start, 0, 5) }} - {{ $event->time_end ? substr($event->time_end, 0, 5) : 'Selesai' }} WIB</div>
+                                    @if ($event->max_participants)
+                                        <div><strong>Kuota:</strong> Terbatas untuk {{ $event->max_participants }} peserta</div>
+                                    @endif
+                                </div>
+
+                                @if ($event->registration_link)
+                                    <a href="{{ $event->registration_link }}" target="_blank" class="btn btn-accent btn-sm" style="width: 100%;">
+                                        Daftar / Booking Kursi &rarr;
+                                    </a>
+                                @else
+                                    <span class="btn btn-glass btn-sm" style="width: 100%; cursor: default;">
+                                        Pendaftaran di Tempat (OTS)
+                                    </span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 @empty

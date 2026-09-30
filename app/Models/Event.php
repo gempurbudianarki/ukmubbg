@@ -34,4 +34,23 @@ class Event extends Model
     {
         return $this->belongsTo(Division::class);
     }
+
+    public function getBannerUrlAttribute(): string
+    {
+        if ($this->banner_image) {
+            if (str_starts_with($this->banner_image, 'http') || str_starts_with($this->banner_image, 'images/')) {
+                return asset($this->banner_image);
+            }
+            return asset('storage/' . $this->banner_image);
+        }
+
+        $slug = $this->division?->slug ?? '';
+        return match ($slug) {
+            'pemrograman' => asset('images/event_hackathon.jpg'),
+            'multimedia' => asset('images/project_multimedia.jpg'),
+            'cyber-security' => asset('images/project_cyber.jpg'),
+            'iot' => asset('images/project_iot.jpg'),
+            default => asset('images/event_hackathon.jpg'),
+        };
+    }
 }

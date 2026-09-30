@@ -6,38 +6,107 @@
 <!-- 1. Hero Section -->
 <section class="hero ambient-glow">
     <div class="container" style="position: relative; z-index: 1;">
-        <div class="hero-badge-wrap">
-            @if ($recruitmentStatus === 'open')
-                <span class="badge badge-success">
-                    <span class="badge-pulse"></span>
-                    <span>Open Recruitment Dibuka &bull; {{ $recruitmentBatch }} (Batas: {{ $recruitmentDeadline }})</span>
-                </span>
-            @else
-                <span class="badge badge-warning">
-                    <span>Pendaftaran Periode Ini Sedang Ditutup</span>
-                </span>
-            @endif
-        </div>
+        <div class="hero-split-layout">
+            <!-- Left Text Column -->
+            <div class="hero-text-col">
+                <div class="hero-badge-wrap" style="justify-content: flex-start;">
+                    @if ($recruitmentStatus === 'open')
+                        <span class="badge badge-success">
+                            <span class="badge-pulse"></span>
+                            <span>Open Recruitment &bull; {{ $recruitmentBatch }}</span>
+                        </span>
+                    @else
+                        <span class="badge badge-warning">
+                            <span>Pendaftaran Periode Ini Sedang Ditutup</span>
+                        </span>
+                    @endif
+                </div>
 
-        <h1 class="hero-title">
-            Pusat Riset, Inovasi & Rekayasa <span>Teknologi Digital</span> Mahasiswa
-        </h1>
+                <h1 class="hero-title">
+                    Pusat Riset, Inovasi & Rekayasa <span>Teknologi Digital</span> Mahasiswa
+                </h1>
 
-        <p class="hero-subtitle">
-            Unit Kegiatan Mahasiswa Fakultas Ilmu Komputer. Ruang kolaborasi untuk mengasah keahlian rekayasa perangkat lunak, eksplorasi multimedia, otomasi IoT, dan ketahanan siber profesional.
-        </p>
+                <p class="hero-subtitle">
+                    Portal kolaborasi resmi UKM Fakultas Ilmu Komputer. Eksplorasi rekayasa perangkat lunak modern, karya multimedia interaktif, otomasi mikrokontroler IoT, dan pengujian ketahanan siber.
+                </p>
 
-        <div class="hero-actions">
-            @if ($recruitmentStatus === 'open')
-                <a href="{{ route('recruitment.index') }}" class="btn btn-primary btn-lg">
-                    <span>Gabung Sekarang</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </a>
-            @endif
-            <a href="#divisions" class="btn btn-glass btn-lg">Jelajahi 4 Divisi</a>
-            <a href="{{ route('projects.index') }}" class="btn btn-outline btn-lg">Lihat Karya Mahasiswa</a>
+                <div class="hero-actions">
+                    @if ($recruitmentStatus === 'open')
+                        <a href="{{ route('recruitment.index') }}" class="btn btn-primary btn-lg">
+                            <span>Daftar Jadi Anggota</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </a>
+                    @endif
+                    <a href="#divisions" class="btn btn-glass btn-lg">Jelajahi 4 Divisi</a>
+                    <a href="{{ route('projects.index') }}" class="btn btn-outline btn-lg">Showcase Karya</a>
+                </div>
+            </div>
+
+            <!-- Right Terminal Column -->
+            <div>
+                <div class="hero-terminal-card">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <span class="terminal-dot terminal-dot-red"></span>
+                            <span class="terminal-dot terminal-dot-yellow"></span>
+                            <span class="terminal-dot terminal-dot-green"></span>
+                        </div>
+                        <div class="terminal-title">ukm-ilkom ~ zsh</div>
+                        <div class="terminal-tabs">
+                            <button type="button" class="terminal-tab-btn active" onclick="switchTermTab(this, 'overview')">info.sh</button>
+                            <button type="button" class="terminal-tab-btn" onclick="switchTermTab(this, 'divisions')">stack.json</button>
+                        </div>
+                    </div>
+
+                    <div class="terminal-body" id="term-body-overview">
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">$</span>
+                            <span class="terminal-cmd">curl -s https://api.ukmilkom.id/status</span>
+                        </div>
+                        <div class="terminal-out" style="color: #67e8f9; margin-bottom: 0.5rem;">
+                            HTTP/2 200 OK &bull; latency: 12ms
+                        </div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">&gt;</span>
+                            <span class="terminal-cmd">Divisions: 4 Specialist Labs</span>
+                        </div>
+                        <div class="terminal-out" style="margin-bottom: 0.4rem;">
+                            <span class="terminal-success">&#10003; Pemrograman:</span> Fullstack, Cloud & Mobile Apps<br>
+                            <span class="terminal-success">&#10003; Multimedia:</span> UI/UX, 3D WebGL & Motion<br>
+                            <span class="terminal-success">&#10003; IoT:</span> Telemetry, ESP32 & Edge Sensors<br>
+                            <span class="terminal-success">&#10003; Cyber Security:</span> Pentest, Forensics & CTF
+                        </div>
+                        <div class="terminal-line" style="margin-top: 0.6rem;">
+                            <span class="terminal-prompt">$</span>
+                            <span class="terminal-cmd">recruitment --check</span>
+                        </div>
+                        <div class="terminal-out">
+                            <span class="terminal-badge">STAGE: SELEKSI TERPADU AKTIF</span>
+                            <span class="terminal-cursor" style="margin-left: 0.4rem;"></span>
+                        </div>
+                    </div>
+
+                    <div class="terminal-body" id="term-body-divisions" style="display: none;">
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">$</span>
+                            <span class="terminal-cmd">cat configs/tech-stack.json</span>
+                        </div>
+                        <pre style="color: #e2e8f0; font-family: var(--font-mono); font-size: 0.775rem; line-height: 1.5; margin-top: 0.5rem;">
+{
+  "org": "UKM Ilmu Komputer",
+  "active_members": 120,
+  "ecosystem": [
+    "Laravel 10", "Vue 3", "Three.js",
+    "ESP32 C/C++", "Python", "Docker"
+  ],
+  "verified_credentials": "SHA-256 Digital Certificates"
+}
+                        </pre>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Metric Stat Strip -->
@@ -135,14 +204,8 @@
             @forelse ($featuredProjects as $project)
                 <div class="project-card">
                     <div class="project-thumb">
-                        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--slate-400);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                            </svg>
-                            <span style="font-size: 0.775rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
-                                {{ $project->division ? $project->division->name : 'Kolaborasi UKM' }}
-                            </span>
-                        </div>
+                        <img src="{{ $project->thumbnail_url }}" alt="{{ $project->title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="project-thumb-overlay"></div>
                     </div>
 
                     <div class="project-body">
@@ -215,42 +278,60 @@
 
         <div class="events-grid">
             @forelse ($upcomingEvents as $event)
-                <div class="event-card">
-                    <div>
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                            <div class="event-date-box">
+                <div class="event-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                    <div style="height: 160px; position: relative; overflow: hidden;">
+                        <img src="{{ $event->banner_url }}" alt="{{ $event->title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.75) 100%);"></div>
+                        <div style="position: absolute; top: 0.75rem; left: 0.75rem;">
+                            <div class="event-date-box" style="box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
                                 <span class="event-day">{{ $event->event_date->format('d') }}</span>
                                 <span class="event-month">{{ $event->event_date->format('M') }}</span>
                             </div>
-                            <span class="badge {{ $event->location_type === 'online' ? 'badge-info' : 'badge-neutral' }}" style="text-transform: capitalize;">
+                        </div>
+                        <div style="position: absolute; top: 0.75rem; right: 0.75rem;">
+                            <span class="badge {{ $event->location_type === 'online' ? 'badge-info' : 'badge-neutral' }}" style="background: rgba(15,23,42,0.85); color: #ffffff; backdrop-filter: blur(8px);">
                                 {{ $event->location_type }}
                             </span>
                         </div>
-
-                        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900); margin: 0.75rem 0 0.5rem; line-height: 1.35;">
-                            {{ $event->title }}
-                        </h3>
-
-                        <p style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6; margin-bottom: 1.25rem;">
-                            {{ Str::limit($event->description, 110) }}
-                        </p>
                     </div>
 
-                    <div>
-                        <div style="font-size: 0.8rem; color: var(--slate-500); margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.3rem;">
-                            <div><strong>Lokasi:</strong> {{ $event->location_venue }}</div>
-                            <div><strong>Waktu:</strong> {{ substr($event->time_start, 0, 5) }} - {{ $event->time_end ? substr($event->time_end, 0, 5) : 'Selesai' }} WIB</div>
+                    <div style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; flex: 1;">
+                        <div>
+                            <div style="margin-bottom: 0.4rem;">
+                                @if ($event->division)
+                                    <span class="badge" style="background: {{ $event->division->color_accent }}15; color: {{ $event->division->color_accent }}; font-size: 0.7rem;">
+                                        {{ $event->division->name }}
+                                    </span>
+                                @else
+                                    <span class="badge badge-neutral" style="font-size: 0.7rem;">Agenda Umum</span>
+                                @endif
+                            </div>
+
+                            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900); margin-bottom: 0.5rem; line-height: 1.35;">
+                                {{ $event->title }}
+                            </h3>
+
+                            <p style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6; margin-bottom: 1.25rem;">
+                                {{ Str::limit($event->description, 100) }}
+                            </p>
                         </div>
 
-                        @if ($event->registration_link)
-                            <a href="{{ $event->registration_link }}" target="_blank" class="btn btn-primary btn-sm" style="width: 100%;">
-                                Registrasi Kursi &rarr;
-                            </a>
-                        @else
-                            <a href="{{ route('events.index') }}" class="btn btn-outline btn-sm" style="width: 100%;">
-                                Detail Agenda
-                            </a>
-                        @endif
+                        <div>
+                            <div style="font-size: 0.8rem; color: var(--slate-500); margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.3rem;">
+                                <div><strong>Lokasi:</strong> {{ $event->location_venue }}</div>
+                                <div><strong>Waktu:</strong> {{ substr($event->time_start, 0, 5) }} - {{ $event->time_end ? substr($event->time_end, 0, 5) : 'Selesai' }} WIB</div>
+                            </div>
+
+                            @if ($event->registration_link)
+                                <a href="{{ $event->registration_link }}" target="_blank" class="btn btn-primary btn-sm" style="width: 100%;">
+                                    Registrasi Kursi &rarr;
+                                </a>
+                            @else
+                                <a href="{{ route('events.index') }}" class="btn btn-outline btn-sm" style="width: 100%;">
+                                    Detail Agenda
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
             @empty
