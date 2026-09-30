@@ -1,0 +1,96 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Division;
+use App\Models\Recruitment;
+use App\Models\Setting;
+use Illuminate\Http\Request;
+
+class RecruitmentController extends Controller
+{
+    public function index(Request $request)
+    {
+        $status = Setting::get('recruitment_status', 'open');
+        $batch = Setting::get('recruitment_batch', 'Gelombang I');
+        $deadline = Setting::get('recruitment_deadline', '31 Oktober 2026');
+        $divisions = Division::all();
+
+        // Optional preselected division from query parameter ?divisi=pemrograman
+        $preselectedDivision = null;
+        if ($request->filled('divisi')) {
+            $preselectedDivision = Division::where('slug', $request->divisi)->first();
+        }
+
+        return view('recruitment.index', compact('status', 'batch', 'deadline', 'divisions', 'preselectedDivision'));
+    }
+
+    public function store(Request $request)
+    {
+        $isOpen = Setting::get('recruitment_status', 'open') === 'open';
+        if (!$isOpen) {
+            return back()->with('error', 'Mohon maaf, periode pendaftaran anggota baru saat ini sedang ditutup.');
+        }
+
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:100',
+            'nim' => 'required|string|max:30',
+            'email' => 'required|email|max:100',
+            'phone_whatsapp' => 'required|string|max:25',
+            'semester' => 'required|integer|min:1|max:14',
+            'class_group' => 'required|string|max:20',
+            'first_choice_division_id' => 'required|exists:divisions,id',
+            'second_choice_division_id' => 'nullable|exists:divisions,id|different:first_choice_division_id',
+            'reason_to_join' => 'required|string|min:20',
+            'portfolio_url' => 'nullable|url|max:255',
+        ], [
+            'full_name.required' => 'Nama lengkap wajib diisi.',
+            'nim.required' => 'NIM wajib diisi.',
+            'email.required' => 'Email aktif wajib diisi.',
+            'phone_whatsapp.required' => 'Nomor WhatsApp aktif wajib diisi.',
+            'first_choice_division_id.required' => 'Pilihan divisi utama wajib dipilih.',
+            'second_choice_division_id.different' => 'Divisi pilihan kedua harus berbeda dengan pilihan utama.',
+            'reason_to_join.min' => 'Alasan/motivasi bergabung minimal 20 karakter.',
+            'portfolio_url.url' => 'Link portofolio harus berupa format URL valid (https://...).',
+        ]);
+
+        // Check if NIM has already registered in this batch
+        $existing = Recruitment::where('nim', $validated['nim'])->first();
+        if ($existing) {
+            return redirect()->route('recruitment.status', ['search' => $validated['nim']])
+                ->with('info', 'NIM ini sudah terdaftar sebelumnya. Anda dapat memantau status seleksi di sini.');
+        }
+
+        $validated['registration_code'] = Recruitment::generateCode();
+        $validated['status'] = 'pending';
+
+        $recruitment = Recruitment::create($validated);
+
+        return redirect()->route('recruitment.success', $recruitment->registration_code)
+            ->with('success', 'Pendaftaran berhasil dikirim! Simpan kode pendaftaran Anda.');
+    }
+
+    public function success(string $code)
+    {
+        $applicant = Recruitment::with(['firstChoiceDivision', 'secondChoiceDivision'])
+            ->where('registration_code', $code)
+            ->firstOrFail();
+
+        return view('recruitment.success', compact('applicant'));
+    }
+
+    public function status(Request $request)
+    {
+        $applicant = null;
+        $search = $request->query('search');
+
+        if ($search) {
+            $applicant = Recruitment::with(['firstChoiceDivision', 'secondChoiceDivision'])
+                ->where('nim', trim($search))
+                ->orWhere('registration_code', trim($search))
+                ->first();
+        }
+
+        return view('recruitment.status', compact('applicant', 'search'));
+    }
+}
