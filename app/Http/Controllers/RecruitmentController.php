@@ -43,6 +43,8 @@ class RecruitmentController extends Controller
             'second_choice_division_id' => 'nullable|exists:divisions,id|different:first_choice_division_id',
             'reason_to_join' => 'required|string|min:20',
             'portfolio_url' => 'nullable|url|max:255',
+            'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'file_cv' => 'nullable|file|mimes:pdf|max:3072',
         ], [
             'full_name.required' => 'Nama lengkap wajib diisi.',
             'nim.required' => 'NIM wajib diisi.',
@@ -52,6 +54,8 @@ class RecruitmentController extends Controller
             'second_choice_division_id.different' => 'Divisi pilihan kedua harus berbeda dengan pilihan utama.',
             'reason_to_join.min' => 'Alasan/motivasi bergabung minimal 20 karakter.',
             'portfolio_url.url' => 'Link portofolio harus berupa format URL valid (https://...).',
+            'file_ktm.max' => 'Ukuran file KTM maksimal 2MB.',
+            'file_cv.max' => 'Ukuran file CV maksimal 3MB.',
         ]);
 
         // Check if NIM has already registered in this batch
@@ -61,8 +65,17 @@ class RecruitmentController extends Controller
                 ->with('info', 'NIM ini sudah terdaftar sebelumnya. Anda dapat memantau status seleksi di sini.');
         }
 
+        if ($request->hasFile('file_ktm')) {
+            $validated['file_ktm'] = $request->file('file_ktm')->store('recruitment/ktm', 'public');
+        }
+
+        if ($request->hasFile('file_cv')) {
+            $validated['file_cv'] = $request->file('file_cv')->store('recruitment/cv', 'public');
+        }
+
         $validated['registration_code'] = Recruitment::generateCode();
         $validated['status'] = 'pending';
+        $validated['selection_stage'] = 'administrasi';
 
         $recruitment = Recruitment::create($validated);
 
