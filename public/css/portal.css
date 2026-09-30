@@ -156,6 +156,20 @@ main {
     border-color: var(--glass-border-hover);
 }
 
+.card {
+    background: #ffffff;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    box-shadow: var(--shadow-card);
+    transition: var(--transition);
+}
+
+.card:hover {
+    border-color: var(--slate-300);
+    box-shadow: var(--shadow-card-hover);
+}
+
 .ambient-glow {
     position: relative;
     overflow: hidden;
