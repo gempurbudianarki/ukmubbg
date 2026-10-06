@@ -1,22 +1,23 @@
-# Spec: Student Account Creation & Comprehensive Member Portal Ecosystem
+# Spec: Student Account Creation, Edit Profile, & Comprehensive Member Portal Ecosystem
 
 **Tanggal**: 2026-10-06  
 **Status**: Approved by User  
-**Tujuan**: Menyederhanakan formulir pendaftaran anggota baru dengan penghapusan field usang (rombel), menambahkan pembuatan akun login (Email & Password), upload foto profil, link GitHub, dan CV, serta menghadirkan Portal / Dashboard Mahasiswa terpadu dengan status seleksi real-time, KTA Digital ber-QR Code, riwayat presensi divisi, dan akses silabus/materi pembelajaran.
+**Tujuan**: Menyederhanakan formulir pendaftaran anggota baru dengan pembuatan akun login (Email & Password), upload foto profil, link GitHub, dan CV, menghadirkan fitur Edit Profil di portal mahasiswa, menampilkan foto profil mahasiswa di Admin CMS (Daftar Pendaftar & Daftar Anggota UKM), serta menghadirkan Portal / Dashboard Mahasiswa terpadu (KTA Digital, Riwayat Presensi, Silabus Materi, Status Seleksi).
 
 ---
 
 ## 1. Latar Belakang & Masalah
-1. **Form Pendaftaran Kurang Modern & Belum Terintegrasi Akun**:
-   - Pendaftar sebelumnya tidak memiliki akun login. Mereka harus mengecek status seleksi secara manual menggunakan kode registrasi.
-   - Field seperti `class_group` (kelas/rombel) membebani pendaftar dan tidak esensial.
-   - Pendaftaran belum meminta password untuk login, foto profil mahasiswa, link GitHub/portofolio secara terstruktur, dan berkas CV pendukung.
-2. **Ketiadaan Portal Mahasiswa / Member Hub**:
-   - Setelah mendaftar atau diterima menjadi anggota resmi, mahasiswa belum memiliki dashboard personal untuk:
-     - Memantau tahapan seleksi (Administrasi &rarr; Wawancara &rarr; Hasil Akhir) beserta lokasi/link jadwal wawancara.
-     - Memiliki Kartu Tanda Anggota (KTA) Digital resmi ber-QR Code sebagai identitas keanggotaan UKM.
-     - Memantau rekap persentase presensi dan riwayat kehadiran pada pertemuan divisi.
-     - Mengakses silabus dan materi pembelajaran yang diajarkan oleh mentor/divisi.
+1. **Form Pendaftaran Kurang Terintegrasi Akun**:
+   - Pendaftar sebelumnya tidak memiliki akun login dan harus mengecek status seleksi manual.
+   - Pendaftaran perlu meminta password, foto profil mahasiswa, link GitHub/portofolio, dan berkas CV pendukung.
+2. **Kebutuhan Fitur Edit Profil Mahasiswa**:
+   - Mahasiswa membutuhkan fitur untuk memperbarui foto profil mereka, nomor kontak WhatsApp, link GitHub, dan mengganti password akun mereka di portal mahasiswa.
+3. **Visibilitas Foto Profil di Panel Admin**:
+   - Admin perlu melihat foto profil mahasiswa secara visual di:
+     - Daftar Pendaftar Rekrutmen (`/admin/recruitment`) & halaman detail pendaftar.
+     - Daftar Anggota UKM (`/admin/members`), sehingga admin dan ketua divisi dapat mengenali wajah anggota resmi UKM secara langsung.
+4. **Ketiadaan Portal Mahasiswa / Member Hub**:
+   - Mahasiswa membutuhkan dashboard personal untuk memantau status seleksi, memiliki Kartu Tanda Anggota (KTA) Digital resmi ber-QR Code, memantau rekap presensi kehadiran, dan mengakses materi pembelajaran yang diajarkan divisi.
 
 ---
 
@@ -24,49 +25,37 @@
 
 ### A. Tabel `users`
 - Kolom `role`: Memperluas enum/string menjadi `['super_admin', 'division_admin', 'member']` (default: `'member'`).
-- Menambahkan kolom `avatar`: (`string`, nullable) path foto profil mahasiswa.
+- Menambahkan kolom `avatar`: (`string`, nullable) path foto profil pengguna.
 - Menambahkan kolom `nim`: (`string`, nullable, unique) NIM mahasiswa pemilik akun.
+- Menambahkan kolom `phone_number`: (`string`, nullable) nomor WhatsApp pengguna.
+- Menambahkan kolom `github_url`: (`string`, nullable) tautan portofolio/GitHub.
 
 ### B. Tabel `recruitments`
-- Menghapus kewajiban `class_group` (jadikan nullable atau default string kosong).
+- Menghapus kewajiban `class_group` (jadikan nullable).
 - Menambahkan `user_id`: (`foreignId`, nullable, constrained to `users`, on delete cascade).
 - Menambahkan `github_url`: (`string`, nullable) tautan akun GitHub / portofolio karya.
 - Menambahkan `profile_photo`: (`string`, nullable) path foto profil pendaftar.
-- Kolom `reason_to_join`: Tetap sebagai esai tujuan/motivasi bergabung UKM.
 - Kolom `file_cv`: Berkas CV (format PDF).
 
-### C. Relasi Member & User
-- Saat calon anggota diterima dan dipromosikan menjadi anggota resmi (`members`), akun `user` yang sama otomatis dihubungkan dengan data `Member`.
-- Jika data `Member` dibuat secara manual oleh admin, sistem dapat mengaitkan user berdasarkan kecocokan NIM/Email.
+### C. Tabel `members`
+- Menambahkan kolom `user_id`: (`foreignId`, nullable, constrained to `users`, on delete null).
+- Menambahkan kolom `avatar`: (`string`, nullable) path foto profil anggota (sinkron dengan akun user).
 
 ---
 
 ## 3. Alur Fungsionalitas & User Journey
 
 ### A. Pendaftaran Terpadu & Pembuatan Akun Otomatis (`/pendaftaran`)
-1. **Formulir Pendaftaran Baru**:
-   - **Tahap 1: Identitas & Akses Akun**:
-     - Nama Lengkap
-     - Nomor Induk Mahasiswa (NIM)
-     - Semester Saat Ini (1 - 8)
-     - Nomor WhatsApp Aktif
-     - Alamat Email Aktif (digunakan sebagai username login)
-     - Password & Konfirmasi Password (minimal 6 karakter)
-     - Upload Foto Profil (JPG/PNG, maksimal 2MB)
-   - **Tahap 2: Pilihan Divisi & Motivasi**:
-     - Divisi Pilihan Utama (hanya divisi yang statusnya dibuka)
-     - Divisi Pilihan Kedua (opsional, hanya divisi yang dibuka)
-     - Motivasi & Tujuan Bergabung UKM (minimal 20 karakter)
-   - **Tahap 3: Berkas Portofolio**:
-     - Link GitHub / Portofolio Digital
-     - Upload CV / Resume (PDF, maksimal 3MB)
+1. **Formulir Pendaftaran**:
+   - **Tahap 1: Identitas & Akses Akun**: Nama Lengkap, NIM, Semester, Nomor WhatsApp, Alamat Email (username login), Password & Konfirmasi Password (min 6 karakter), Upload Foto Profil (JPG/PNG, max 2MB).
+   - **Tahap 2: Pilihan Divisi & Motivasi**: Divisi Pilihan Utama, Divisi Pilihan Kedua, Motivasi & Tujuan Bergabung UKM.
+   - **Tahap 3: Berkas Portofolio**: Link GitHub / Portofolio Digital, Upload CV / Resume (PDF, max 3MB).
 2. **Proses Pengiriman Form**:
-   - Validasi backend memeriksa ketersediaan email & NIM di tabel `users`.
-   - Membuat record pendaftar di `recruitments`.
-   - Membuat record akun pengguna di `users` (`role = 'member'`, password di-hash `bcrypt`, avatar foto profil disimpan).
-   - Menghubungkan `recruitment.user_id = user.id`.
-   - Melakukan `Auth::login($user)`.
-   - Redirect langsung ke Dashboard Mahasiswa: `/student/dashboard` dengan alert selamat datang.
+   - Simpan foto profil ke direktori penyimpanan `storage/app/public/avatars`.
+   - Buat akun di `users` (`role = 'member'`, password di-hash `bcrypt`, path foto profil disimpan).
+   - Buat record pendaftar di `recruitments` dengan relasi `user_id` dan `profile_photo`.
+   - Lakukan `Auth::login($user)` otomatis.
+   - Redirect langsung ke Dashboard Mahasiswa: `/student/dashboard`.
 
 ### B. Otentikasi & Smart Role-Based Redirect (`/login`)
 - Form login tunggal di `/login` (Email & Password).
@@ -75,44 +64,49 @@
   - Jika `role == 'member'` &rarr; redirect ke `/student/dashboard`.
 
 ### C. Dashboard / Portal Mahasiswa (`/student/dashboard`)
-Halaman personal mahasiswa dengan desain modern bergaya Apple/Vercel (Glassmorphism, dark/light contrast, responsif):
 1. **Header Profil Mahasiswa**:
-   - Avatar foto profil, Nama Lengkap, NIM, Email, dan Divisi Spesialisasi.
+   - Avatar foto profil mahasiswa, Nama Lengkap, NIM, Email, dan Divisi Spesialisasi.
+   - Tombol cepat **"Edit Profil"** menuju `/student/profile`.
    - Badge Status: `Calon Anggota (Tahap: Administrasi/Wawancara)` atau `Anggota Resmi UKM (Aktif)`.
-2. **Tab / Bagian 1: Status Rekrutmen & Timeline Seleksi**:
-   - Stepper visual tahapan seleksi:
-     - 1. Administrasi Berkas (Ditinjau)
-     - 2. Sesi Wawancara (Tanggal, Jam, dan Lokasi/Link Google Meet jika dijadwalkan admin)
-     - 3. Pengumuman Kelulusan (Diterima / Ditolak, beserta Catatan Reviewer)
-3. **Tab / Bagian 2: Kartu Tanda Anggota (KTA) Digital**:
-   - ID Card digital vertikal/horizontal premium:
-     - Logo Resmi UKM Ilmu Komputer & Universitas.
-     - Foto Profil & Chip Holografik visual.
-     - Nama Lengkap & NIM.
-     - Divisi Spesialisasi & Angkatan.
-     - QR Code unik yang mengarah ke link verifikasi keabsahan anggota (`/verifikasi?nim=...`).
-4. **Tab / Bagian 3: Riwayat Presensi & Kehadiran**:
-   - Menampilkan persentase kehadiran mahasiswa pada kegiatan divisi terkait.
-   - Tabel riwayat presensi: Tanggal pertemuan, judul agenda, status kehadiran (*Hadir, Izin, Sakit, Alpa*), dan catatan.
-5. **Tab / Bagian 4: Modul & Silabus Pembelajaran**:
-   - Daftar pokok bahasan materi yang dipelajari pada pertemuan divisi.
-   - Uraian capaian pembelajaran dan resume materi yang disampaikan pemateri/instruktur divisi.
+2. **Tab 1: Status Rekrutmen & Stepper Seleksi**:
+   - Stepper visual tahapan seleksi (Administrasi &rarr; Wawancara &rarr; Hasil Akhir) beserta lokasi/link wawancara dan catatan penyeleksi.
+3. **Tab 2: Kartu Tanda Anggota (KTA) Digital**:
+   - ID Card digital bergaya Apple Wallet/Holographic Card berisi Foto Profil, Logo UKM, Nama, NIM, Divisi, dan QR Code verifikasi resmi.
+4. **Tab 3: Riwayat Presensi & Kehadiran**:
+   - Rekapitulasi persentase kehadiran dan tabel riwayat kehadiran di sesi pertemuan divisi (*Hadir/Izin/Sakit/Alpa*).
+5. **Tab 4: Modul & Silabus Pembelajaran**:
+   - Daftar pokok bahasan materi yang dipelajari dan rangkuman capaian pembelajaran dari pertemuan divisi.
+
+### D. Fitur Edit Profil Mahasiswa (`/student/profile`)
+- Mahasiswa dapat:
+  - Mengganti Foto Profil / Avatar (dengan live preview gambar).
+  - Mengubah Nama Lengkap dan Nomor WhatsApp.
+  - Memperbarui Link GitHub / Portofolio.
+  - Mengubah Password Akun (password lama, password baru, konfirmasi password baru).
+- Data foto profil otomatis tersinkronisasi ke data anggota dan pendaftar terkait.
+
+### E. Visibilitas Foto Profil di Admin CMS
+1. **Tabel Data Rekrutmen (`/admin/recruitment`)**:
+   - Menampilkan thumbnail avatar bundar foto profil pendaftar di kolom Nama & Identitas.
+   - Di halaman detail pendaftar (`/admin/recruitment/{id}`), foto profil ditampilkan berukuran besar di samping informasi biodata.
+2. **Tabel Data Anggota UKM (`/admin/members`)**:
+   - Menampilkan thumbnail avatar bundar foto profil anggota di baris tabel anggota.
+   - Jika anggota belum memiliki foto profil, tampil avatar inisial nama dengan background warna divisi yang elegan.
 
 ---
 
 ## 4. Keamanan & Hak Akses
-- Middleware `auth`: Memastikan pengunjung harus login.
-- Middleware `student` / Role Check: Memastikan hanya user dengan role `member` yang dapat mengakses `/student/*`. Jika admin mengakses, diarahkan ke dashboard admin.
-- Data Isolation: Mahasiswa hanya dapat melihat data profil, status pendaftaran, dan presensi miliknya sendiri (`Auth::id()`).
+- Middleware `auth`: Memastikan user terautentikasi.
+- Middleware `student` / Role check: Membatasi area `/student/*` hanya untuk user ber-role `member`.
+- Data Isolation: Mahasiswa hanya dapat mengedit dan melihat profil miliknya sendiri (`Auth::id()`).
 
 ---
 
 ## 5. Rencana Pengujian Otomatis (Automated Tests)
-1. **StudentRegistrationTest**:
-   - Mahasiswa mendaftar dengan email & password, berhasil membuat user baru ber-role `member` dan login otomatis.
-   - Upload foto profil dan link GitHub tersimpan di database.
-2. **StudentPortalAccessTest**:
-   - Mahasiswa yang login dapat membuka `/student/dashboard`.
-   - Menguji tampilan timeline status seleksi.
-   - Menguji tampilan KTA Digital dan riwayat presensi.
-   - User non-login atau role yang tidak berhak dibatasi secara aman.
+1. **StudentRegistrationAndAuthTest**:
+   - Registrasi pendaftar dengan password & foto profil, otomatis membuat akun user dan login.
+   - Redirect sesuai role pada halaman login.
+2. **StudentProfileEditTest**:
+   - Mahasiswa dapat memperbarui foto profil, nomor telepon, link GitHub, dan password.
+3. **AdminProfilePhotoVisibilityTest**:
+   - Admin recruitment list dan admin members list menampilkan avatar foto profil mahasiswa.
