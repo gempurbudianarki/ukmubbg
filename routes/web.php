@@ -64,6 +64,12 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/recruitment/{recruitment}', [RecruitmentAdminController::class, 'show'])->name('recruitment.show');
     Route::put('/recruitment/{recruitment}/status', [RecruitmentAdminController::class, 'updateStatus'])->name('recruitment.updateStatus');
 
+    // Member Management
+    Route::get('/members', [\App\Http\Controllers\Admin\MemberAdminController::class, 'index'])->name('members.index');
+    Route::post('/members', [\App\Http\Controllers\Admin\MemberAdminController::class, 'store'])->name('members.store');
+    Route::put('/members/{member}/status', [\App\Http\Controllers\Admin\MemberAdminController::class, 'updateStatus'])->name('members.updateStatus');
+    Route::delete('/members/{member}', [\App\Http\Controllers\Admin\MemberAdminController::class, 'destroy'])->name('members.destroy');
+
     // Ecosystem Modules
     Route::resource('projects', \App\Http\Controllers\Admin\ProjectAdminController::class)->except(['show']);
     Route::resource('events', \App\Http\Controllers\Admin\EventAdminController::class)->except(['show']);
