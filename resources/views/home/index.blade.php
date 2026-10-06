@@ -49,8 +49,12 @@
                 <img src="{{ asset('images/logo.png') }}" alt="Logo UKM Ilmu Komputer" class="hero-pure-logo">
             </div>
         </div>
+    </div>
+</section>
 
-        <!-- Metric Stat Strip -->
+<!-- 2. Metric Stat Strip Overview -->
+<section class="stat-section" style="padding: 2.75rem 0; background: #ffffff; border-top: 1px solid var(--slate-200);">
+    <div class="container">
         <div class="stat-strip">
             <div class="stat-item">
                 <div class="stat-number">4</div>
@@ -72,8 +76,8 @@
     </div>
 </section>
 
-<!-- 2. Bento Grid 4 Divisions Showcase -->
-<section id="divisions" style="padding: 5.5rem 0; background: #ffffff; border-top: 1px solid var(--slate-200); border-bottom: 1px solid var(--slate-200);">
+<!-- 3. Bento Grid 4 Divisions Showcase -->
+<section id="divisions" style="padding: 5rem 0; background: #f8fafc; border-top: 1px solid var(--slate-200); border-bottom: 1px solid var(--slate-200);">
     <div class="container">
         <div class="section-header">
             <div class="section-tag">Struktur Keahlian</div>
