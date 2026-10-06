@@ -209,6 +209,20 @@ class DatabaseSeeder extends Seeder
 
         $superAdminId = DB::table('users')->where('role', 'super_admin')->value('id');
 
+        $bintangUserId = DB::table('users')->insertGetId([
+            'name' => 'Bintang Mahasiswa',
+            'email' => 'bintang@student.ac.id',
+            'password' => Hash::make('student123'),
+            'role' => 'member',
+            'division_id' => $divPemrogramanId,
+            'nim' => '2301010099',
+            'phone_number' => '081234567890',
+            'github_url' => 'https://github.com/bintangmhs',
+            'avatar' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         // 3. Seed Posts (Publikasi per divisi)
         $samplePosts = [
             [
@@ -595,17 +609,21 @@ class DatabaseSeeder extends Seeder
         $adminUserId = $superAdminUser ? $superAdminUser->id : 1;
 
         $recruitmentAcceptedId = DB::table('recruitments')->insertGetId([
+            'user_id' => $bintangUserId,
             'registration_code' => 'REG-2026-001',
-            'full_name' => 'Bintang Ramadhan',
-            'nim' => '220104095',
-            'email' => 'bintang.dev@kampus.ac.id',
-            'phone_whatsapp' => '081298765432',
+            'full_name' => 'Bintang Mahasiswa',
+            'nim' => '2301010099',
+            'email' => 'bintang@student.ac.id',
+            'phone_whatsapp' => '081234567890',
             'semester' => 3,
             'class_group' => 'IF-3A',
             'first_choice_division_id' => $divPemrogramanId,
             'second_choice_division_id' => $divCyberId,
             'reason_to_join' => 'Ingin memperdalam arsitektur web backend Laravel modern dan berkontribusi di kompetisi GEMASTIK.',
-            'portfolio_url' => 'https://github.com/bintang-ramadhan',
+            'portfolio_url' => 'https://github.com/bintangmhs',
+            'github_url' => 'https://github.com/bintangmhs',
+            'interview_schedule' => now()->addDays(2)->format('Y-m-d 14:00:00'),
+            'interview_location' => 'Lab Komputer 3 Gedung Fasilkom',
             'status' => 'accepted',
             'selection_stage' => 'diterima',
             'admin_notes' => 'Lolos tes coding dan wawancara dengan skor memuaskan.',
@@ -635,6 +653,21 @@ class DatabaseSeeder extends Seeder
         // 11. Seed Members (Anggota Resmi UKM per Divisi)
         $membersData = [
             // Divisi Pemrograman
+            [
+                'user_id' => $bintangUserId,
+                'division_id' => $divPemrogramanId,
+                'recruitment_id' => $recruitmentAcceptedId,
+                'nim' => '2301010099',
+                'name' => 'Bintang Mahasiswa',
+                'email' => 'bintang@student.ac.id',
+                'phone_number' => '081234567890',
+                'batch_year' => '2026',
+                'status' => 'aktif',
+                'join_date' => now()->format('Y-m-d'),
+                'notes' => 'Anggota resmi divisi pemrograman angkatan 2026.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             [
                 'division_id' => $divPemrogramanId,
                 'recruitment_id' => null,
