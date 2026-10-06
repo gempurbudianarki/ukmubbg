@@ -84,7 +84,7 @@ class RecruitmentAdminController extends Controller
         return back()->with('success', 'Status pendaftar ' . $recruitment->full_name . ' berhasil diperbarui.');
     }
 
-    public function convertToMember(Recruitment $recruitment)
+    public function convertToMember(Request $request, Recruitment $recruitment)
     {
         $user = Auth::user();
 
@@ -105,13 +105,15 @@ class RecruitmentAdminController extends Controller
         }
 
         \App\Models\Member::create([
+            'user_id' => $recruitment->user_id,
             'recruitment_id' => $recruitment->id,
             'nim' => $recruitment->nim,
             'name' => $recruitment->full_name,
             'email' => $recruitment->email,
             'phone_number' => $recruitment->phone_whatsapp,
+            'avatar' => $recruitment->profile_photo ?? $recruitment->user?->avatar,
             'division_id' => $recruitment->first_choice_division_id,
-            'batch_year' => date('Y'),
+            'batch_year' => $request->input('batch_year', date('Y')),
             'status' => 'aktif',
             'join_date' => now()->toDateString(),
             'notes' => 'Dikonversi otomatis dari jalur Open Recruitment (' . $recruitment->registration_code . ').',

@@ -18,13 +18,16 @@
     <div style="display: grid; grid-template-columns: 2fr 1.2fr; gap: 2rem;">
         <!-- Left: Applicant Profile & Motivation -->
         <div class="glass-panel" style="padding: 2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--slate-100);">
-                <div>
-                    <h3 style="font-size: 1.45rem; font-weight: 800; color: var(--slate-900);">
-                        {{ $recruitment->full_name }}
-                    </h3>
-                    <div style="font-family: var(--font-mono); font-size: 0.875rem; color: var(--slate-500); margin-top: 0.25rem;">
-                        NIM: <strong>{{ $recruitment->nim }}</strong> &bull; Semester {{ $recruitment->semester }} (Kelas {{ $recruitment->class_group }})
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--slate-100); gap: 1.5rem;">
+                <div style="display: flex; gap: 1.25rem; align-items: center;">
+                    <img src="{{ $recruitment->avatar_url }}" alt="{{ $recruitment->full_name }}" style="width: 76px; height: 96px; border-radius: var(--radius-md); object-fit: cover; border: 2px solid var(--slate-200); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                    <div>
+                        <h3 style="font-size: 1.45rem; font-weight: 800; color: var(--slate-900);">
+                            {{ $recruitment->full_name }}
+                        </h3>
+                        <div style="font-family: var(--font-mono); font-size: 0.875rem; color: var(--slate-500); margin-top: 0.25rem;">
+                            NIM: <strong>{{ $recruitment->nim }}</strong> &bull; Semester {{ $recruitment->semester }} {{ $recruitment->class_group ? '(Kelas ' . $recruitment->class_group . ')' : '' }}
+                        </div>
                     </div>
                 </div>
                 <div style="text-align: right;">
@@ -54,6 +57,11 @@
                 <a href="mailto:{{ $recruitment->email }}" class="btn btn-outline btn-sm">
                     Kirim Email ({{ $recruitment->email }})
                 </a>
+                @if ($recruitment->github_url)
+                    <a href="{{ $recruitment->github_url }}" target="_blank" class="btn btn-outline btn-sm" style="color: var(--slate-800);">
+                        <i class="fab fa-github" style="margin-right: 0.3rem;"></i> GitHub Profil
+                    </a>
+                @endif
             </div>
 
             <!-- Division Choices -->

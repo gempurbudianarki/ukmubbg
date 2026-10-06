@@ -91,12 +91,17 @@
                             <small style="color: var(--slate-400);">{{ $app->created_at->format('d/m/Y H:i') }}</small>
                         </td>
                         <td>
-                            <div style="font-weight: 700; color: var(--slate-900);">
-                                <a href="{{ route('admin.recruitment.show', $app->id) }}" style="color: var(--slate-900);">
-                                    {{ $app->full_name }}
-                                </a>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <img src="{{ $app->avatar_url }}" alt="{{ $app->full_name }}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1px solid var(--slate-200); flex-shrink: 0;">
+                                <div>
+                                    <div style="font-weight: 700; color: var(--slate-900);">
+                                        <a href="{{ route('admin.recruitment.show', $app->id) }}" style="color: var(--slate-900);">
+                                            {{ $app->full_name }}
+                                        </a>
+                                    </div>
+                                    <small style="color: var(--slate-500); font-family: var(--font-mono);">NIM: {{ $app->nim }}</small>
+                                </div>
                             </div>
-                            <small style="color: var(--slate-500); font-family: var(--font-mono);">NIM: {{ $app->nim }}</small>
                         </td>
                         <td>
                             <div>{{ $app->email }}</div>

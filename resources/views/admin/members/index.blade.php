@@ -107,9 +107,7 @@
                         <tr style="border-bottom: 1px solid var(--slate-100); transition: background-color 0.15s ease;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
                             <td style="padding: 1rem 1.25rem;">
                                 <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                    <div class="avatar-round" style="background: {{ $member->division->color_accent ?? '#0284c7' }}15; color: {{ $member->division->color_accent ?? '#0284c7' }}; width: 38px; height: 38px; font-size: 0.825rem; font-weight: 700;">
-                                        {{ strtoupper(substr($member->name, 0, 2)) }}
-                                    </div>
+                                    <img src="{{ $member->avatar_url }}" alt="{{ $member->name }}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1px solid var(--slate-200); flex-shrink: 0;">
                                     <div>
                                         <div style="font-weight: 700; color: var(--slate-900);">{{ $member->name }}</div>
                                         <div style="font-size: 0.775rem; color: var(--slate-500);">
