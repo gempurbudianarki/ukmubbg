@@ -72,7 +72,7 @@
                 <!-- Header Card -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem;">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <img src="{{ asset('images/logo.png') }}" alt="UKM Logo" style="width: 38px; height: 38px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));">
+                        <img src="{{ asset('images/logo.png') }}" alt="UKM Logo" style="height: 40px; width: auto; max-width: 44px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));">
                         <div>
                             <div style="font-size: 0.85rem; font-weight: 800; letter-spacing: 0.05em; line-height: 1.1;">KARTU TANDA ANGGOTA</div>
                             <div style="font-size: 0.7rem; color: rgba(255,255,255,0.75);">UKM ILMU KOMPUTER &bull; FASILKOM</div>

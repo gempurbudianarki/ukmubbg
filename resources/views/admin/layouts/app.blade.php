@@ -108,7 +108,7 @@
         <!-- Sidebar -->
         <aside class="admin-sidebar">
             <div class="admin-brand">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-logo-img" style="width: 34px; height: 34px;">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-logo-img" style="height: 38px; width: auto; object-fit: contain;">
                 <div>
                     <div style="font-weight: 800; font-size: 0.95rem; color: var(--slate-900);">UKM ILKOM CMS</div>
                     <div style="font-size: 0.725rem; color: var(--slate-400); font-weight: 600;">

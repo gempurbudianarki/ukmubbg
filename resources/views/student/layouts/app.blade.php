@@ -243,7 +243,7 @@
         <aside class="student-sidebar" id="studentSidebar">
             <!-- Brand -->
             <a href="{{ route('student.dashboard') }}" class="student-brand">
-                <img src="{{ asset('images/logo.png') }}" alt="UKM Ilmu Komputer Logo" style="width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));">
+                <img src="{{ asset('images/logo.png') }}" alt="UKM Ilmu Komputer Logo" style="height: 44px; width: auto; max-width: 44px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));">
                 <div>
                     <div style="font-weight: 800; font-size: 1.05rem; letter-spacing: -0.01em; color: #ffffff;">PORTAL MAHASISWA</div>
                     <div style="font-size: 0.725rem; color: #94a3b8; font-weight: 500;">UKM ILMU KOMPUTER</div>

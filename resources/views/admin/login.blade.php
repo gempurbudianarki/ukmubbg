@@ -11,7 +11,7 @@
     <div style="width: 100%; max-width: 440px;">
         <div style="text-align: center; margin-bottom: 2rem;">
             <a href="{{ route('home') }}" style="display: inline-block; text-decoration: none;">
-                <img src="{{ asset('images/logo.png') }}" alt="UKM Ilmu Komputer Logo" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 0.85rem; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.4));">
+                <img src="{{ asset('images/logo.png') }}" alt="UKM Ilmu Komputer Logo" style="height: 84px; width: auto; max-width: 90px; object-fit: contain; margin-bottom: 0.85rem; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.4));">
             </a>
             <h1 style="color: #ffffff; font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 0.35rem;">
                 Portal Masuk Akun

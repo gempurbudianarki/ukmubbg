@@ -4,7 +4,7 @@
             <!-- Brand Column -->
             <div>
                 <div class="footer-brand">
-                    <img src="{{ asset('images/logo.png') }}" alt="UKM Ilmu Komputer Logo" class="brand-logo-img" style="width: 38px; height: 38px;">
+                    <img src="{{ asset('images/logo.png') }}" alt="UKM Ilmu Komputer Logo" class="brand-logo-img" style="height: 42px; width: auto; object-fit: contain;">
                     <span>UKM ILKOM</span>
                 </div>
                 <p style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.65; margin-bottom: 1.25rem;">
