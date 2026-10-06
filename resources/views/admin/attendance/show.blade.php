@@ -24,11 +24,15 @@
                 {{ $session->title }}
             </h1>
             <div style="font-size: 0.875rem; color: var(--slate-500); display: flex; gap: 1rem; flex-wrap: wrap;">
-                <span><strong>Tanggal:</strong> {{ $session->session_date->format('d F Y') }}</span>
+                <span><strong>Hari & Tanggal:</strong> {{ $session->day_name ? $session->day_name . ', ' : '' }}{{ $session->session_date->format('d M Y') }}</span>
                 <span>&bull;</span>
                 <span><strong>Waktu:</strong> {{ substr($session->time_start, 0, 5) }} {{ $session->time_end ? '- ' . substr($session->time_end, 0, 5) : '' }} WIB</span>
                 <span>&bull;</span>
                 <span><strong>Lokasi:</strong> {{ $session->location }}</span>
+                @if($session->instructor_name)
+                    <span>&bull;</span>
+                    <span><strong>Pemateri:</strong> {{ $session->instructor_name }}</span>
+                @endif
             </div>
         </div>
 
@@ -44,6 +48,34 @@
             </button>
         </div>
     </div>
+
+    <!-- Academic Syllabus & Learning Outcomes Card -->
+    @if ($session->topic_material || $session->instructor_name || $session->learning_outcomes)
+        <div class="glass-card" style="padding: 1.5rem 1.75rem; margin-bottom: 2rem; border-radius: 16px; border-left: 4px solid var(--accent-blue);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.75rem;">
+                <div>
+                    <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-blue);">
+                        Pokok Bahasan / Silabus Pertemuan
+                    </span>
+                    <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--slate-900); margin-top: 0.2rem;">
+                        {{ $session->topic_material ?? $session->title }}
+                    </h3>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--slate-700); background: var(--bg-surface); padding: 0.4rem 0.85rem; border-radius: 8px; border: 1px solid var(--slate-200);">
+                    <strong>Pemateri / PIC:</strong> {{ $session->instructor_name ?? '-' }}
+                </div>
+            </div>
+
+            @if ($session->learning_outcomes)
+                <div style="background: var(--bg-surface); padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--slate-100); font-size: 0.9rem; color: var(--slate-700); line-height: 1.6; margin-top: 0.75rem;">
+                    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--slate-500); margin-bottom: 0.35rem;">
+                        Capaian Pembelajaran & Ringkasan Materi:
+                    </div>
+                    {{ $session->learning_outcomes }}
+                </div>
+            @endif
+        </div>
+    @endif
 
     <!-- Live Statistics Strip -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem;">

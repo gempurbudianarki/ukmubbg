@@ -59,11 +59,17 @@ class AttendanceAdminController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'division_id' => 'nullable|exists:divisions,id',
+            'day_name' => 'required|string|max:20',
             'session_date' => 'required|date',
             'time_start' => 'required',
             'time_end' => 'nullable',
+            'session_type' => 'required|string|in:riset_rutin,workshop_teknis,mentoring_proyek,evaluasi_bulanan,sidang_pleno',
             'location' => 'required|string|max:255',
+            'topic_material' => 'required|string|max:255',
+            'learning_outcomes' => 'nullable|string',
+            'instructor_name' => 'required|string|max:150',
             'notes' => 'nullable|string',
+            'status' => 'nullable|in:open,closed',
         ]);
 
         if (!$user->isSuperAdmin() && !empty($validated['division_id']) && (int)$validated['division_id'] !== (int)$user->division_id) {
