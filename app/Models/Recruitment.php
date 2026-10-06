@@ -11,6 +11,7 @@ class Recruitment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'registration_code',
         'full_name',
         'nim',
@@ -22,6 +23,8 @@ class Recruitment extends Model
         'second_choice_division_id',
         'reason_to_join',
         'portfolio_url',
+        'profile_photo',
+        'github_url',
         'file_ktm',
         'file_cv',
         'status',
@@ -30,6 +33,11 @@ class Recruitment extends Model
         'interview_location',
         'admin_notes',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function firstChoiceDivision()
     {
@@ -44,6 +52,19 @@ class Recruitment extends Model
     public function member()
     {
         return $this->hasOne(Member::class);
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        if ($this->profile_photo) {
+            return asset('storage/' . $this->profile_photo);
+        }
+
+        if ($this->user && $this->user->avatar) {
+            return $this->user->avatar_url;
+        }
+
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->full_name ?? 'Peserta') . '&background=0284c7&color=ffffff&bold=true';
     }
 
     public static function generateCode(): string

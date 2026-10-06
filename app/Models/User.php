@@ -18,6 +18,9 @@ class User extends Authenticatable
         'role',
         'division_id',
         'avatar',
+        'nim',
+        'phone_number',
+        'github_url',
     ];
 
     protected $hidden = [
@@ -40,6 +43,16 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'author_id');
     }
 
+    public function recruitment()
+    {
+        return $this->hasOne(Recruitment::class);
+    }
+
+    public function member()
+    {
+        return $this->hasOne(Member::class);
+    }
+
     public function isSuperAdmin(): bool
     {
         return $this->role === 'super_admin';
@@ -48,5 +61,19 @@ class User extends Authenticatable
     public function isDivisionAdmin(): bool
     {
         return $this->role === 'division_admin';
+    }
+
+    public function isMember(): bool
+    {
+        return $this->role === 'member';
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        if ($this->avatar) {
+            return asset('storage/' . $this->avatar);
+        }
+
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name ?? 'User') . '&background=0284c7&color=ffffff&bold=true';
     }
 }
