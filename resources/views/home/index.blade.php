@@ -44,39 +44,9 @@
                 </div>
             </div>
 
-            <!-- Right Column: Official UKM Logo Showcase -->
-            <div class="hero-logo-showcase-wrap">
-                <div class="hero-logo-card">
-                    <!-- Ambient Glow Effect -->
-                    <div class="hero-logo-glow"></div>
-                    
-                    <div class="hero-logo-badge-top">
-                        <span class="badge-pulse"></span>
-                        <span>OFFICIAL EMBLEM &bull; FASILKOM</span>
-                    </div>
-
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo Resmi UKM Ilmu Komputer" class="hero-main-logo-img">
-
-                    <div class="hero-logo-meta">
-                        <div class="hero-logo-title">UKM ILMU KOMPUTER</div>
-                        <div class="hero-logo-tagline">Wadah Riset, Inovasi & Rekayasa Teknologi Mahasiswa</div>
-                    </div>
-
-                    <div class="hero-logo-chips">
-                        <span class="hero-logo-chip">
-                            <i class="fas fa-code" style="color: #38bdf8;"></i> Pemrograman
-                        </span>
-                        <span class="hero-logo-chip">
-                            <i class="fas fa-palette" style="color: #c084fc;"></i> Multimedia
-                        </span>
-                        <span class="hero-logo-chip">
-                            <i class="fas fa-microchip" style="color: #fbbf24;"></i> IoT
-                        </span>
-                        <span class="hero-logo-chip">
-                            <i class="fas fa-shield-halved" style="color: #34d399;"></i> Cyber Security
-                        </span>
-                    </div>
-                </div>
+            <!-- Right Column: Pure Official Logo Without Background -->
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo UKM Ilmu Komputer" style="width: 100%; max-width: 380px; height: auto; object-fit: contain; filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.45));">
             </div>
         </div>
 
