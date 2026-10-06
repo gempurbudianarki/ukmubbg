@@ -12,6 +12,14 @@ use Tests\TestCase;
 
 class UkmPortalTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(\Database\Seeders\DatabaseSeeder::class);
+    }
+
     public function test_homepage_loads_successfully()
     {
         $response = $this->get('/');

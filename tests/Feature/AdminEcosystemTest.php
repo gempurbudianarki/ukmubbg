@@ -4,9 +4,18 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AdminEcosystemTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(\Database\Seeders\DatabaseSeeder::class);
+    }
+
     public function test_super_admin_can_access_all_management_modules()
     {
         $superAdmin = User::where('role', 'super_admin')->first();

@@ -577,5 +577,231 @@ class DatabaseSeeder extends Seeder
         ];
 
         DB::table('certificates')->insert($sampleCerts);
+
+        // 10. Seed Recruitments (Untuk simulasi dan 1-Click promosi anggota)
+        $superAdminUser = DB::table('users')->where('role', 'super_admin')->first();
+        $adminUserId = $superAdminUser ? $superAdminUser->id : 1;
+
+        $recruitmentAcceptedId = DB::table('recruitments')->insertGetId([
+            'registration_code' => 'REG-2026-001',
+            'full_name' => 'Bintang Ramadhan',
+            'nim' => '220104095',
+            'email' => 'bintang.dev@kampus.ac.id',
+            'phone_whatsapp' => '081298765432',
+            'semester' => 3,
+            'class_group' => 'IF-3A',
+            'first_choice_division_id' => $divPemrogramanId,
+            'second_choice_division_id' => $divCyberId,
+            'reason_to_join' => 'Ingin memperdalam arsitektur web backend Laravel modern dan berkontribusi di kompetisi GEMASTIK.',
+            'portfolio_url' => 'https://github.com/bintang-ramadhan',
+            'status' => 'accepted',
+            'selection_stage' => 'diterima',
+            'admin_notes' => 'Lolos tes coding dan wawancara dengan skor memuaskan.',
+            'created_at' => now()->subDays(5),
+            'updated_at' => now()->subDays(1),
+        ]);
+
+        DB::table('recruitments')->insert([
+            'registration_code' => 'REG-2026-002',
+            'full_name' => 'Dwi Santoso',
+            'nim' => '230104099',
+            'email' => 'dwi.santoso@kampus.ac.id',
+            'phone_whatsapp' => '081277665544',
+            'semester' => 1,
+            'class_group' => 'IF-1B',
+            'first_choice_division_id' => $divIotId,
+            'second_choice_division_id' => null,
+            'reason_to_join' => 'Tertarik riset sensor IoT cerdas dan mikrokontroler ESP32.',
+            'portfolio_url' => null,
+            'status' => 'pending',
+            'selection_stage' => 'administrasi',
+            'admin_notes' => null,
+            'created_at' => now()->subDays(2),
+            'updated_at' => now()->subDays(2),
+        ]);
+
+        // 11. Seed Members (Anggota Resmi UKM per Divisi)
+        $membersData = [
+            // Divisi Pemrograman
+            [
+                'division_id' => $divPemrogramanId,
+                'recruitment_id' => null,
+                'nim' => '210103045',
+                'name' => 'Muhammad Rayhan Fajar',
+                'email' => 'rayhanfajar.dev@gmail.com',
+                'phone_number' => '081234567890',
+                'batch_year' => '2021',
+                'status' => 'aktif',
+                'join_date' => now()->subYears(3)->format('Y-m-d'),
+                'notes' => 'Koordinator riset web & backend.',
+                'created_at' => now()->subMonths(12),
+                'updated_at' => now(),
+            ],
+            [
+                'division_id' => $divPemrogramanId,
+                'recruitment_id' => null,
+                'nim' => '220103011',
+                'name' => 'Aditia Pratama',
+                'email' => 'aditia.pratama@kampus.ac.id',
+                'phone_number' => '081234567891',
+                'batch_year' => '2022',
+                'status' => 'aktif',
+                'join_date' => now()->subYears(2)->format('Y-m-d'),
+                'notes' => 'Fokus pengembangan frontend Vue/Tailwind.',
+                'created_at' => now()->subMonths(6),
+                'updated_at' => now(),
+            ],
+            [
+                'division_id' => $divPemrogramanId,
+                'recruitment_id' => null,
+                'nim' => '230103022',
+                'name' => 'Farah Salsabila',
+                'email' => 'farah.salsabila@kampus.ac.id',
+                'phone_number' => '081234567892',
+                'batch_year' => '2023',
+                'status' => 'aktif',
+                'join_date' => now()->subYear()->format('Y-m-d'),
+                'notes' => 'Tim riset competitive programming.',
+                'created_at' => now()->subMonths(2),
+                'updated_at' => now(),
+            ],
+
+            // Divisi Multimedia
+            [
+                'division_id' => $divMultimediaId,
+                'recruitment_id' => null,
+                'nim' => '210103082',
+                'name' => 'Aulia Rahma Putri',
+                'email' => 'auliarputri@gmail.com',
+                'phone_number' => '081234567893',
+                'batch_year' => '2021',
+                'status' => 'aktif',
+                'join_date' => now()->subYears(3)->format('Y-m-d'),
+                'notes' => 'Lead UI/UX Designer & branding UKM.',
+                'created_at' => now()->subMonths(12),
+                'updated_at' => now(),
+            ],
+            [
+                'division_id' => $divMultimediaId,
+                'recruitment_id' => null,
+                'nim' => '220103044',
+                'name' => 'Gilang Ramadhan',
+                'email' => 'gilang.ramadhan@kampus.ac.id',
+                'phone_number' => '081234567894',
+                'batch_year' => '2022',
+                'status' => 'aktif',
+                'join_date' => now()->subYears(2)->format('Y-m-d'),
+                'notes' => 'Motion graphic & video editor.',
+                'created_at' => now()->subMonths(5),
+                'updated_at' => now(),
+            ],
+
+            // Divisi IoT
+            [
+                'division_id' => $divIotId,
+                'recruitment_id' => null,
+                'nim' => '210103112',
+                'name' => 'Dimas Bagus Nugroho',
+                'email' => 'dimasbagus.tech@gmail.com',
+                'phone_number' => '081234567895',
+                'batch_year' => '2021',
+                'status' => 'aktif',
+                'join_date' => now()->subYears(3)->format('Y-m-d'),
+                'notes' => 'Penanggung jawab lab IoT & mikrokontroler.',
+                'created_at' => now()->subMonths(12),
+                'updated_at' => now(),
+            ],
+            [
+                'division_id' => $divIotId,
+                'recruitment_id' => null,
+                'nim' => '220103066',
+                'name' => 'Nanda Syahputra',
+                'email' => 'nanda.syahputra@kampus.ac.id',
+                'phone_number' => '081234567896',
+                'batch_year' => '2022',
+                'status' => 'aktif',
+                'join_date' => now()->subYears(2)->format('Y-m-d'),
+                'notes' => 'Riset telemetri LoRa & sensor cuaca.',
+                'created_at' => now()->subMonths(4),
+                'updated_at' => now(),
+            ],
+
+            // Divisi Cyber Security
+            [
+                'division_id' => $divCyberId,
+                'recruitment_id' => null,
+                'nim' => '210103019',
+                'name' => 'Kevin Danuarta',
+                'email' => 'kevindanuarta.sec@gmail.com',
+                'phone_number' => '081234567897',
+                'batch_year' => '2021',
+                'status' => 'aktif',
+                'join_date' => now()->subYears(3)->format('Y-m-d'),
+                'notes' => 'Kapten tim CTF dan web pentest.',
+                'created_at' => now()->subMonths(12),
+                'updated_at' => now(),
+            ],
+            [
+                'division_id' => $divCyberId,
+                'recruitment_id' => null,
+                'nim' => '220103088',
+                'name' => 'Rizky Maulana',
+                'email' => 'rizky.maulana@kampus.ac.id',
+                'phone_number' => '081234567898',
+                'batch_year' => '2022',
+                'status' => 'aktif',
+                'join_date' => now()->subYears(2)->format('Y-m-d'),
+                'notes' => 'Riset network forensic & cryptography.',
+                'created_at' => now()->subMonths(6),
+                'updated_at' => now(),
+            ],
+            [
+                'division_id' => $divCyberId,
+                'recruitment_id' => null,
+                'nim' => '200103001',
+                'name' => 'Hendri Kurniawan',
+                'email' => 'hendri.k@alumni.ac.id',
+                'phone_number' => '081234567899',
+                'batch_year' => '2020',
+                'status' => 'alumni',
+                'join_date' => now()->subYears(4)->format('Y-m-d'),
+                'notes' => 'Mantan ketua divisi 2023, pembina alumni.',
+                'created_at' => now()->subMonths(24),
+                'updated_at' => now(),
+            ],
+        ];
+
+        foreach ($membersData as $m) {
+            DB::table('members')->insert($m);
+        }
+
+        // 12. Seed Attendance Sessions & Logs
+        $progMembers = DB::table('members')->where('division_id', $divPemrogramanId)->where('status', 'aktif')->get();
+        $sessionId = DB::table('attendance_sessions')->insertGetId([
+            'division_id' => $divPemrogramanId,
+            'created_by' => $adminUserId,
+            'title' => 'Pertemuan Mingguan: Clean Architecture & Microservices',
+            'session_date' => now()->format('Y-m-d'),
+            'time_start' => '16:00:00',
+            'time_end' => '18:00:00',
+            'location' => 'Lab Komputer 3 Gedung Fasilkom',
+            'notes' => 'Pembahasan standarisasi repository pattern, dependency injection, dan persiapan hackathon.',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        foreach ($progMembers as $idx => $pm) {
+            $status = ($idx === 2) ? 'izin' : 'hadir';
+            $logNotes = ($idx === 2) ? 'Ada praktikum susulan mata kuliah Basis Data' : 'Hadir tepat waktu';
+
+            DB::table('attendance_logs')->insert([
+                'session_id' => $sessionId,
+                'member_id' => $pm->id,
+                'status' => $status,
+                'notes' => $logNotes,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

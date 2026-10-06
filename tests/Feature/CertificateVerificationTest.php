@@ -4,9 +4,18 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\Certificate;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CertificateVerificationTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(\Database\Seeders\DatabaseSeeder::class);
+    }
+
     public function test_can_view_verification_page()
     {
         $response = $this->get(route('certificates.verify'));

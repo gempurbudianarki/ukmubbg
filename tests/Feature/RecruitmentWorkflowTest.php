@@ -5,11 +5,20 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\Division;
 use App\Models\Setting;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class RecruitmentWorkflowTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(\Database\Seeders\DatabaseSeeder::class);
+    }
+
     public function test_can_submit_registration_with_ktm_upload()
     {
         Storage::fake('public');

@@ -7,11 +7,20 @@ use App\Models\User;
 use App\Models\Division;
 use App\Models\Certificate;
 use App\Models\Setting;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class EndToEndPortalTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(\Database\Seeders\DatabaseSeeder::class);
+    }
+
     public function test_complete_user_and_admin_ecosystem_journey()
     {
         Storage::fake('public');
