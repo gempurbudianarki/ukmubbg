@@ -83,6 +83,42 @@ class RecruitmentAdminController extends Controller
         return back()->with('success', 'Status pendaftar ' . $recruitment->full_name . ' berhasil diperbarui.');
     }
 
+    public function convertToMember(Recruitment $recruitment)
+    {
+        $user = Auth::user();
+
+        if (!$user->isSuperAdmin() && $recruitment->first_choice_division_id !== $user->division_id) {
+            abort(403, 'Akses terbatas untuk pendaftar divisi lain.');
+        }
+
+        if ($recruitment->status !== 'accepted') {
+            return back()->with('error', 'Hanya pendaftar berstatus diterima (accepted) yang dapat dijadikan anggota.');
+        }
+
+        $existing = \App\Models\Member::where('nim', $recruitment->nim)
+            ->orWhere('recruitment_id', $recruitment->id)
+            ->first();
+
+        if ($existing) {
+            return back()->with('info', 'Pendaftar ini sudah terdaftar sebagai anggota resmi UKM.');
+        }
+
+        \App\Models\Member::create([
+            'recruitment_id' => $recruitment->id,
+            'nim' => $recruitment->nim,
+            'name' => $recruitment->full_name,
+            'email' => $recruitment->email,
+            'phone_number' => $recruitment->phone_whatsapp,
+            'division_id' => $recruitment->first_choice_division_id,
+            'batch_year' => date('Y'),
+            'status' => 'aktif',
+            'join_date' => now()->toDateString(),
+            'notes' => 'Dikonversi otomatis dari jalur Open Recruitment (' . $recruitment->registration_code . ').',
+        ]);
+
+        return back()->with('success', 'Selamat! Pendaftar ' . $recruitment->full_name . ' resmi diangkat menjadi Anggota UKM.');
+    }
+
     public function export(Request $request): StreamedResponse
     {
         $user = Auth::user();

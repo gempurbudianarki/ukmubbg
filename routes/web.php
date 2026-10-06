@@ -63,6 +63,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/recruitment', [RecruitmentAdminController::class, 'index'])->name('recruitment.index');
     Route::get('/recruitment/{recruitment}', [RecruitmentAdminController::class, 'show'])->name('recruitment.show');
     Route::put('/recruitment/{recruitment}/status', [RecruitmentAdminController::class, 'updateStatus'])->name('recruitment.updateStatus');
+    Route::post('/recruitment/{recruitment}/convert-to-member', [RecruitmentAdminController::class, 'convertToMember'])->name('recruitment.convertToMember');
 
     // Member Management
     Route::get('/members', [\App\Http\Controllers\Admin\MemberAdminController::class, 'index'])->name('members.index');

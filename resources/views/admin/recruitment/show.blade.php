@@ -180,6 +180,39 @@
                         Simpan Keputusan &rarr;
                     </button>
                 </form>
+
+                @if ($recruitment->status === 'accepted')
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200);">
+                        @if ($recruitment->member)
+                            <div style="background: var(--success-bg); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 1rem; text-align: center;">
+                                <div style="color: #059669; font-weight: 700; font-size: 0.9rem; margin-bottom: 0.25rem;">
+                                    &#10003; Resmi Terdaftar Sebagai Anggota
+                                </div>
+                                <div style="font-size: 0.775rem; color: var(--slate-600); margin-bottom: 0.75rem;">
+                                    Data pendaftar telah tersinkronisasi di direktori anggota UKM.
+                                </div>
+                                <a href="{{ route('admin.members.index', ['q' => $recruitment->nim]) }}" class="btn btn-outline btn-sm" style="font-size: 0.775rem;">
+                                    Lihat di Direktori Anggota &rarr;
+                                </a>
+                            </div>
+                        @else
+                            <div style="background: #eff6ff; border: 1px solid rgba(37, 99, 235, 0.3); border-radius: var(--radius-md); padding: 1.25rem; text-align: center;">
+                                <div style="color: var(--accent-blue); font-weight: 800; font-size: 0.95rem; margin-bottom: 0.35rem;">
+                                    Angkat Menjadi Anggota Resmi
+                                </div>
+                                <p style="font-size: 0.8rem; color: var(--slate-600); line-height: 1.5; margin-bottom: 1rem;">
+                                    Pendaftar ini telah diterima. Klik di bawah untuk langsung menerbitkan status Anggota UKM aktif tanpa input ulang.
+                                </p>
+                                <form action="{{ route('admin.recruitment.convertToMember', $recruitment->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary btn-sm" style="width: 100%; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                                        + Jadikan Anggota UKM
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
     </div>
