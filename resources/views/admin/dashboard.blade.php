@@ -5,51 +5,75 @@
 
 @section('content')
 <!-- Top Analytics Cards -->
-<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
-    <div class="glass-panel" style="padding: 1.5rem; border-left: 4px solid var(--accent-blue);">
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+    <div class="glass-panel" style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--accent-blue);">
+        <div style="font-size: 0.775rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
             Total Pendaftar
         </div>
-        <div style="font-size: 2.25rem; font-weight: 800; color: var(--slate-900); margin: 0.25rem 0;">
+        <div style="font-size: 2rem; font-weight: 800; color: var(--slate-900); margin: 0.2rem 0;">
             {{ $totalApplicants }}
         </div>
-        <div style="font-size: 0.775rem; color: var(--slate-500);">
-            Calon Anggota Baru (Oprec)
+        <div style="font-size: 0.75rem; color: var(--slate-500);">
+            Calon Anggota (Oprec)
         </div>
     </div>
 
-    <div class="glass-panel" style="padding: 1.5rem; border-left: 4px solid var(--warning);">
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+    <div class="glass-panel" style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--warning);">
+        <div style="font-size: 0.775rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
             Menunggu Seleksi
         </div>
-        <div style="font-size: 2.25rem; font-weight: 800; color: var(--warning); margin: 0.25rem 0;">
+        <div style="font-size: 2rem; font-weight: 800; color: var(--warning); margin: 0.2rem 0;">
             {{ $pendingApplicants }}
         </div>
-        <div style="font-size: 0.775rem; color: var(--slate-500);">
+        <div style="font-size: 0.75rem; color: var(--slate-500);">
             Perlu ditinjau pengurus
         </div>
     </div>
 
-    <div class="glass-panel" style="padding: 1.5rem; border-left: 4px solid var(--success);">
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+    <div class="glass-panel" style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--success);">
+        <div style="font-size: 0.775rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
             Diterima
         </div>
-        <div style="font-size: 2.25rem; font-weight: 800; color: var(--success); margin: 0.25rem 0;">
+        <div style="font-size: 2rem; font-weight: 800; color: var(--success); margin: 0.2rem 0;">
             {{ $acceptedApplicants }}
         </div>
-        <div style="font-size: 0.775rem; color: var(--slate-500);">
+        <div style="font-size: 0.75rem; color: var(--slate-500);">
             Lolos seleksi divisi
         </div>
     </div>
 
-    <div class="glass-panel" style="padding: 1.5rem; border-left: 4px solid var(--div-pemrograman);">
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+    <div class="glass-panel" style="padding: 1.25rem 1.5rem; border-left: 4px solid #10b981;">
+        <div style="font-size: 0.775rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+            Anggota Aktif
+        </div>
+        <div style="font-size: 2rem; font-weight: 800; color: #10b981; margin: 0.2rem 0;">
+            {{ $totalMembers }}
+        </div>
+        <div style="font-size: 0.75rem; color: var(--slate-500);">
+            <a href="{{ route('admin.members.index') }}" style="color: var(--accent-blue); font-weight: 600;">Lihat Direktori &rarr;</a>
+        </div>
+    </div>
+
+    <div class="glass-panel" style="padding: 1.25rem 1.5rem; border-left: 4px solid #8b5cf6;">
+        <div style="font-size: 0.775rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+            Sesi Presensi
+        </div>
+        <div style="font-size: 2rem; font-weight: 800; color: #8b5cf6; margin: 0.2rem 0;">
+            {{ $totalSessions }}
+        </div>
+        <div style="font-size: 0.75rem; color: var(--slate-500);">
+            <a href="{{ route('admin.attendance.index') }}" style="color: var(--accent-blue); font-weight: 600;">Rekap Kehadiran &rarr;</a>
+        </div>
+    </div>
+
+    <div class="glass-panel" style="padding: 1.25rem 1.5rem; border-left: 4px solid var(--div-pemrograman);">
+        <div style="font-size: 0.775rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
             Karya & Artikel
         </div>
-        <div style="font-size: 2.25rem; font-weight: 800; color: var(--slate-900); margin: 0.25rem 0;">
+        <div style="font-size: 2rem; font-weight: 800; color: var(--slate-900); margin: 0.2rem 0;">
             {{ $totalPosts }}
         </div>
-        <div style="font-size: 0.775rem; color: var(--slate-500);">
+        <div style="font-size: 0.75rem; color: var(--slate-500);">
             Publikasi aktif di kanal
         </div>
     </div>

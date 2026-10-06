@@ -29,12 +29,16 @@ class DashboardController extends Controller
                 ->get();
 
             $divisionsStats = Division::withCount(['posts', 'firstChoiceApplicants'])->get();
+            $totalMembers = \App\Models\Member::where('status', 'aktif')->count();
+            $totalSessions = \App\Models\AttendanceSession::count();
         } else {
             $divisionId = $user->division_id;
             $totalPosts = Post::where('division_id', $divisionId)->count();
             $totalApplicants = Recruitment::where('first_choice_division_id', $divisionId)->count();
             $pendingApplicants = Recruitment::where('first_choice_division_id', $divisionId)->where('status', 'pending')->count();
             $acceptedApplicants = Recruitment::where('first_choice_division_id', $divisionId)->where('status', 'accepted')->count();
+            $totalMembers = \App\Models\Member::where('division_id', $divisionId)->where('status', 'aktif')->count();
+            $totalSessions = \App\Models\AttendanceSession::where('division_id', $divisionId)->count();
 
             $recentApplicants = Recruitment::with(['firstChoiceDivision'])
                 ->where('first_choice_division_id', $divisionId)
@@ -54,6 +58,8 @@ class DashboardController extends Controller
             'totalApplicants',
             'pendingApplicants',
             'acceptedApplicants',
+            'totalMembers',
+            'totalSessions',
             'recentApplicants',
             'divisionsStats',
             'recruitmentStatus'
