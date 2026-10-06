@@ -10,6 +10,9 @@ class AuthController extends Controller
     public function showLogin()
     {
         if (Auth::check()) {
+            if (Auth::user()->isMember()) {
+                return redirect()->route('student.dashboard');
+            }
             return redirect()->route('admin.dashboard');
         }
 
@@ -30,6 +33,11 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
+            if ($user->isMember()) {
+                return redirect()->intended(route('student.dashboard'))
+                    ->with('success', 'Selamat datang kembali, ' . $user->name . '!');
+            }
+
             return redirect()->intended(route('admin.dashboard'))
                 ->with('success', 'Selamat datang kembali, ' . $user->name . '!');
         }

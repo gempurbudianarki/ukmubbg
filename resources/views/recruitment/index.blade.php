@@ -99,24 +99,61 @@
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
-                    <div class="form-group">
-                        <label class="form-label" for="class_group">Kelas / Rombel *</label>
-                        <input type="text" id="class_group" name="class_group" class="form-control @error('class_group') is-invalid @enderror" value="{{ old('class_group') }}" placeholder="Contoh: IF-22A" required>
-                        @error('class_group') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="phone_whatsapp">Nomor WhatsApp Aktif *</label>
-                        <input type="text" id="phone_whatsapp" name="phone_whatsapp" class="form-control @error('phone_whatsapp') is-invalid @enderror" value="{{ old('phone_whatsapp') }}" placeholder="Contoh: 081298765432" required>
-                        @error('phone_whatsapp') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
-                    </div>
+                <div class="form-group">
+                    <label class="form-label" for="phone_whatsapp">Nomor WhatsApp Aktif *</label>
+                    <input type="text" id="phone_whatsapp" name="phone_whatsapp" class="form-control @error('phone_whatsapp') is-invalid @enderror" value="{{ old('phone_whatsapp') }}" placeholder="Contoh: 081298765432" required>
+                    @error('phone_whatsapp') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="email">Alamat Email Aktif *</label>
-                    <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Contoh: bintang@kampus.ac.id" required>
-                    @error('email') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
+                <!-- Pas Foto Profil Mahasiswa -->
+                <div class="form-group" style="background: var(--slate-50); border: 1px dashed var(--slate-300); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.5rem;">
+                    <label class="form-label" for="profile_photo" style="display: flex; align-items: center; justify-content: space-between;">
+                        <span><i class="fas fa-camera" style="color: var(--primary-600); margin-right: 0.5rem;"></i> Pas Foto Resmi / Foto Profil Mahasiswa</span>
+                        <span style="font-size: 0.75rem; font-weight: 500; color: var(--slate-400);">JPG, PNG, WEBP (Maks 2MB)</span>
+                    </label>
+                    <input type="file" id="profile_photo" name="profile_photo" class="form-control @error('profile_photo') is-invalid @enderror" accept="image/jpeg,image/png,image/webp">
+                    <p style="font-size: 0.775rem; color: var(--slate-500); margin-top: 0.4rem; margin-bottom: 0;">
+                        Foto setengah badan dengan pakaian rapi. Foto ini otomatis tampil di <strong>KTA Digital Mahasiswa</strong> dan buku data anggota UKM.
+                    </p>
+                    @error('profile_photo') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
+                </div>
+
+                <!-- Akun & Keamanan Akses Portal Mahasiswa -->
+                <div style="background: linear-gradient(135deg, rgba(37,99,235,0.04), rgba(14,165,233,0.04)); border: 1px solid rgba(37,99,235,0.15); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                        <span style="display: inline-flex; width: 24px; height: 24px; border-radius: 6px; background: var(--primary-600); color: #fff; align-items: center; justify-content: center; font-size: 0.75rem;"><i class="fas fa-lock"></i></span>
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--slate-900); margin: 0;">Akun & Akses Portal Mahasiswa</h4>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--slate-600); margin-bottom: 1rem;">
+                        Akun ini akan langsung aktif agar Anda dapat login ke <strong>Portal Mahasiswa</strong>, memantau pengumuman kelulusan, jadwal wawancara, serta mengunduh KTA Digital.
+                    </p>
+
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label class="form-label" for="email">Alamat Email Aktif (ID Login) *</label>
+                        <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', auth()->user()?->email) }}" placeholder="Contoh: nama@student.ac.id" required {{ auth()->check() ? 'readonly' : '' }}>
+                        @error('email') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
+                    </div>
+
+                    @guest
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="password">Kata Sandi Baru *</label>
+                            <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Minimal 8 karakter" required>
+                            @error('password') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="password_confirmation">Ulangi Kata Sandi *</label>
+                            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Konfirmasi kata sandi" required>
+                        </div>
+                    </div>
+                    @endguest
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="class_group">Kelas / Rombel Kuliah (Opsional)</label>
+                    <input type="text" id="class_group" name="class_group" class="form-control @error('class_group') is-invalid @enderror" value="{{ old('class_group') }}" placeholder="Contoh: IF-22A atau Reguler Pagi">
+                    @error('class_group') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
                 </div>
 
                 <!-- Section 2 -->
@@ -188,11 +225,20 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="portfolio_url">Link Portofolio / GitHub / Karya Digital (Opsional)</label>
-                    <input type="url" id="portfolio_url" name="portfolio_url" class="form-control @error('portfolio_url') is-invalid @enderror" value="{{ old('portfolio_url') }}" placeholder="https://github.com/username atau link Figma / Drive">
-                    <small style="color: var(--slate-400); font-size: 0.775rem;">Menyertakan link karya nyata akan menjadi nilai tambah besar saat seleksi.</small>
-                    @error('portfolio_url') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="github_url">Tautan Profil GitHub (Opsional)</label>
+                        <input type="url" id="github_url" name="github_url" class="form-control @error('github_url') is-invalid @enderror" value="{{ old('github_url', auth()->user()?->github_url) }}" placeholder="https://github.com/username">
+                        <small style="color: var(--slate-400); font-size: 0.75rem;">Sangat disukai untuk divisi teknologi & pemrograman.</small>
+                        @error('github_url') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="portfolio_url">Link Portofolio / Karya Lainnya (Opsional)</label>
+                        <input type="url" id="portfolio_url" name="portfolio_url" class="form-control @error('portfolio_url') is-invalid @enderror" value="{{ old('portfolio_url') }}" placeholder="https://dribbble.com, Behance, atau Drive">
+                        <small style="color: var(--slate-400); font-size: 0.75rem;">Link karya nyata atau sertifikat pendukung.</small>
+                        @error('portfolio_url') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
+                    </div>
                 </div>
 
                 <div style="margin-top: 2.5rem;">
