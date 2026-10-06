@@ -49,9 +49,12 @@ class StudentDashboardController extends Controller
             ];
         }
 
+        // Acceptance status check
+        $isAccepted = ($member !== null) || ($recruitment?->status === 'accepted');
+
         // Division syllabus / academic topics
         $syllabus = $division?->focus_topics ?? [];
 
-        return view('student.dashboard', compact('user', 'recruitment', 'member', 'division', 'attendanceStats', 'syllabus'));
+        return view('student.dashboard', compact('user', 'recruitment', 'member', 'division', 'attendanceStats', 'syllabus', 'isAccepted'));
     }
 }

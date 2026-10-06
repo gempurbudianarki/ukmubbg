@@ -1,6 +1,7 @@
 @extends('student.layouts.app')
 
 @section('title', 'Edit Profil Mahasiswa')
+@section('page_title', 'Pengaturan & Edit Profil')
 
 @section('styles')
 <style>

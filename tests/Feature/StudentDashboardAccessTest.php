@@ -55,7 +55,7 @@ class StudentDashboardAccessTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
-    public function test_student_can_view_dashboard_with_stepper_and_kta(): void
+    public function test_applicant_sees_selection_stepper_interview_and_locked_kta(): void
     {
         $recruitment = Recruitment::create([
             'user_id' => $this->student->id,
@@ -80,9 +80,59 @@ class StudentDashboardAccessTest extends TestCase
         $response->assertSee('Dimas Arya Mahasiswa');
         $response->assertSee('2401019999');
         $response->assertSee('Divisi Pemrograman Web');
-        $response->assertSee('Tahap Wawancara');
         $response->assertSee('UKM-2026-DIMAS');
-        $response->assertSee('Kartu Tanda Anggota');
-        $response->assertSee('Laravel Framework');
+        // Sees applicant stepper and interview schedule
+        $response->assertSee('Alur Seleksi Penerimaan Anggota');
+        $response->assertSee('Tahap Wawancara');
+        $response->assertSee('Lab Komputer 3');
+        // KTA is in locked state until accepted
+        $response->assertSee('Kartu Tanda Anggota (KTA) Belum Terbit');
+        // Sidebar exists
+        $response->assertSee('PORTAL MAHASISWA');
+    }
+
+    public function test_accepted_member_hides_stepper_and_displays_official_kta_and_metrics(): void
+    {
+        // Student is officially accepted & promoted to member
+        $recruitment = Recruitment::create([
+            'user_id' => $this->student->id,
+            'registration_code' => 'UKM-2026-DIMAS',
+            'full_name' => $this->student->name,
+            'email' => $this->student->email,
+            'nim' => $this->student->nim,
+            'first_choice_division_id' => $this->division->id,
+            'semester' => 3,
+            'phone_whatsapp' => '081234567899',
+            'reason_to_join' => 'Mau belajar pemrograman web dan berkontribusi.',
+            'profile_photo' => $this->student->avatar,
+            'status' => 'accepted',
+            'selection_stage' => 'diterima',
+        ]);
+
+        $member = Member::create([
+            'user_id' => $this->student->id,
+            'recruitment_id' => $recruitment->id,
+            'division_id' => $this->division->id,
+            'name' => $this->student->name,
+            'nim' => $this->student->nim,
+            'email' => $this->student->email,
+            'phone_number' => '081234567899',
+            'batch_year' => '2026',
+            'status' => 'aktif',
+            'avatar' => $this->student->avatar,
+        ]);
+
+        $response = $this->actingAs($this->student)->get(route('student.dashboard'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Dimas Arya Mahasiswa');
+        $response->assertSee('STATUS: ANGGOTA AKTIF TERDAFTAR');
+        // The recruitment stepper and interview schedule MUST be gone
+        $response->assertDontSee('Alur Seleksi Penerimaan Anggota');
+        $response->assertDontSee('Jadwal Wawancara Divisi Anda:');
+        // The official KTA Digital is unlocked and rendered
+        $response->assertSee('KARTU TANDA ANGGOTA');
+        $response->assertSee('TERVERIFIKASI SISTEM');
+        $response->assertSee('Cetak Dokumen KTA');
     }
 }
