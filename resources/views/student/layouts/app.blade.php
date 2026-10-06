@@ -285,19 +285,19 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('student.dashboard') }}#kta-section" class="student-nav-link">
+                    <a href="{{ route('student.kta') }}" class="student-nav-link {{ request()->routeIs('student.kta') ? 'active' : '' }}">
                         <i class="fas fa-id-card"></i>
                         <span>Kartu Anggota (KTA)</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('student.dashboard') }}#presensi-section" class="student-nav-link">
+                    <a href="{{ route('student.presensi') }}" class="student-nav-link {{ request()->routeIs('student.presensi') ? 'active' : '' }}">
                         <i class="fas fa-clipboard-check"></i>
                         <span>Presensi Pertemuan</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('student.dashboard') }}#silabus-section" class="student-nav-link">
+                    <a href="{{ route('student.silabus') }}" class="student-nav-link {{ request()->routeIs('student.silabus') ? 'active' : '' }}">
                         <i class="fas fa-book-open"></i>
                         <span>Silabus & Riset</span>
                     </a>

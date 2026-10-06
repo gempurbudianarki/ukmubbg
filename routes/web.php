@@ -48,6 +48,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Student Portal Routes (Authenticated)
 Route::middleware('auth')->prefix('student')->name('student.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Student\StudentDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/kta', [\App\Http\Controllers\Student\StudentDashboardController::class, 'kta'])->name('kta');
+    Route::get('/presensi', [\App\Http\Controllers\Student\StudentDashboardController::class, 'presensi'])->name('presensi');
+    Route::get('/silabus', [\App\Http\Controllers\Student\StudentDashboardController::class, 'silabus'])->name('silabus');
     Route::get('/profile', [\App\Http\Controllers\Student\StudentProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [\App\Http\Controllers\Student\StudentProfileController::class, 'update'])->name('profile.update');
 });

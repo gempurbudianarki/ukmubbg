@@ -135,4 +135,27 @@ class StudentDashboardAccessTest extends TestCase
         $response->assertSee('TERVERIFIKASI SISTEM');
         $response->assertSee('Cetak Dokumen KTA');
     }
+
+    public function test_student_can_access_dedicated_kta_page(): void
+    {
+        $response = $this->actingAs($this->student)->get(route('student.kta'));
+        $response->assertStatus(200);
+        $response->assertSee('Kartu Tanda Anggota (KTA Digital)');
+    }
+
+    public function test_student_can_access_dedicated_presensi_page(): void
+    {
+        $response = $this->actingAs($this->student)->get(route('student.presensi'));
+        $response->assertStatus(200);
+        $response->assertSee('Presensi & Kehadiran Pertemuan');
+        $response->assertSee('Riwayat Seluruh Sesi Pertemuan Divisi');
+    }
+
+    public function test_student_can_access_dedicated_silabus_page(): void
+    {
+        $response = $this->actingAs($this->student)->get(route('student.silabus'));
+        $response->assertStatus(200);
+        $response->assertSee('Silabus');
+        $response->assertSee('Daftar Modul');
+    }
 }
