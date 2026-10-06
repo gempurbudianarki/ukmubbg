@@ -41,6 +41,11 @@ class Recruitment extends Model
         return $this->belongsTo(Division::class, 'second_choice_division_id');
     }
 
+    public function member()
+    {
+        return $this->hasOne(Member::class);
+    }
+
     public static function generateCode(): string
     {
         do {

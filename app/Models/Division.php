@@ -30,13 +30,24 @@ class Division extends Model
         'social_links',
     ];
 
+    protected $casts = [
+        'focus_topics' => 'array',
+        'social_links' => 'array',
+    ];
+
     public function getFocusTopicsListAttribute(): array
     {
+        if (is_array($this->focus_topics)) {
+            return $this->focus_topics;
+        }
         return json_decode($this->focus_topics ?: '[]', true) ?: [];
     }
 
     public function getSocialLinksListAttribute(): array
     {
+        if (is_array($this->social_links)) {
+            return $this->social_links;
+        }
         return json_decode($this->social_links ?: '{}', true) ?: [];
     }
 
@@ -68,5 +79,15 @@ class Division extends Model
     public function events()
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function members()
+    {
+        return $this->hasMany(Member::class);
+    }
+
+    public function attendanceSessions()
+    {
+        return $this->hasMany(AttendanceSession::class);
     }
 }
