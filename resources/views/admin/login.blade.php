@@ -4,21 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masuk Admin CMS - UKM Ilmu Komputer</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/portal.css') }}">
 </head>
 <body style="background: linear-gradient(135deg, var(--slate-900) 0%, var(--primary-dark) 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem;">
     <div style="width: 100%; max-width: 440px;">
         <div style="text-align: center; margin-bottom: 2rem;">
-            <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); display: inline-flex; align-items: center; justify-content: center; color: #ffffff; margin-bottom: 1rem;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-            </div>
-            <h1 style="color: #ffffff; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em;">
-                Portal CMS Pengurus
+            <a href="{{ route('home') }}" style="display: inline-block; text-decoration: none;">
+                <img src="{{ asset('images/logo.png') }}" alt="UKM Ilmu Komputer Logo" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 0.85rem; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.4));">
+            </a>
+            <h1 style="color: #ffffff; font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 0.35rem;">
+                Portal Masuk Akun
             </h1>
-            <p style="color: var(--slate-400); font-size: 0.9rem; margin-top: 0.25rem;">
-                UKM Program Studi Ilmu Komputer
+            <p style="color: var(--slate-400); font-size: 0.9rem; margin: 0;">
+                UKM Ilmu Komputer &bull; Pengurus & Mahasiswa
             </p>
         </div>
 
@@ -39,8 +38,8 @@
                 @csrf
 
                 <div class="form-group">
-                    <label class="form-label" for="email">Alamat Email Pengurus</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="admin@ukmilkom.id" required autofocus>
+                    <label class="form-label" for="email">Alamat Email Terdaftar</label>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="nama@ukmilkom.id atau email mahasiswa" required autofocus>
                 </div>
 
                 <div class="form-group">

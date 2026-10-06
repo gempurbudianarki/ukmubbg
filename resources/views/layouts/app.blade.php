@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'UKM Ilmu Komputer - Wadah Riset & Inovasi Teknologi')</title>
     <meta name="description" content="@yield('meta_description', 'Portal publikasi resmi UKM Ilmu Komputer: Pemrograman, Multimedia, IoT, dan Cyber Security. Informasi pendaftaran anggota baru dan dokumentasi kegiatan.')">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/portal.css') }}">

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Portal Mahasiswa') - UKM Ilmu Komputer</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/portal.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -242,9 +243,7 @@
         <aside class="student-sidebar" id="studentSidebar">
             <!-- Brand -->
             <a href="{{ route('student.dashboard') }}" class="student-brand">
-                <div class="student-brand-icon">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
+                <img src="{{ asset('images/logo.png') }}" alt="UKM Ilmu Komputer Logo" style="width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));">
                 <div>
                     <div style="font-weight: 800; font-size: 1.05rem; letter-spacing: -0.01em; color: #ffffff;">PORTAL MAHASISWA</div>
                     <div style="font-size: 0.725rem; color: #94a3b8; font-weight: 500;">UKM ILMU KOMPUTER</div>
