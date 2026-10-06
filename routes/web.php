@@ -71,6 +71,14 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::put('/members/{member}/status', [\App\Http\Controllers\Admin\MemberAdminController::class, 'updateStatus'])->name('members.updateStatus');
     Route::delete('/members/{member}', [\App\Http\Controllers\Admin\MemberAdminController::class, 'destroy'])->name('members.destroy');
 
+    // Attendance & Presensi System
+    Route::get('/attendance', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'index'])->name('attendance.index');
+    Route::get('/attendance/create', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'create'])->name('attendance.create');
+    Route::post('/attendance', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'store'])->name('attendance.store');
+    Route::get('/attendance/{session}', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'show'])->name('attendance.show');
+    Route::put('/attendance/{session}/logs', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'updateLogs'])->name('attendance.updateLogs');
+    Route::delete('/attendance/{session}', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'destroy'])->name('attendance.destroy');
+
     // Ecosystem Modules
     Route::resource('projects', \App\Http\Controllers\Admin\ProjectAdminController::class)->except(['show']);
     Route::resource('events', \App\Http\Controllers\Admin\EventAdminController::class)->except(['show']);
