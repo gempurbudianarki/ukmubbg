@@ -1,115 +1,111 @@
-# Spec: Recruitment Control Center & Formal Academic Attendance with BAP Generator
+# Spec: Recruitment Control Center & Formal Division Attendance System
 
 **Tanggal**: 2026-10-06  
-**Status**: Approved by User  
-**Tujuan**: Menghadirkan sistem pembukaan rekrutmen berbasis jadwal waktu & seleksi divisi terpusat oleh Super Admin, serta sistem presensi sesi divisi resmi berstandar nasional yang mencatat silabus materi pembelajaran dan menghasilkan dokumen Berita Acara Presensi (BAP) akademik siap cetak.
+**Status**: Approved by User (Streamlined Web-First, Tanpa Cetak Fisik BAP)  
+**Tujuan**: Menghadirkan sistem pembukaan rekrutmen berbasis jadwal waktu & seleksi divisi terpusat oleh Super Admin, serta sistem pembukaan sesi presensi divisi resmi yang mencatat silabus materi pembelajaran secara formal di web.
 
 ---
 
 ## 1. Latar Belakang & Masalah
-1. **Pendaftaran Tidak Terjadwal & Tidak Fleksibel**:
-   - Sebelumnya, form pendaftaran terbuka tanpa pembatasan jadwal waktu otomatis (tanggal buka/tutup).
-   - Super Admin belum memiliki kontrol per divisi (misalnya membuka kuota hanya untuk Divisi Pemrograman dan IoT, sedangkan Multimedia dan Cyber Security ditutup sementara).
-   - Pengunjung publik dapat memilih divisi yang kuotanya sebenarnya sudah penuh atau sedang tidak membuka rekrutmen.
-2. **Presensi Kurang Formal & Belum Memenuhi Standar Akademik Kampus/Nasional**:
-   - Setiap divisi di lingkungan kampus wajib memiliki rekaman kegiatan yang jelas: hari & tanggal, jam pelaksanaan, nama ruangan/media, materi/silabus pokok bahasan, capaian pembelajaran (resume materi), dan penanggung jawab/pemateri.
-   - Belum ada dokumen resmi Berita Acara Presensi (BAP) yang memuat kop resmi organisasi, rekap statistik kehadiran, tanda tangan Ketua Divisi, dan Dosen Pembina untuk pelaporan pertanggungjawaban (LPJ).
+1. **Pendaftaran Perlu Kontrol Jadwal & Pembatasan Divisi**:
+   - Pendaftaran tidak dibuka terus-menerus; ada periode tanggal mulai dan tanggal penutupan yang diatur oleh Super Admin.
+   - Super Admin dapat menentukan divisi mana saja yang aktif dibuka dan mana yang ditutup (misalnya kuota penuh di divisi tertentu).
+   - Pengunjung publik pada halaman `/pendaftaran` hanya dapat memilih divisi yang sedang berstatus dibuka. Jika pendaftaran ditutup secara global atau di luar jadwal, sistem menampilkan pengumuman resmi dan menonaktifkan formulir.
+2. **Presensi Perlu Prosedur Buka Sesi Formal per Divisi**:
+   - Setiap Admin Divisi wajib membuka sesi pertemuan terlebih dahulu sebelum melakukan absensi.
+   - Sesi mencakup informasi formal kegiatan:
+     - Hari & Tanggal pelaksanaan (nama hari terisi otomatis berdasarkan tanggal)
+     - Waktu mulai dan selesai
+     - Lokasi / Ruang Lab / Media Pertemuan
+     - Pokok Bahasan & Silabus (Materi apa saja yang dipelajari)
+     - Resume / Capaian Pembelajaran sesi
+     - Nama Pemateri / Instruktur / PIC
+   - Setelah sesi dibuka, admin mengisi daftar hadir anggota divisi secara interaktif di layar web lengkap dengan live counter statistik kehadiran.
 
 ---
 
 ## 2. Arsitektur & Perubahan Skema Database
 
 ### A. Tabel `divisions`
-Menambahkan kolom kontrol rekrutmen tingkat divisi:
-- `is_recruitment_open` (`boolean`, default: `true`): Flag pembukaan rekrutmen untuk divisi ini.
-- `recruitment_quota` (`integer`, nullable, default: `null`): Kuota maksimal pendaftar (opsional/unlimited jika null).
-- `recruitment_notes` (`string`, nullable): Catatan khusus divisi (misal: "Hanya untuk angkatan 2025/2026" atau "Kuota Terpenuhi").
+Menambahkan kolom kontrol rekrutmen divisi:
+- `is_recruitment_open` (`boolean`, default: `true`): Status buka/tutup pendaftaran divisi ini.
+- `recruitment_quota` (`integer`, nullable, default: `null`): Kuota maksimal pendaftar (opsional).
+- `recruitment_notes` (`string`, nullable): Catatan ringkas untuk pendaftar (misal: "Kuota Terbatas").
 
 ### B. Tabel `settings` (Konfigurasi Global Gelombang Pendaftaran)
 Kunci konfigurasi yang dikelola Super Admin:
 - `recruitment_status`: `'open'` | `'closed'`
-- `recruitment_start_date`: Tanggal & waktu mulai pembukaan (format: `Y-m-d H:i`)
-- `recruitment_end_date`: Tanggal & waktu penutupan pendaftaran (format: `Y-m-d H:i`)
+- `recruitment_start_date`: Tanggal & waktu mulai pembukaan (`Y-m-d H:i`)
+- `recruitment_end_date`: Tanggal & waktu penutupan pendaftaran (`Y-m-d H:i`)
 - `recruitment_batch_name`: Nama gelombang (misal: "Gelombang Ganjil 2026/2027")
 - `recruitment_closed_message`: Pesan formal saat pendaftaran ditutup.
 
 ### C. Tabel `attendance_sessions`
-Memperluas metadata sesi presensi agar setara standar akademik/BAP nasional:
-- `day_name`: (`string`, panjang: 20) Hari pelaksanaan (Senin, Selasa, Rabu, Kamis, Jumat, Sabtu, Minggu)
+Memperluas metadata sesi presensi agar formal dan tercatat jelas apa yang dipelajari:
+- `day_name`: (`string`, panjang: 20) Hari pelaksanaan (Senin, Selasa, dst., auto-detect dari tanggal)
 - `session_type`: (`enum`: `riset_rutin`, `workshop_teknis`, `mentoring_proyek`, `evaluasi_bulanan`, `sidang_pleno`, default: `riset_rutin`)
 - `topic_material`: (`string`, panjang: 255) Pokok Bahasan / Silabus Pertemuan yang dipelajari
-- `learning_outcomes`: (`text`, nullable) Uraian materi yang dipelajari, ringkasan pembahasan, atau capaian kompetensi
-- `instructor_name`: (`string`, panjang: 150) Nama Pemateri / Instruktur / Mentor / PIC Sesi
-- `status`: (`enum`: `open`, `closed`, default: `open`) Status sesi presensi
+- `learning_outcomes`: (`text`, nullable) Uraian materi yang dipelajari & resume pembahasan
+- `instructor_name`: (`string`, panjang: 150) Nama Pemateri / Mentor / PIC Sesi
+- `status`: (`enum`: `open`, `closed`, default: `open`)
 
 ---
 
-## 3. Alur Fungsionalitas & User Journey
+## 3. Alur Fungsionalitas & User Interface
 
 ### A. Kontrol Pendaftaran (Super Admin)
-1. **Halaman Pengaturan Gelombang (`/admin/recruitment/settings`)**:
+1. **Menu Pengaturan Gelombang (`/admin/recruitment/settings`)**:
    - Super Admin dapat:
-     - Mengubah switch status pendaftaran global (`Buka Pendaftaran` vs `Tutup Pendaftaran`).
-     - Mengatur periode waktu mulai (`start_date`) dan batas akhir (`end_date`).
-     - Menentukan nama gelombang dan pesan formal ketika pendaftaran ditutup.
-     - Mengatur status pembukaan divisi masing-masing via switch interaktif, kuota pendaftar, dan catatan divisi.
-     - Melihat ringkasan real-time: Total pendaftar per divisi vs kuota yang ditetapkan.
+     - Mengubah switch status pendaftaran global (Buka/Tutup).
+     - Mengatur tanggal & jam mulai serta tanggal & jam selesai.
+     - Mengatur nama gelombang dan pesan formal ketika pendaftaran ditutup.
+     - Switch on/off pembukaan per divisi, serta mengatur kuota maksimal masing-masing divisi.
+     - Melihat kartu ringkasan jumlah pendaftar saat ini per divisi vs kuota.
 2. **Validasi & Tampilan Publik (`/pendaftaran`)**:
-   - **Pengecekan Waktu Otomatis**:
-     - Jika status pendaftaran global `closed` ATAU waktu sekarang di luar rentang `start_date` sampai `end_date`, halaman `/pendaftaran` menampilkan **Pemberitahuan Resmi Penutupan Rekrutmen** lengkap dengan tanggal pembukaan gelombang berikutnya. Tombol pendaftaran dinonaktifkan.
+   - **Otomatisasi Jadwal**:
+     - Jika status global `closed` ATAU waktu sekarang di luar rentang `start_date` sampai `end_date`, form pendaftaran disembunyikan dan digantikan dengan banner pengumuman formal status rekrutmen.
    - **Filter Divisi Aktif**:
-     - Form pendaftaran hanya menampilkan pilihan divisi (Pilihan 1 dan Pilihan 2) yang memiliki `is_recruitment_open == true` dan belum melebihi kuota.
-     - Setiap opsi divisi menampilkan status badge (misal: "Buka - Kuota Tersedia" atau "Sisa Kuota: 12").
-     - Backend controller (`RecruitmentController@store`) memvalidasi ulang: menolak pendaftaran jika divisi pilihan utama/kedua sedang ditutup atau kuota sudah penuh.
+     - Pilihan divisi (Pilihan 1 dan Pilihan 2) pada form hanya memunculkan divisi yang `is_recruitment_open == true` dan belum melebihi kuota.
+     - Validasi backend menolak pengiriman form jika memilih divisi yang sedang ditutup.
 
-### B. Sesi Presensi Formal & Berita Acara Pertemuan (BAP)
-1. **Pembukaan Sesi Formal oleh Admin Divisi (`/admin/attendance/create`)**:
-   - Admin Divisi mengisi form sesi lengkap:
-     - Divisi (otomatis terkunci untuk admin divisi terkait)
-     - Hari & Tanggal (hari terdeteksi otomatis via JavaScript berdasarkan tanggal yang dipilih)
-     - Jam Mulai & Jam Selesai
-     - Tipe Sesi (Riset Rutin, Workshop Teknis, Mentoring Proyek, Evaluasi Bulanan)
-     - Lokasi / Ruangan (Laboratorium, Gedung Kuliah, atau Link Daring)
-     - Pokok Bahasan / Silabus yang dipelajari
-     - Capaian Pembelajaran & Uraian Materi yang dipelajari
-     - Nama Pemateri / Instruktur / PIC
-   - Saat sesi disimpan, seluruh anggota aktif divisi otomatis dibuatkan log absensi berstatus default `hadir`.
-2. **Pengisian Presensi Interaktif (`/admin/attendance/{id}`)**:
-   - Admin menandai status presensi masing-masing anggota (`Hadir`, `Izin`, `Sakit`, `Alpa`) dan memberikan catatan jika izin/sakit.
-   - Tersedia tombol cepat "Tandai Semua Hadir".
-   - Terdapat tombol aksi menuju **"Cetak Berita Acara Presensi (BAP)"**.
-3. **Dokumen Berita Acara Presensi Resmi (`/admin/attendance/{id}/bap`)**:
-   - Tampilan dokumen resmi standar akademik universitas:
-     - Kop surat resmi UKM Ilmu Komputer & Fakultas.
-     - Judul: **BERITA ACARA PERTEMUAN & DAFTAR PRESENSI KEGIATAN**.
-     - Nomor Dokumen: BAP otomatis (format: `BAP-ILKOM/YYYY/MM/ID`).
-     - Tabel Informasi Sesi: Hari/Tanggal, Jam, Tempat, Divisi, Tipe Pertemuan, Pemateri.
-     - Kotak Materi & Capaian Pembelajaran: Pokok bahasan silabus dan resume materi yang dipelajari.
-     - Rekapitulasi Statistik Kehadiran: Total Anggota, Hadir, Izin, Sakit, Alpa, serta Persentase Kehadiran (% Rate).
-     - Tabel Daftar Kehadiran Anggota: No, NIM, Nama Anggota, Angkatan, Status Kehadiran, Paraf/Status, Catatan.
-     - Kolom Tanda Tangan Resmi: PIC Pemateri Sesi, Ketua Divisi, dan Mengetahui Ketua Umum UKM / Dosen Pembina.
-     - Cetak siap pakai (`window.print()`) dengan CSS print yang memotong header/sidebar sistem web, sehingga hasil print PDF atau kertas A4 sangat rapi dan presisi.
+### B. Prosedur Pembukaan Sesi Presensi oleh Admin Divisi
+1. **Buka Sesi Baru (`/admin/attendance/create`)**:
+   - Admin Divisi masuk ke form pembukaan sesi resmi:
+     - Divisi otomatis terkunci ke divisi miliknya (Super Admin bisa memilih divisi mana saja atau sesi pleno).
+     - Pilih Tanggal & Hari (Hari terisi otomatis secara responsif saat tanggal dipilih, misal memilih 2026-10-10 langsung mengisi "Sabtu").
+     - Jam Mulai & Jam Selesai.
+     - Tipe Sesi (*Riset Rutin*, *Workshop Teknis*, *Mentoring Proyek*, *Evaluasi Bulanan*).
+     - Ruang / Lokasi Kegiatan.
+     - **Materi Pokok Bahasan**: Mengisi judul topik/silabus materi yang dipelajari.
+     - **Capaian Pembelajaran / Resume Materi**: Rangkuman apa saja yang dipelajari anggota dalam pertemuan tersebut.
+     - **Pemateri / PIC Sesi**: Nama pemateri atau ketua yang memimpin pertemuan.
+   - Setelah disimpan, sistem langsung mengarahkan ke lembar checklist kehadiran anggota aktif divisi tersebut.
+2. **Lembar Pengisian Presensi Interaktif (`/admin/attendance/{id}`)**:
+   - Menampilkan kartu rincian sesi: Hari, Tanggal, Jam, Lokasi, Pemateri, serta Box Silabus & Materi Pembelajaran.
+   - Tabel interaktif anggota divisi dengan radio button status (`Hadir`, `Izin`, `Sakit`, `Alpa`).
+   - Tombol cepat **"Tandai Semua Hadir"** dengan konfirmasi instan.
+   - Kolom catatan izin/sakit per anggota.
+   - Live counter kehadiran yang otomatis mengkalkulasi persentase kehadiran real-time.
+   - Tombol simpan perubahan presensi.
 
 ---
 
-## 4. Keamanan & Hak Akses (Role & Permission)
+## 4. Hak Akses (Role & Permission)
 - **Super Admin**:
-  - Akses penuh ke pengaturan rekrutmen global dan seluruh divisi.
-  - Dapat membuat dan melihat sesi presensi seluruh divisi atau sesi pleno bersama.
+  - Akses menu pengaturan rekrutmen dan kuota seluruh divisi.
+  - Dapat membuka sesi presensi untuk divisi mana pun atau sesi pleno.
 - **Admin Divisi**:
-  - Hanya dapat melihat dan membuat sesi presensi untuk divisinya sendiri.
-  - Berita Acara (BAP) hanya dapat diakses/dikelola untuk divisinya sendiri.
-- **Guest / Publik**:
-  - Hanya dapat mendaftar jika gelombang rekrutmen dan divisi terkait berstatus aktif dibuka.
+  - Hanya dapat membuka dan mengisi sesi presensi untuk divisinya sendiri.
+  - Menu pengaturan rekrutmen global hanya dapat diubah oleh Super Admin.
 
 ---
 
 ## 5. Rencana Pengujian Otomatis (Automated Tests)
 1. **RecruitmentControlTest**:
-   - Memastikan pendaftaran ditolak jika jadwal pendaftaran belum dimulai atau sudah lewat tenggat.
-   - Memastikan Super Admin dapat mengaktifkan/menonaktifkan divisi tertentu.
-   - Memastikan form pendaftaran hanya mengizinkan pemilihan divisi yang dibuka.
-2. **AttendanceBAPTest**:
-   - Memastikan sesi presensi menyimpan hari, tipe sesi, silabus materi, dan pemateri.
-   - Memastikan halaman BAP menghasilkan perhitungan statistik kehadiran yang akurat dan dapat dirender dengan status HTTP 200.
-   - Memastikan hak akses admin divisi dibatasi sesuai divisinya.
+   - Jadwal pendaftaran tertutup menolak pendaftaran baru.
+   - Mematikan divisi A membuat divisi A tidak muncul di opsi pendaftaran dan dilarang dipilih.
+   - Super admin berhasil memperbarui pengaturan gelombang dan divisi.
+2. **AttendanceSessionFlowTest**:
+   - Pembuatan sesi berhasil menyimpan hari, silabus materi yang dipelajari, dan nama pemateri.
+   - Admin divisi hanya dapat membuat sesi untuk divisinya sendiri.
+   - Batch update status presensi anggota berhasil disimpan dengan benar.
