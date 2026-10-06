@@ -12,24 +12,53 @@ class RecruitmentController extends Controller
     public function index(Request $request)
     {
         $status = Setting::get('recruitment_status', 'open');
-        $batch = Setting::get('recruitment_batch', 'Gelombang I');
+        $batch = Setting::get('recruitment_batch_name', Setting::get('recruitment_batch', 'Gelombang I'));
         $deadline = Setting::get('recruitment_deadline', '31 Oktober 2026');
-        $divisions = Division::all();
+        $startDate = Setting::get('recruitment_start_date');
+        $endDate = Setting::get('recruitment_end_date');
+        $closedMessage = Setting::get('recruitment_closed_message', 'Mohon maaf, periode pendaftaran anggota baru saat ini sedang ditutup.');
+
+        $now = now();
+        $isWithinSchedule = true;
+        if (!empty($startDate) && $now->lt(\Carbon\Carbon::parse($startDate))) {
+            $isWithinSchedule = false;
+        }
+        if (!empty($endDate) && $now->gt(\Carbon\Carbon::parse($endDate))) {
+            $isWithinSchedule = false;
+        }
+        $isOpen = ($status === 'open') && $isWithinSchedule;
+
+        // Retrieve only divisions where recruitment is open
+        $divisions = Division::where('is_recruitment_open', true)->get();
 
         // Optional preselected division from query parameter ?divisi=pemrograman
         $preselectedDivision = null;
         if ($request->filled('divisi')) {
-            $preselectedDivision = Division::where('slug', $request->divisi)->first();
+            $preselectedDivision = Division::where('slug', $request->divisi)->where('is_recruitment_open', true)->first();
         }
 
-        return view('recruitment.index', compact('status', 'batch', 'deadline', 'divisions', 'preselectedDivision'));
+        return view('recruitment.index', compact('status', 'isOpen', 'batch', 'deadline', 'startDate', 'endDate', 'closedMessage', 'divisions', 'preselectedDivision'));
     }
 
     public function store(Request $request)
     {
-        $isOpen = Setting::get('recruitment_status', 'open') === 'open';
+        $status = Setting::get('recruitment_status', 'open');
+        $startDate = Setting::get('recruitment_start_date');
+        $endDate = Setting::get('recruitment_end_date');
+        $closedMessage = Setting::get('recruitment_closed_message', 'Mohon maaf, periode pendaftaran anggota baru saat ini sedang ditutup.');
+
+        $now = now();
+        $isWithinSchedule = true;
+        if (!empty($startDate) && $now->lt(\Carbon\Carbon::parse($startDate))) {
+            $isWithinSchedule = false;
+        }
+        if (!empty($endDate) && $now->gt(\Carbon\Carbon::parse($endDate))) {
+            $isWithinSchedule = false;
+        }
+        $isOpen = ($status === 'open') && $isWithinSchedule;
+
         if (!$isOpen) {
-            return back()->with('error', 'Mohon maaf, periode pendaftaran anggota baru saat ini sedang ditutup.');
+            return back()->with('error', $closedMessage);
         }
 
         $validated = $request->validate([
@@ -57,6 +86,19 @@ class RecruitmentController extends Controller
             'file_ktm.max' => 'Ukuran file KTM maksimal 2MB.',
             'file_cv.max' => 'Ukuran file CV maksimal 3MB.',
         ]);
+
+        // Verify that selected divisions are currently open for recruitment
+        $firstDiv = Division::where('id', $validated['first_choice_division_id'])->where('is_recruitment_open', true)->first();
+        if (!$firstDiv) {
+            return back()->withErrors(['first_choice_division_id' => 'Divisi pilihan utama saat ini sedang tidak membuka pendaftaran atau kuota telah terpenuhi.'])->withInput();
+        }
+
+        if (!empty($validated['second_choice_division_id'])) {
+            $secondDiv = Division::where('id', $validated['second_choice_division_id'])->where('is_recruitment_open', true)->first();
+            if (!$secondDiv) {
+                return back()->withErrors(['second_choice_division_id' => 'Divisi pilihan kedua saat ini sedang tidak membuka pendaftaran atau kuota telah terpenuhi.'])->withInput();
+            }
+        }
 
         // Check if NIM has already registered in this batch
         $existing = Recruitment::where('nim', $validated['nim'])->first();

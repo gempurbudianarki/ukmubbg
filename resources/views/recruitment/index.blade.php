@@ -19,25 +19,49 @@
 </div>
 
 <div class="container-narrow" style="padding: 1rem 1.5rem 5rem;">
-    @if ($status !== 'open')
-        <div class="glass-panel" style="text-align: center; padding: 3.5rem 2rem; border-top: 4px solid var(--warning);">
-            <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--warning-bg); color: var(--warning); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    @if(session('error'))
+        <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; color: #991b1b; display: flex; align-items: center; gap: 0.75rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span style="font-weight: 500; font-size: 0.95rem;">{{ session('error') }}</span>
+        </div>
+    @endif
+
+    @if (!$isOpen)
+        <div class="glass-panel" style="text-align: center; padding: 3.5rem 2rem; border-top: 4px solid var(--warning); border-radius: 16px;">
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--warning-bg); color: var(--warning); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
             </div>
-            <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--slate-900); margin-bottom: 0.5rem;">
-                Pendaftaran Periode Ini Telah Ditutup
+            <div class="badge badge-neutral" style="margin-bottom: 0.75rem;">
+                Status: Pendaftaran Sedang Ditutup
+            </div>
+            <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--slate-900); margin-bottom: 0.75rem; letter-spacing: -0.02em;">
+                Pendaftaran Sedang Ditutup
             </h2>
-            <p style="color: var(--slate-600); margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto;">
-                Periode pendaftaran gelombang ini telah berakhir. Jika Anda sudah mendaftar sebelumnya, Anda dapat memantau status seleksi Anda kapan saja.
+            <p style="color: var(--slate-600); margin-bottom: 1.75rem; max-width: 540px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                {{ $closedMessage ?? 'Periode pendaftaran anggota baru saat ini sedang tidak aktif atau batas waktu gelombang telah berakhir.' }}
             </p>
-            <a href="{{ route('recruitment.status') }}" class="btn btn-primary">
-                Cek Status Seleksi Anda &rarr;
+            @if(!empty($startDate) || !empty($endDate))
+                <div style="background: var(--bg-muted); border-radius: 10px; padding: 0.75rem 1.25rem; display: inline-flex; gap: 1.5rem; font-size: 0.85rem; color: var(--slate-700); margin-bottom: 2rem;">
+                    @if(!empty($startDate))
+                        <div><strong>Mulai:</strong> {{ $startDate }}</div>
+                    @endif
+                    @if(!empty($endDate))
+                        <div><strong>Batas Akhir:</strong> {{ $endDate }}</div>
+                    @endif
+                </div>
+                <br>
+            @endif
+            <a href="{{ route('recruitment.status') }}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                <span>Cek Status Seleksi Anda</span>
+                <span>&rarr;</span>
             </a>
         </div>
     @else
-        <div class="glass-panel" style="padding: 2.5rem; border-top: 4px solid var(--accent-blue);">
+        <div class="glass-panel" style="padding: 2.5rem; border-top: 4px solid var(--accent-blue); border-radius: 16px;">
             <form action="{{ route('recruitment.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
@@ -111,7 +135,7 @@
                             <option value="">-- Pilih Divisi Utama --</option>
                             @foreach ($divisions as $d)
                                 <option value="{{ $d->id }}" {{ (old('first_choice_division_id', optional($preselectedDivision)->id) == $d->id) ? 'selected' : '' }}>
-                                    {{ $d->name }}
+                                    {{ $d->name }}{{ $d->recruitment_quota ? ' (Kuota: ' . $d->recruitment_quota . ')' : '' }}{{ $d->recruitment_notes ? ' • ' . $d->recruitment_notes : '' }}
                                 </option>
                             @endforeach
                         </select>
@@ -124,7 +148,7 @@
                             <option value="">-- Bebas / Tidak Memilih --</option>
                             @foreach ($divisions as $d)
                                 <option value="{{ $d->id }}" {{ old('second_choice_division_id') == $d->id ? 'selected' : '' }}>
-                                    {{ $d->name }}
+                                    {{ $d->name }}{{ $d->recruitment_quota ? ' (Kuota: ' . $d->recruitment_quota . ')' : '' }}{{ $d->recruitment_notes ? ' • ' . $d->recruitment_notes : '' }}
                                 </option>
                             @endforeach
                         </select>
