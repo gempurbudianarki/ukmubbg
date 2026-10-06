@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Division;
 use App\Models\Recruitment;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -183,5 +184,73 @@ class RecruitmentAdminController extends Controller
             'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ]);
+    }
+
+    public function settings()
+    {
+        $user = Auth::user();
+        if (!$user->isSuperAdmin()) {
+            abort(403, 'Akses terbatas untuk Super Admin.');
+        }
+
+        $recruitmentStatus = Setting::get('recruitment_status', 'open');
+        $startDate = Setting::get('recruitment_start_date', now()->format('Y-m-d H:i'));
+        $endDate = Setting::get('recruitment_end_date', now()->addMonth()->format('Y-m-d H:i'));
+        $batchName = Setting::get('recruitment_batch_name', 'Gelombang Ganjil 2026/2027');
+        $closedMessage = Setting::get('recruitment_closed_message', 'Mohon maaf, periode pendaftaran anggota baru saat ini sedang ditutup.');
+
+        $divisions = Division::withCount('firstChoiceApplicants')->get();
+
+        return view('admin.recruitment.settings', compact(
+            'recruitmentStatus',
+            'startDate',
+            'endDate',
+            'batchName',
+            'closedMessage',
+            'divisions',
+            'user'
+        ));
+    }
+
+    public function updateSettings(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user->isSuperAdmin()) {
+            abort(403, 'Akses terbatas untuk Super Admin.');
+        }
+
+        $validated = $request->validate([
+            'recruitment_status' => 'required|in:open,closed',
+            'recruitment_start_date' => 'nullable|string',
+            'recruitment_end_date' => 'nullable|string',
+            'recruitment_batch_name' => 'required|string|max:100',
+            'recruitment_closed_message' => 'nullable|string|max:500',
+            'divisions' => 'nullable|array',
+            'divisions.*.is_recruitment_open' => 'nullable',
+            'divisions.*.recruitment_quota' => 'nullable|integer|min:0',
+            'divisions.*.recruitment_notes' => 'nullable|string|max:255',
+        ]);
+
+        Setting::set('recruitment_status', $validated['recruitment_status']);
+        Setting::set('recruitment_start_date', $validated['recruitment_start_date'] ?? '');
+        Setting::set('recruitment_end_date', $validated['recruitment_end_date'] ?? '');
+        Setting::set('recruitment_batch_name', $validated['recruitment_batch_name']);
+        Setting::set('recruitment_closed_message', $validated['recruitment_closed_message'] ?? 'Pendaftaran saat ini sedang ditutup.');
+
+        if (!empty($validated['divisions'])) {
+            foreach ($validated['divisions'] as $divisionId => $data) {
+                $div = Division::find($divisionId);
+                if ($div) {
+                    $isOpen = isset($data['is_recruitment_open']) && ($data['is_recruitment_open'] === '1' || $data['is_recruitment_open'] === true || $data['is_recruitment_open'] === 'on');
+                    $div->update([
+                        'is_recruitment_open' => $isOpen,
+                        'recruitment_quota' => !empty($data['recruitment_quota']) ? (int)$data['recruitment_quota'] : null,
+                        'recruitment_notes' => $data['recruitment_notes'] ?? null,
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('admin.recruitment.settings')->with('success', 'Pengaturan gelombang dan kuota divisi berhasil diperbarui!');
     }
 }

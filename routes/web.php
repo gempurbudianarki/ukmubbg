@@ -60,6 +60,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
     // Recruitment Hub & CSV Export
     Route::get('/recruitment/export', [RecruitmentAdminController::class, 'export'])->name('recruitment.export');
+    Route::get('/recruitment/settings', [RecruitmentAdminController::class, 'settings'])->name('recruitment.settings');
+    Route::post('/recruitment/settings', [RecruitmentAdminController::class, 'updateSettings'])->name('recruitment.settings.update');
     Route::get('/recruitment', [RecruitmentAdminController::class, 'index'])->name('recruitment.index');
     Route::get('/recruitment/{recruitment}', [RecruitmentAdminController::class, 'show'])->name('recruitment.show');
     Route::put('/recruitment/{recruitment}/status', [RecruitmentAdminController::class, 'updateStatus'])->name('recruitment.updateStatus');
