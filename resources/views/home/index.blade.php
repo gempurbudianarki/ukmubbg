@@ -44,66 +44,37 @@
                 </div>
             </div>
 
-            <!-- Right Terminal Column -->
-            <div>
-                <div class="hero-terminal-card">
-                    <div class="terminal-header">
-                        <div class="terminal-dots">
-                            <span class="terminal-dot terminal-dot-red"></span>
-                            <span class="terminal-dot terminal-dot-yellow"></span>
-                            <span class="terminal-dot terminal-dot-green"></span>
-                        </div>
-                        <div class="terminal-title">ukm-ilkom ~ zsh</div>
-                        <div class="terminal-tabs">
-                            <button type="button" class="terminal-tab-btn active" onclick="switchTermTab(this, 'overview')">info.sh</button>
-                            <button type="button" class="terminal-tab-btn" onclick="switchTermTab(this, 'divisions')">stack.json</button>
-                        </div>
+            <!-- Right Column: Official UKM Logo Showcase -->
+            <div class="hero-logo-showcase-wrap">
+                <div class="hero-logo-card">
+                    <!-- Ambient Glow Effect -->
+                    <div class="hero-logo-glow"></div>
+                    
+                    <div class="hero-logo-badge-top">
+                        <span class="badge-pulse"></span>
+                        <span>OFFICIAL EMBLEM &bull; FASILKOM</span>
                     </div>
 
-                    <div class="terminal-body" id="term-body-overview">
-                        <div class="terminal-line">
-                            <span class="terminal-prompt">$</span>
-                            <span class="terminal-cmd">curl -s https://api.ukmilkom.id/status</span>
-                        </div>
-                        <div class="terminal-out" style="color: #67e8f9; margin-bottom: 0.5rem;">
-                            HTTP/2 200 OK &bull; latency: 12ms
-                        </div>
-                        <div class="terminal-line">
-                            <span class="terminal-prompt">&gt;</span>
-                            <span class="terminal-cmd">Divisions: 4 Specialist Labs</span>
-                        </div>
-                        <div class="terminal-out" style="margin-bottom: 0.4rem;">
-                            <span class="terminal-success">&#10003; Pemrograman:</span> Fullstack, Cloud & Mobile Apps<br>
-                            <span class="terminal-success">&#10003; Multimedia:</span> UI/UX, 3D WebGL & Motion<br>
-                            <span class="terminal-success">&#10003; IoT:</span> Telemetry, ESP32 & Edge Sensors<br>
-                            <span class="terminal-success">&#10003; Cyber Security:</span> Pentest, Forensics & CTF
-                        </div>
-                        <div class="terminal-line" style="margin-top: 0.6rem;">
-                            <span class="terminal-prompt">$</span>
-                            <span class="terminal-cmd">recruitment --check</span>
-                        </div>
-                        <div class="terminal-out">
-                            <span class="terminal-badge">STAGE: SELEKSI TERPADU AKTIF</span>
-                            <span class="terminal-cursor" style="margin-left: 0.4rem;"></span>
-                        </div>
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo Resmi UKM Ilmu Komputer" class="hero-main-logo-img">
+
+                    <div class="hero-logo-meta">
+                        <div class="hero-logo-title">UKM ILMU KOMPUTER</div>
+                        <div class="hero-logo-tagline">Wadah Riset, Inovasi & Rekayasa Teknologi Mahasiswa</div>
                     </div>
 
-                    <div class="terminal-body" id="term-body-divisions" style="display: none;">
-                        <div class="terminal-line">
-                            <span class="terminal-prompt">$</span>
-                            <span class="terminal-cmd">cat configs/tech-stack.json</span>
-                        </div>
-                        <pre style="color: #e2e8f0; font-family: var(--font-mono); font-size: 0.775rem; line-height: 1.5; margin-top: 0.5rem;">
-{
-  "org": "UKM Ilmu Komputer",
-  "active_members": 120,
-  "ecosystem": [
-    "Laravel 10", "Vue 3", "Three.js",
-    "ESP32 C/C++", "Python", "Docker"
-  ],
-  "verified_credentials": "SHA-256 Digital Certificates"
-}
-                        </pre>
+                    <div class="hero-logo-chips">
+                        <span class="hero-logo-chip">
+                            <i class="fas fa-code" style="color: #38bdf8;"></i> Pemrograman
+                        </span>
+                        <span class="hero-logo-chip">
+                            <i class="fas fa-palette" style="color: #c084fc;"></i> Multimedia
+                        </span>
+                        <span class="hero-logo-chip">
+                            <i class="fas fa-microchip" style="color: #fbbf24;"></i> IoT
+                        </span>
+                        <span class="hero-logo-chip">
+                            <i class="fas fa-shield-halved" style="color: #34d399;"></i> Cyber Security
+                        </span>
                     </div>
                 </div>
             </div>
