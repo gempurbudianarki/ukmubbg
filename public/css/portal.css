@@ -1139,13 +1139,31 @@ main {
     margin-bottom: 0;
 }
 
-/* Official UKM Hero Logo Showcase */
-.hero-logo-showcase-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+/* Official UKM Pure Hero Logo (No background card/badges) */
+.hero-pure-logo {
     width: 100%;
+    max-width: 410px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 35px rgba(2, 6, 23, 0.25));
+    animation: floatHeroLogo 6s ease-in-out infinite;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+    user-select: none;
+    pointer-events: auto;
+}
+
+.hero-pure-logo:hover {
+    transform: scale(1.04) translateY(-6px);
+    filter: drop-shadow(0 28px 45px rgba(14, 165, 233, 0.35));
+}
+
+@keyframes floatHeroLogo {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .hero-logo-card {

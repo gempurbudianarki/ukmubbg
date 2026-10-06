@@ -46,7 +46,7 @@
 
             <!-- Right Column: Pure Official Logo Without Background -->
             <div style="display: flex; justify-content: center; align-items: center;">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo UKM Ilmu Komputer" style="width: 100%; max-width: 380px; height: auto; object-fit: contain; filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.45));">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo UKM Ilmu Komputer" class="hero-pure-logo">
             </div>
         </div>
 
