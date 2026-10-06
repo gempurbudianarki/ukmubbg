@@ -56,6 +56,22 @@ class AttendanceAdminController extends Controller
     {
         $user = Auth::user();
 
+        // Intelligent auto-fills for formal metadata if omitted
+        if (!$request->filled('day_name') && $request->filled('session_date')) {
+            $daysIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            $dayOfWeek = \Carbon\Carbon::parse($request->session_date)->dayOfWeek;
+            $request->merge(['day_name' => $daysIndo[$dayOfWeek]]);
+        }
+        if (!$request->filled('session_type')) {
+            $request->merge(['session_type' => 'riset_rutin']);
+        }
+        if (!$request->filled('topic_material') && $request->filled('title')) {
+            $request->merge(['topic_material' => $request->title]);
+        }
+        if (!$request->filled('instructor_name')) {
+            $request->merge(['instructor_name' => $user->name]);
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'division_id' => 'nullable|exists:divisions,id',

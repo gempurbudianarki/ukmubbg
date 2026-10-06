@@ -40,6 +40,9 @@ class DatabaseSeeder extends Seeder
                     'github' => 'https://github.com/rayhanfajar',
                     'linkedin' => 'https://linkedin.com/in/rayhanfajar'
                 ]),
+                'is_recruitment_open' => true,
+                'recruitment_quota' => 35,
+                'recruitment_notes' => 'Tersedia 35 kuota pendaftar baru',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -70,6 +73,9 @@ class DatabaseSeeder extends Seeder
                     'behance' => 'https://behance.net/auliarahmaputri',
                     'linkedin' => 'https://linkedin.com/in/auliarahmaputri'
                 ]),
+                'is_recruitment_open' => true,
+                'recruitment_quota' => 25,
+                'recruitment_notes' => 'Portofolio desain/animasi diutamakan',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -100,6 +106,9 @@ class DatabaseSeeder extends Seeder
                     'github' => 'https://github.com/dimasbagus-tech',
                     'linkedin' => 'https://linkedin.com/in/dimas-bagus-nugroho'
                 ]),
+                'is_recruitment_open' => true,
+                'recruitment_quota' => 20,
+                'recruitment_notes' => 'Riset hardware & mikrokontroler',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -130,6 +139,9 @@ class DatabaseSeeder extends Seeder
                     'github' => 'https://github.com/kevindanuarta',
                     'linkedin' => 'https://linkedin.com/in/kevin-danuarta'
                 ]),
+                'is_recruitment_open' => true,
+                'recruitment_quota' => 15,
+                'recruitment_notes' => 'Fokus persiapan kompetisi CTF',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -780,12 +792,18 @@ class DatabaseSeeder extends Seeder
         $sessionId = DB::table('attendance_sessions')->insertGetId([
             'division_id' => $divPemrogramanId,
             'created_by' => $adminUserId,
-            'title' => 'Pertemuan Mingguan: Clean Architecture & Microservices',
+            'title' => 'Pertemuan Mingguan #4: Clean Architecture & Microservices',
+            'day_name' => 'Selasa',
             'session_date' => now()->format('Y-m-d'),
             'time_start' => '16:00:00',
             'time_end' => '18:00:00',
+            'session_type' => 'workshop_teknis',
             'location' => 'Lab Komputer 3 Gedung Fasilkom',
-            'notes' => 'Pembahasan standarisasi repository pattern, dependency injection, dan persiapan hackathon.',
+            'topic_material' => 'Standarisasi Repository Pattern & RESTful API Architecture',
+            'learning_outcomes' => 'Mahasiswa memahami pemisahan controller, service layer, repository pattern, dan implementasi automated feature tests.',
+            'instructor_name' => 'Muhammad Rayhan Fajar',
+            'notes' => 'Diikuti oleh seluruh anggota aktif Divisi Pemrograman.',
+            'status' => 'open',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -802,6 +820,19 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+        }
+
+        // 13. Seed Recruitment Settings (Gelombang & Periode)
+        $settingsData = [
+            ['key_name' => 'recruitment_status', 'value' => 'open', 'created_at' => now(), 'updated_at' => now()],
+            ['key_name' => 'recruitment_batch_name', 'value' => 'Gelombang I (Ganjil 2026/2027)', 'created_at' => now(), 'updated_at' => now()],
+            ['key_name' => 'recruitment_start_date', 'value' => '2026-10-01 00:00', 'created_at' => now(), 'updated_at' => now()],
+            ['key_name' => 'recruitment_end_date', 'value' => '2026-11-30 23:59', 'created_at' => now(), 'updated_at' => now()],
+            ['key_name' => 'recruitment_closed_message', 'value' => 'Mohon maaf, periode pendaftaran anggota baru gelombang ini sedang ditutup. Pantau pengumuman gelombang berikutnya.', 'created_at' => now(), 'updated_at' => now()],
+        ];
+
+        foreach ($settingsData as $s) {
+            DB::table('settings')->updateOrInsert(['key_name' => $s['key_name']], $s);
         }
     }
 }
