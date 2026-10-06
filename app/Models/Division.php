@@ -28,11 +28,16 @@ class Division extends Model
         'leader_photo',
         'leader_bio',
         'social_links',
+        'is_recruitment_open',
+        'recruitment_quota',
+        'recruitment_notes',
     ];
 
     protected $casts = [
         'focus_topics' => 'array',
         'social_links' => 'array',
+        'is_recruitment_open' => 'boolean',
+        'recruitment_quota' => 'integer',
     ];
 
     public function getFocusTopicsListAttribute(): array

@@ -14,12 +14,18 @@ class AttendanceSession extends Model
     protected $fillable = [
         'division_id',
         'title',
+        'day_name',
         'session_date',
         'time_start',
         'time_end',
+        'session_type',
         'location',
+        'topic_material',
+        'learning_outcomes',
+        'instructor_name',
         'created_by',
         'notes',
+        'status',
     ];
 
     protected $casts = [
