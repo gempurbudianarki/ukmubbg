@@ -12,10 +12,18 @@
         </div>
         <div>
             <h1 style="font-size: 1.25rem; font-weight: 800; color: var(--slate-900); margin: 0 0 0.2rem 0;">
-                Biodata & Profil 4 Divisi Spesialisasi
+                @if ($user->isSuperAdmin())
+                    Biodata & Profil 4 Divisi Spesialisasi
+                @else
+                    Biodata & Profil Divisi {{ $user->division->name ?? 'Spesialisasi' }}
+                @endif
             </h1>
             <p style="font-size: 0.85rem; color: var(--slate-500); margin: 0;">
-                Perbarui data Dosen Pembina, Ketua Divisi Mahasiswa, visi misi riset, serta materi silabus pembelajaran tiap divisi.
+                @if ($user->isSuperAdmin())
+                    Perbarui data Dosen Pembina, Ketua Divisi Mahasiswa, visi misi riset, serta materi silabus pembelajaran tiap divisi.
+                @else
+                    Kelola profil publik, data Dosen Pembina, Ketua Divisi Mahasiswa, visi misi riset, serta kurikulum pembelajaran divisi Anda.
+                @endif
             </p>
         </div>
     </div>

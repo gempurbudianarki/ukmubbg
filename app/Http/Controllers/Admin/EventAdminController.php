@@ -32,8 +32,9 @@ class EventAdminController extends Controller
 
         $events = $query->paginate(15)->withQueryString();
         $divisions = Division::all();
+        $user = auth()->user();
 
-        return view('admin.events.index', compact('events', 'divisions'));
+        return view('admin.events.index', compact('events', 'divisions', 'user'));
     }
 
     public function create()

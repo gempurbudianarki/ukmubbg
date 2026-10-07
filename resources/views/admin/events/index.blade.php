@@ -8,19 +8,15 @@
 <div class="admin-header-box">
     <div>
         <h1 class="admin-header-title">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#2563eb">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
+            <i class="fas fa-calendar-days" style="color: #2563eb; font-size: 1.5rem;"></i>
             <span>Daftar Pelatihan & Acara UKM</span>
         </h1>
         <p class="admin-header-desc">
-            Kelola jadwal bootcamp spesialisasi, seminar teknologi, dan workshop 4 divisi.
+            {{ auth()->user()->isSuperAdmin() ? 'Kelola jadwal bootcamp spesialisasi, seminar teknologi, dan workshop 4 divisi UKM.' : 'Kelola agenda pelatihan, workshop, dan kegiatan khusus divisi ' . (auth()->user()->division->name ?? '') }}
         </p>
     </div>
     <a href="{{ route('admin.events.create') }}" class="btn btn-primary" style="box-shadow: var(--clay-btn); display: inline-flex; align-items: center; gap: 0.45rem;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
-        </svg>
+        <i class="fas fa-plus"></i>
         <span>Tambah Agenda Baru</span>
     </a>
 </div>
@@ -138,7 +134,7 @@
         </table>
     </div>
 
-    @if ($events->hasPages())
+    @if ($events->total() > 0)
         <div style="padding: 1.25rem 1.75rem; border-top: 1px solid rgba(226, 232, 240, 0.8); background: #f8fafc;">
             {{ $events->links() }}
         </div>

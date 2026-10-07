@@ -15,7 +15,7 @@
                 Sistem Presensi & Berita Acara (BAP)
             </h1>
             <p style="font-size: 0.85rem; color: var(--slate-500); margin: 0;">
-                Monitoring kehadiran rapat pleno, riset divisi, passcode check-in, dan cetak dokumen BAP resmi.
+                {{ $user->isSuperAdmin() ? 'Monitoring kehadiran rapat pleno, riset divisi, passcode check-in, dan cetak dokumen BAP resmi.' : 'Monitoring presensi kegiatan & riset rutin divisi ' . ($user->division->name ?? '') . ', passcode check-in, dan cetak dokumen BAP.' }}
             </p>
         </div>
     </div>
@@ -155,8 +155,8 @@
     @endforelse
 </div>
 
-@if ($sessions->hasPages())
-    <div style="margin-top: 2rem; display: flex; justify-content: center;">
+@if ($sessions->total() > 0)
+    <div style="margin-top: 2rem;">
         {{ $sessions->links() }}
     </div>
 @endif

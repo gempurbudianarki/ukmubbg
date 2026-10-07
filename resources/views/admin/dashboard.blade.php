@@ -7,20 +7,33 @@
 <!-- Welcome Executive Banner -->
 <div class="admin-welcome-banner">
     <div style="display: flex; align-items: center; gap: 1.25rem;">
-        <div style="width: 58px; height: 58px; border-radius: 18px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; box-shadow: var(--clay-pill); flex-shrink: 0;">
-            <i class="fas fa-crown"></i>
+        <div style="width: 58px; height: 58px; border-radius: 18px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: {{ $isSuperAdmin ? '#2563eb' : ($user->division->color_accent ?? '#2563eb') }}; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; box-shadow: var(--clay-pill); flex-shrink: 0;">
+            <i class="fas {{ $isSuperAdmin ? 'fa-crown' : 'fa-laptop-code' }}"></i>
         </div>
         <div>
             <h1 style="font-size: 1.4rem; font-weight: 800; color: var(--slate-900); margin: 0 0 0.25rem 0; letter-spacing: -0.01em;">
-                Selamat Datang di Command Center, {{ $user->name }}!
+                @if ($isSuperAdmin)
+                    Selamat Datang di Command Center, {{ $user->name }}!
+                @else
+                    Panel Komando Divisi {{ $user->division->name ?? 'Spesialisasi' }}, {{ $user->name }}!
+                @endif
             </h1>
             <p style="font-size: 0.875rem; color: var(--slate-500); margin: 0; line-height: 1.5;">
-                Kendali terpusat seluruh pendaftaran, direktori anggota, sesi presensi riset, dan publikasi 4 divisi UKM Ilmu Komputer.
+                @if ($isSuperAdmin)
+                    Kendali terpusat seluruh pendaftaran, direktori anggota, sesi presensi riset, dan publikasi 4 divisi UKM Ilmu Komputer.
+                @else
+                    Kelola pendaftar baru, direktori anggota divisi, sesi presensi riset terikat, dan publikasi khusus divisi {{ $user->division->name ?? '' }}.
+                @endif
             </p>
         </div>
     </div>
 
     <div style="display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap;">
+        @if (!$isSuperAdmin && $user->division)
+            <span class="badge" style="padding: 0.55rem 1.15rem; font-size: 0.8rem; box-shadow: var(--clay-pill); font-weight: 800; background: {{ $user->division->color_accent }}18; color: {{ $user->division->color_accent }}; border: 1px solid {{ $user->division->color_accent }}30;">
+                <i class="fas fa-layer-group" style="margin-right: 0.35rem;"></i> Divisi {{ $user->division->name }}
+            </span>
+        @endif
         <div style="background: var(--bg-body); padding: 0.5rem 1rem; border-radius: 9999px; box-shadow: var(--clay-input); font-size: 0.8rem; font-weight: 700; color: var(--slate-600); display: flex; align-items: center; gap: 0.5rem;">
             <i class="fas fa-calendar-day" style="color: #2563eb;"></i>
             <span>{{ now()->translatedFormat('l, d F Y') }}</span>
@@ -38,16 +51,20 @@
         <i class="fas fa-bolt" style="color: #f59e0b;"></i> Aksi Cepat:
     </span>
     <a href="{{ route('admin.members.index') }}" class="admin-quick-btn">
-        <i class="fas fa-user-plus"></i>
-        <span>Kelola Anggota</span>
+        <i class="fas fa-users"></i>
+        <span>{{ $isSuperAdmin ? 'Kelola Anggota' : 'Anggota Divisi' }}</span>
     </a>
     <a href="{{ route('admin.attendance.create') }}" class="admin-quick-btn">
         <i class="fas fa-clipboard-check"></i>
         <span>Buka Sesi Presensi</span>
     </a>
-    <a href="{{ route('admin.announcements.index') }}" class="admin-quick-btn">
-        <i class="fas fa-bullhorn"></i>
-        <span>Buat Pengumuman</span>
+    <a href="{{ route('admin.posts.create') }}" class="admin-quick-btn">
+        <i class="fas fa-pen-nib"></i>
+        <span>Tulis Artikel / Riset</span>
+    </a>
+    <a href="{{ route('admin.projects.index') }}" class="admin-quick-btn">
+        <i class="fas fa-laptop-code"></i>
+        <span>Karya Mahasiswa</span>
     </a>
     @if ($isSuperAdmin)
         <a href="{{ route('admin.recruitment.settings') }}" class="admin-quick-btn">
@@ -57,6 +74,11 @@
         <a href="{{ route('admin.users.index') }}" class="admin-quick-btn">
             <i class="fas fa-user-shield"></i>
             <span>Kelola Hak Akses</span>
+        </a>
+    @else
+        <a href="{{ route('admin.divisions.edit', $user->division_id ?? 1) }}" class="admin-quick-btn">
+            <i class="fas fa-gear"></i>
+            <span>Pengaturan Profil Divisi</span>
         </a>
     @endif
 </div>
@@ -202,76 +224,164 @@
     @else
         <div class="admin-stat-card">
             <div class="admin-stat-header">
-                <span class="admin-stat-label" style="color: #64748b;">Lingkup Divisi</span>
-                <div class="admin-stat-icon" style="background: #f1f5f9; color: #64748b;">
-                    <i class="fas fa-shield"></i>
+                <span class="admin-stat-label" style="color: #8b5cf6;">Karya & Riset</span>
+                <div class="admin-stat-icon" style="background: #ede9fe; color: #8b5cf6;">
+                    <i class="fas fa-laptop-code"></i>
                 </div>
             </div>
-            <div class="admin-stat-value" style="font-size: 1.45rem;">
-                {{ auth()->user()->division->name ?? 'Divisi' }}
+            <div class="admin-stat-value" style="color: #8b5cf6;">{{ $totalProjects }}</div>
+            <div class="admin-stat-sub">
+                <a href="{{ route('admin.projects.index') }}" style="color: #8b5cf6; font-weight: 700; text-decoration: none;">
+                    Portofolio Mahasiswa &rarr;
+                </a>
             </div>
-            <div class="admin-stat-sub">Admin Fungsional Terikat</div>
         </div>
     @endif
 </div>
 
-<!-- Symmetrical 2 Columns: 50% Statistik Divisi vs 50% Pendaftar Terbaru -->
+<!-- Symmetrical 2 Columns: 50% Statistik Divisi / Profil Hub vs 50% Pendaftar Terbaru -->
 <div class="admin-grid-2">
-    <!-- Division Performance Stats -->
-    <div class="admin-clay-card" style="display: flex; flex-direction: column; justify-content: space-between;">
-        <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-                <div style="display: flex; align-items: center; gap: 0.65rem;">
-                    <div style="width: 34px; height: 34px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; box-shadow: var(--clay-pill);">
-                        <i class="fas fa-layer-group"></i>
+    @if ($isSuperAdmin)
+        <!-- Division Performance Stats (Super Admin) -->
+        <div class="admin-clay-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <div style="display: flex; align-items: center; gap: 0.65rem;">
+                        <div style="width: 34px; height: 34px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; box-shadow: var(--clay-pill);">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h2 style="font-size: 1.15rem; font-weight: 800; color: var(--slate-900); margin: 0;">
+                            Statistik 4 Divisi
+                        </h2>
                     </div>
-                    <h2 style="font-size: 1.15rem; font-weight: 800; color: var(--slate-900); margin: 0;">
-                        Statistik 4 Divisi
-                    </h2>
+                    <a href="{{ route('admin.divisions.index') }}" style="font-size: 0.8rem; font-weight: 700; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.25rem;">
+                        <span>Lihat Biodata</span> &rarr;
+                    </a>
                 </div>
-                <a href="{{ route('admin.divisions.index') }}" style="font-size: 0.8rem; font-weight: 700; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.25rem;">
-                    <span>Lihat Biodata</span> &rarr;
-                </a>
-            </div>
 
-            <div class="admin-table-container">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Bidang Divisi</th>
-                            <th style="text-align: center;">Artikel</th>
-                            <th style="text-align: center;">Pendaftar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($divisionsStats as $ds)
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
                             <tr>
-                                <td>
-                                    <div style="font-weight: 800; color: var(--slate-900); display: flex; align-items: center; gap: 0.5rem;">
-                                        <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $ds->color_accent ?? '#2563eb' }}; display: inline-block;"></span>
-                                        <span>{{ $ds->name }}</span>
-                                    </div>
-                                    <div style="font-size: 0.775rem; color: var(--slate-500); margin-left: 1rem;">
-                                        Kadiv: {{ $ds->leader_name ?? 'Pengurus' }}
-                                    </div>
-                                </td>
-                                <td style="text-align: center;">
-                                    <span class="badge badge-neutral" style="box-shadow: var(--clay-pill); font-family: var(--font-mono); font-weight: 700;">
-                                        {{ $ds->posts_count }}
-                                    </span>
-                                </td>
-                                <td style="text-align: center;">
-                                    <span class="badge badge-info" style="box-shadow: var(--clay-pill); font-family: var(--font-mono); font-weight: 700;">
-                                        {{ $ds->first_choice_applicants_count }}
-                                    </span>
-                                </td>
+                                <th>Bidang Divisi</th>
+                                <th style="text-align: center;">Artikel</th>
+                                <th style="text-align: center;">Pendaftar</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($divisionsStats as $ds)
+                                <tr>
+                                    <td>
+                                        <div style="font-weight: 800; color: var(--slate-900); display: flex; align-items: center; gap: 0.5rem;">
+                                            <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $ds->color_accent ?? '#2563eb' }}; display: inline-block;"></span>
+                                            <span>{{ $ds->name }}</span>
+                                        </div>
+                                        <div style="font-size: 0.775rem; color: var(--slate-500); margin-left: 1rem;">
+                                            Kadiv: {{ $ds->leader_name ?? 'Pengurus' }}
+                                        </div>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span class="badge badge-neutral" style="box-shadow: var(--clay-pill); font-family: var(--font-mono); font-weight: 700;">
+                                            {{ $ds->posts_count }}
+                                        </span>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span class="badge badge-info" style="box-shadow: var(--clay-pill); font-family: var(--font-mono); font-weight: 700;">
+                                            {{ $ds->first_choice_applicants_count }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
+    @else
+        <!-- Division Profile & Leadership Hub (Division Admin) -->
+        @php
+            $currentDiv = $user->division;
+        @endphp
+        <div class="admin-clay-card" style="border-top: 4px solid {{ $currentDiv->color_accent ?? '#2563eb' }}; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <div style="display: flex; align-items: center; gap: 0.65rem;">
+                        <div style="width: 36px; height: 36px; border-radius: 10px; background: {{ $currentDiv->color_accent ?? '#2563eb' }}18; color: {{ $currentDiv->color_accent ?? '#2563eb' }}; display: flex; align-items: center; justify-content: center; box-shadow: var(--clay-pill); font-size: 1.1rem;">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <div>
+                            <h2 style="font-size: 1.15rem; font-weight: 800; color: var(--slate-900); margin: 0;">
+                                Profil & Kepengurusan Divisi
+                            </h2>
+                            <span style="font-size: 0.75rem; color: var(--slate-400); font-weight: 600;">{{ $currentDiv->name ?? 'Divisi' }}</span>
+                        </div>
+                    </div>
+                    <a href="{{ route('admin.divisions.edit', $currentDiv->id ?? 1) }}" class="btn btn-outline btn-sm" style="background: #ffffff; box-shadow: var(--clay-btn); font-size: 0.75rem;">
+                        <i class="fas fa-pen-to-square" style="margin-right: 0.25rem;"></i> Edit Profil
+                    </a>
+                </div>
+
+                <!-- Tagline Box -->
+                <div style="background: var(--bg-body); padding: 0.85rem 1rem; border-radius: var(--radius-md); box-shadow: var(--clay-input); margin-bottom: 1.25rem;">
+                    <div style="font-size: 0.725rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--slate-400); margin-bottom: 0.2rem;">
+                        <i class="fas fa-quote-left" style="color: {{ $currentDiv->color_accent ?? '#2563eb' }};"></i> Tagline Divisi
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--slate-700); margin: 0; font-weight: 600; line-height: 1.45;">
+                        "{{ $currentDiv->tagline ?? 'Belum ada tagline divisi.' }}"
+                    </p>
+                </div>
+
+                <!-- Leadership Mini Grid -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1.25rem;">
+                    <div style="background: #ffffff; border-radius: var(--radius-md); padding: 0.85rem; box-shadow: var(--clay-pill); border: 1px solid rgba(226, 232, 240, 0.8);">
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0;">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div style="min-width: 0;">
+                                <span style="font-size: 0.65rem; color: var(--slate-400); font-weight: 800; text-transform: uppercase; display: block;">Pembina</span>
+                                <div style="font-weight: 800; font-size: 0.825rem; color: var(--slate-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $currentDiv->adviser_name ?? '-' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: #ffffff; border-radius: var(--radius-md); padding: 0.85rem; box-shadow: var(--clay-pill); border: 1px solid rgba(226, 232, 240, 0.8);">
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: #ede9fe; color: #8b5cf6; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0;">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div style="min-width: 0;">
+                                <span style="font-size: 0.65rem; color: var(--slate-400); font-weight: 800; text-transform: uppercase; display: block;">Ketua Divisi</span>
+                                <div style="font-weight: 800; font-size: 0.825rem; color: var(--slate-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $currentDiv->leader_name ?? '-' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Focus Topics Preview -->
+                <div>
+                    <div style="font-size: 0.725rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--slate-400); margin-bottom: 0.45rem;">
+                        Topik & Kurikulum Riset Unggulan:
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
+                        @forelse (array_slice($currentDiv->focus_topics_list ?? [], 0, 4) as $topic)
+                            <span class="badge" style="background: #f8fafc; color: var(--slate-700); box-shadow: var(--clay-pill); font-size: 0.72rem; font-weight: 700; border: 1px solid rgba(226, 232, 240, 0.8);">
+                                <i class="fas fa-check" style="font-size: 0.6rem; color: {{ $currentDiv->color_accent ?? '#2563eb' }}; margin-right: 0.25rem;"></i>
+                                {{ $topic }}
+                            </span>
+                        @empty
+                            <span style="font-size: 0.75rem; color: var(--slate-400);">Belum ada kurikulum terdaftar.</span>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.25rem; padding-top: 0.85rem; border-top: 1px solid var(--slate-100); display: flex; justify-content: flex-end;">
+                <a href="{{ route('divisions.show', $currentDiv->slug ?? 'it') }}" target="_blank" style="font-size: 0.775rem; font-weight: 700; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.35rem;">
+                    <span>Buka Halaman Publik Divisi</span> <i class="fas fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+        </div>
+    @endif
 
     <!-- Recent Applicants Table -->
     <div class="admin-clay-card" style="display: flex; flex-direction: column; justify-content: space-between;">
