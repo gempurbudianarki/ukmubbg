@@ -140,9 +140,8 @@
     <div class="container">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; gap: 1rem;">
             <div>
-                <h2 style="font-size: 1.65rem; font-weight: 850; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.65rem;">
-                    <i class="fas fa-bolt" style="color: #0284c7;"></i>
-                    <span>Agenda Mendatang (Upcoming)</span>
+                <h2 style="font-size: 1.65rem; font-weight: 850; color: #0f172a; margin: 0;">
+                    Agenda Mendatang (Upcoming)
                 </h2>
                 <p style="color: #64748b; font-size: 0.875rem; margin: 0.25rem 0 0;">
                     Daftar dan amankan kursi Anda sebelum kuota penuh.

@@ -5,11 +5,11 @@
 @section('styles')
 <style>
     /* ==========================================================================
-       OFFICERS LUXURY WHITE CLAYMORPHISM SYSTEM
+       OFFICERS LUXURY WHITE CLAYMORPHISM SYSTEM (CENTERED & CLEAN)
        ========================================================================== */
     .officers-hero {
         text-align: center;
-        padding: 4rem 1.5rem 3rem;
+        padding: 4rem 1.5rem 2.5rem;
         position: relative;
     }
 
@@ -19,7 +19,7 @@
         align-items: center;
         flex-wrap: wrap;
         gap: 0.65rem;
-        margin: 2.25rem auto 0;
+        margin: 2rem auto 0;
         max-width: 960px;
     }
 
@@ -49,7 +49,7 @@
     /* Section Subheadings */
     .officer-section-header {
         text-align: center;
-        margin-bottom: 2.5rem;
+        margin-bottom: 2.25rem;
     }
 
     .officer-section-badge {
@@ -65,24 +65,22 @@
         padding: 0.35rem 0.95rem;
         border-radius: 9999px;
         box-shadow: var(--clay-pill);
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.65rem;
     }
 
-    /* Grid Layouts */
-    .officers-bph-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    /* Centered Flex Layouts for Perfect Balance */
+    .officers-centered-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 1.75rem;
-    }
-
-    .officers-div-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 1.5rem;
+        margin: 0 auto;
     }
 
     /* Executive & Officer Card Base */
     .executive-card {
+        width: 290px;
+        max-width: 100%;
         background: #ffffff;
         border-radius: 20px;
         border: 1.5px solid rgba(226, 232, 240, 0.95);
@@ -197,12 +195,6 @@
         border: 1px solid #fde68a;
     }
 
-    .badge-lead {
-        background: #ecfdf5;
-        color: #065f46;
-        border: 1px solid #a7f3d0;
-    }
-
     .badge-staff {
         background: #f1f5f9;
         color: #475569;
@@ -220,7 +212,7 @@
     }
 
     .executive-name {
-        font-size: 1.12rem;
+        font-size: 1.1rem;
         font-weight: 800;
         color: #0f172a;
         margin: 0 0 0.25rem;
@@ -294,15 +286,15 @@
         border-color: transparent;
     }
 
-    /* Division Container Box */
-    .division-org-container {
-        background: #ffffff;
-        border-radius: 24px;
-        border: 1.5px solid rgba(226, 232, 240, 0.95);
-        box-shadow: var(--clay-card);
-        padding: 2.25rem;
-        margin-bottom: 3.5rem;
-        position: relative;
+    /* Division Segment Clean Title Block */
+    .division-clean-block {
+        margin-bottom: 4rem;
+        scroll-margin-top: 90px;
+    }
+
+    .division-clean-header {
+        text-align: center;
+        margin-bottom: 1.75rem;
     }
 </style>
 @endsection
@@ -316,16 +308,16 @@
     <div class="container">
         <div class="officers-hero">
             <span class="officer-section-badge">
-                <i class="fas fa-sitemap"></i> STRUKTUR ORGANISASI RESMI 2026/2027
+                <i class="fas fa-sitemap"></i> STRUKTUR KEPENGURUSAN
             </span>
             <h1 style="font-size: 2.65rem; font-weight: 900; color: #0c2340; letter-spacing: -0.02em; margin: 0 0 0.85rem; line-height: 1.2;">
-                Susunan Pengurus & Dewan Pembina UKM
+                Susunan Organisasi & Pengurus UKM
             </h1>
             <p style="color: #64748b; font-size: 1.05rem; max-width: 720px; margin: 0 auto; line-height: 1.6;">
                 Mengenal nakhoda, para pembimbing ahli, dan tim koordinator 4 divisi spesialisasi UKM Ilmu Komputer yang berdedikasi memajukan riset, kurikulum, dan teknologi kampus.
             </p>
 
-            <!-- Quick Navigation Jump Pills -->
+            <!-- Quick Navigation Jump Pills (FontAwesome Icons, No Emojis) -->
             <div class="officers-nav-pills">
                 <a href="#bph-section" class="officer-nav-pill">
                     <i class="fas fa-crown" style="color: #0284c7;"></i> Dewan Pembina & BPH
@@ -351,7 +343,7 @@
         <!-- ==========================================
              1. DEWAN PEMBINA & BPH (BADAN PENGURUS HARIAN)
              ========================================== -->
-        <section id="bph-section" style="margin-bottom: 4.5rem; scroll-margin-top: 80px;">
+        <section id="bph-section" style="margin-bottom: 4.5rem; scroll-margin-top: 90px;">
             <div class="officer-section-header">
                 <span class="officer-section-badge" style="background: #e0f2fe; color: #0284c7;">
                     <i class="fas fa-award"></i> TATA KELOLA TERTINGGI
@@ -364,7 +356,7 @@
                 </p>
             </div>
 
-            <div class="officers-bph-grid">
+            <div class="officers-centered-grid">
                 @foreach ($bphOfficers as $officer)
                     @php
                         $posLower = strtolower($officer->position);
@@ -448,6 +440,18 @@
         <!-- ==========================================
              2. STRUKTUR 4 DIVISI SPESIALISASI
              ========================================== -->
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <span class="officer-section-badge" style="background: #f1f5f9; color: #475569;">
+                <i class="fas fa-layer-group"></i> BIDANG SPESIALISASI
+            </span>
+            <h2 style="font-size: 1.85rem; font-weight: 850; color: #0f172a; margin: 0 0 0.35rem;">
+                Struktur Kepengurusan 4 Divisi Spesialisasi
+            </h2>
+            <p style="color: #64748b; font-size: 0.95rem; margin: 0; max-width: 600px; margin: 0 auto;">
+                Dipandu oleh Dosen Pembina keilmuan dan dipimpin oleh Koordinator Divisi mahasiswa.
+            </p>
+        </div>
+
         @php
             $divisionsData = [
                 [
@@ -493,49 +497,34 @@
             ];
         @endphp
 
-        <div style="text-align: center; margin-bottom: 2.5rem;">
-            <span class="officer-section-badge" style="background: #f1f5f9; color: #475569;">
-                <i class="fas fa-layer-group"></i> BIDANG SPESIALISASI
-            </span>
-            <h2 style="font-size: 1.85rem; font-weight: 850; color: #0f172a; margin: 0 0 0.35rem;">
-                Struktur Kepengurusan 4 Divisi Spesialisasi
-            </h2>
-            <p style="color: #64748b; font-size: 0.95rem; margin: 0; max-width: 600px; margin: 0 auto;">
-                Dipandu oleh Dosen Pembina keilmuan dan dipimpin oleh Koordinator Divisi mahasiswa.
-            </p>
-        </div>
-
-        <div style="margin-top: 1rem;">
+        <div>
             @foreach ($divisionsData as $divGroup)
-                <div class="division-org-container" id="{{ $divGroup['id'] }}" style="border-top: 5px solid {{ $divGroup['accent'] }}; scroll-margin-top: 80px;">
-                    <!-- Division Box Header -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; padding-bottom: 1.5rem; border-bottom: 1px solid #f1f5f9;">
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div style="width: 50px; height: 50px; border-radius: 14px; background: {{ $divGroup['bg_light'] }}; color: {{ $divGroup['accent'] }}; display: flex; align-items: center; justify-content: center; font-size: 1.45rem; box-shadow: var(--clay-pill); border: 1.5px solid {{ $divGroup['accent'] }}30;">
+                <div class="division-clean-block" id="{{ $divGroup['id'] }}">
+                    <!-- Clean Centered Division Header (Tanpa Kotak Besar) -->
+                    <div class="division-clean-header">
+                        <div style="display: inline-flex; align-items: center; justify-content: center; gap: 0.65rem; margin-bottom: 0.45rem;">
+                            <div style="width: 38px; height: 38px; border-radius: 10px; background: {{ $divGroup['bg_light'] }}; color: {{ $divGroup['accent'] }}; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; box-shadow: var(--clay-pill); border: 1px solid {{ $divGroup['accent'] }}30;">
                                 <i class="fas {{ $divGroup['icon'] }}"></i>
                             </div>
-                            <div>
-                                <h3 style="font-size: 1.45rem; font-weight: 850; color: #0c2340; margin: 0 0 0.2rem;">
-                                    {{ $divGroup['name'] }}
-                                </h3>
-                                <p style="font-size: 0.875rem; color: #64748b; margin: 0;">
-                                    {{ $divGroup['desc'] }}
-                                </p>
-                            </div>
+                            <h3 style="font-size: 1.5rem; font-weight: 850; color: #0c2340; margin: 0;">
+                                {{ $divGroup['name'] }}
+                            </h3>
                         </div>
-
-                        <div style="display: flex; align-items: center; gap: 0.65rem;">
-                            <span class="badge" style="background: {{ $divGroup['bg_light'] }}; color: {{ $divGroup['accent'] }}; font-weight: 800; font-size: 0.775rem; padding: 0.45rem 1rem; border-radius: 9999px; border: 1px solid {{ $divGroup['accent'] }}30; box-shadow: var(--clay-pill);">
+                        <p style="font-size: 0.885rem; color: #64748b; margin: 0 auto 0.75rem; max-width: 580px;">
+                            {{ $divGroup['desc'] }}
+                        </p>
+                        <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <span class="badge" style="background: {{ $divGroup['bg_light'] }}; color: {{ $divGroup['accent'] }}; font-weight: 800; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: 9999px; border: 1px solid {{ $divGroup['accent'] }}30;">
                                 {{ $divGroup['officers']->count() }} Anggota Tim & Pembimbing
                             </span>
-                            <a href="{{ route('divisions.show', $divGroup['slug']) }}" class="btn btn-outline btn-sm" style="font-size: 0.75rem; padding: 0.45rem 0.85rem; border-radius: 9999px; font-weight: 700;">
+                            <a href="{{ route('divisions.show', $divGroup['slug']) }}" class="btn btn-outline btn-sm" style="font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: 9999px; font-weight: 700; background: #ffffff;">
                                 Kanal Divisi &rarr;
                             </a>
                         </div>
                     </div>
 
-                    <!-- Officers Grid -->
-                    <div class="officers-div-grid">
+                    <!-- Centered Officers Cards -->
+                    <div class="officers-centered-grid">
                         @forelse ($divGroup['officers'] as $officer)
                             @php
                                 $posLower = strtolower($officer->position);
@@ -579,7 +568,7 @@
                                             @endif
                                         </div>
 
-                                        <h4 class="executive-name" style="font-size: 1.05rem;">{{ $officer->name }}</h4>
+                                        <h4 class="executive-name">{{ $officer->name }}</h4>
                                         <div class="executive-position" style="color: {{ $divGroup['accent'] }};">{{ $officer->position }}</div>
                                         <div class="executive-id-badge">
                                             <i class="fas {{ $isDosen ? 'fa-id-badge' : 'fa-id-card' }}" style="margin-right: 0.25rem;"></i>
@@ -613,7 +602,7 @@
                                 </div>
                             </div>
                         @empty
-                            <div style="color: #94a3b8; font-style: italic; grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                            <div style="color: #94a3b8; font-style: italic; width: 100%; text-align: center; padding: 2rem;">
                                 Belum ada data pengurus yang dipublikasikan untuk divisi ini.
                             </div>
                         @endforelse
