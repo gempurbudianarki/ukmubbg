@@ -5,33 +5,30 @@
 
 @section('content')
 <!-- Header Box -->
-<div class="admin-header-box">
-    <div>
-        <h1 class="admin-header-title">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#2563eb">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-            </svg>
-            <span>Data Pendaftaran Masuk</span>
-        </h1>
-        <p class="admin-header-desc">
-            {{ $user->isSuperAdmin() ? 'Kelola berkas seleksi pendaftar dari seluruh 4 divisi spesialisasi.' : 'Kelola berkas calon anggota yang memilih divisi ' . $user->division->name }}
-        </p>
+<div class="admin-welcome-banner" style="margin-bottom: 2rem; padding: 1.5rem 2rem;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 48px; height: 48px; border-radius: 14px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; box-shadow: var(--clay-pill); flex-shrink: 0;">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        <div>
+            <h1 style="font-size: 1.25rem; font-weight: 800; color: var(--slate-900); margin: 0 0 0.2rem 0;">
+                Pusat Seleksi Pendaftar Masuk
+            </h1>
+            <p style="font-size: 0.85rem; color: var(--slate-500); margin: 0;">
+                {{ $user->isSuperAdmin() ? 'Kelola berkas seleksi pendaftar dari seluruh 4 divisi spesialisasi.' : 'Kelola berkas calon anggota yang memilih divisi ' . $user->division->name }}
+            </p>
+        </div>
     </div>
     
     <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
         @if ($user->isSuperAdmin())
-            <a href="{{ route('admin.recruitment.settings') }}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.45rem; box-shadow: var(--clay-btn);">
-                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
+            <a href="{{ route('admin.recruitment.settings') }}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.45rem; box-shadow: var(--clay-btn); border-radius: 9999px; padding: 0.65rem 1.25rem;">
+                <i class="fas fa-clock-rotate-left"></i>
                 <span>Pengaturan Gelombang</span>
             </a>
         @endif
-        <a href="{{ route('admin.recruitment.export', request()->query()) }}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 0.45rem; background: #ffffff; box-shadow: var(--clay-btn);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
+        <a href="{{ route('admin.recruitment.export', request()->query()) }}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 0.45rem; background: #ffffff; box-shadow: var(--clay-btn); border-radius: 9999px; padding: 0.65rem 1.25rem;">
+            <i class="fas fa-file-csv" style="color: #059669;"></i>
             <span>Export CSV</span>
         </a>
     </div>

@@ -5,22 +5,22 @@
 
 @section('content')
 <!-- Header Box -->
-<div class="admin-header-box">
-    <div>
-        <h1 class="admin-header-title">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#2563eb">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-            <span>Daftar Akun Pengguna & Hak Akses</span>
-        </h1>
-        <p class="admin-header-desc">
-            Super Admin dapat menunjuk peran (role) akun kapan saja, mengubah divisi penugasan, atau mereset password.
-        </p>
+<div class="admin-welcome-banner" style="margin-bottom: 2rem; padding: 1.5rem 2rem;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 48px; height: 48px; border-radius: 14px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; box-shadow: var(--clay-pill); flex-shrink: 0;">
+            <i class="fas fa-user-shield"></i>
+        </div>
+        <div>
+            <h1 style="font-size: 1.25rem; font-weight: 800; color: var(--slate-900); margin: 0 0 0.2rem 0;">
+                Daftar Akun Pengguna & Hak Akses
+            </h1>
+            <p style="font-size: 0.85rem; color: var(--slate-500); margin: 0;">
+                Super Admin dapat menunjuk peran (role) akun kapan saja, mengubah divisi penugasan, atau mereset password.
+            </p>
+        </div>
     </div>
-    <button type="button" class="btn btn-primary" onclick="openCreateUserModal()" style="box-shadow: var(--clay-btn); display: inline-flex; align-items: center; gap: 0.45rem;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
-        </svg>
+    <button type="button" class="btn btn-primary" onclick="openCreateUserModal()" style="box-shadow: var(--clay-btn); display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 9999px; padding: 0.65rem 1.35rem;">
+        <i class="fas fa-user-plus"></i>
         <span>Tambah Akun Baru</span>
     </button>
 </div>
@@ -29,11 +29,9 @@
 <div class="admin-stat-grid">
     <div class="admin-stat-card">
         <div class="admin-stat-header">
-            <span class="admin-stat-label" style="color: #2563eb;">Total Pengguna</span>
-            <div class="admin-stat-icon" style="background: #eff6ff; color: #2563eb;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
+            <span class="admin-stat-label" style="color: #0284c7;">Total Pengguna</span>
+            <div class="admin-stat-icon" style="background: #e0f2fe; color: #0284c7;">
+                <i class="fas fa-users"></i>
             </div>
         </div>
         <div class="admin-stat-value">{{ $stats['total'] }}</div>
@@ -43,10 +41,8 @@
     <div class="admin-stat-card">
         <div class="admin-stat-header">
             <span class="admin-stat-label" style="color: #d97706;">Super Admin</span>
-            <div class="admin-stat-icon" style="background: #fffbeb; color: #d97706;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
+            <div class="admin-stat-icon" style="background: #fef3c7; color: #d97706;">
+                <i class="fas fa-crown"></i>
             </div>
         </div>
         <div class="admin-stat-value" style="color: #d97706;">{{ $stats['super_admin'] }}</div>
@@ -56,10 +52,8 @@
     <div class="admin-stat-card">
         <div class="admin-stat-header">
             <span class="admin-stat-label" style="color: #6366f1;">Admin Divisi</span>
-            <div class="admin-stat-icon" style="background: #e0e7ff; color: #4f46e5;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
+            <div class="admin-stat-icon" style="background: #e0e7ff; color: #6366f1;">
+                <i class="fas fa-shield-halved"></i>
             </div>
         </div>
         <div class="admin-stat-value" style="color: #4f46e5;">{{ $stats['division_admin'] }}</div>
@@ -70,9 +64,7 @@
         <div class="admin-stat-header">
             <span class="admin-stat-label" style="color: #10b981;">Anggota Mahasiswa</span>
             <div class="admin-stat-icon" style="background: #ecfdf5; color: #10b981;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
-                </svg>
+                <i class="fas fa-user-graduate"></i>
             </div>
         </div>
         <div class="admin-stat-value" style="color: #10b981;">{{ $stats['member'] }}</div>

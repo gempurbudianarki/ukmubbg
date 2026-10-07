@@ -2019,8 +2019,167 @@ main {
         gap: 0.65rem !important;
     }
 }
+/* ==========================================================================
+   ADMIN EXECUTIVE COMMAND HUB EXTENSIONS
+   ========================================================================== */
+.admin-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
 
+@media (min-width: 1024px) {
+    .admin-stat-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
 
+.admin-cluster-heading {
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--slate-400);
+    padding: 0.95rem 0.85rem 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
+.admin-cluster-heading i {
+    font-size: 0.8rem;
+}
 
+.admin-profile-badge {
+    padding: 0.75rem 0.85rem;
+    margin: 0.75rem 0.85rem 0.5rem;
+    background: #ffffff;
+    box-shadow: var(--clay-pill);
+    border-radius: 14px;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.admin-profile-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: var(--clay-pill);
+    flex-shrink: 0;
+    background: var(--slate-900);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.8rem;
+}
+
+.admin-layout.sidebar-closed .admin-sidebar {
+    margin-left: -275px;
+}
+
+.admin-sidebar {
+    transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.admin-sidebar-toggle-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: var(--clay-pill);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    color: var(--slate-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.admin-sidebar-toggle-btn:hover {
+    color: #2563eb;
+    transform: scale(1.04);
+}
+
+.admin-welcome-banner {
+    background: #ffffff;
+    border-radius: var(--radius-xl);
+    padding: 2rem 2.25rem;
+    box-shadow: var(--clay-card);
+    border: 1.5px solid rgba(226, 232, 240, 0.9);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-quick-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.admin-quick-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: 9999px;
+    background: #ffffff;
+    box-shadow: var(--clay-pill);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    font-size: 0.825rem;
+    font-weight: 700;
+    color: var(--slate-700);
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-quick-btn:hover {
+    background: #ffffff;
+    color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: var(--clay-btn-hover);
+}
+
+.admin-quick-btn i {
+    color: #2563eb;
+    font-size: 0.875rem;
+}
+
+.admin-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.825rem;
+    color: var(--slate-400);
+    font-weight: 600;
+}
+
+.admin-breadcrumb a {
+    color: var(--slate-600);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.admin-breadcrumb a:hover {
+    color: #2563eb;
+}
+
+.admin-breadcrumb .current {
+    color: var(--slate-900);
+    font-weight: 800;
+}
 
