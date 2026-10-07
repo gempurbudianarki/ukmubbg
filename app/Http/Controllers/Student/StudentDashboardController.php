@@ -81,6 +81,14 @@ class StudentDashboardController extends Controller
         // Division syllabus / academic topics
         $syllabus = $division?->focus_topics ?? [];
 
+        // Division sessions / meeting archives
+        $divisionSessions = collect();
+        if ($division) {
+            $divisionSessions = AttendanceSession::where('division_id', $division->id)
+                ->orderByDesc('session_date')
+                ->get();
+        }
+
         // Active announcements for student's division or general UKM
         $announcements = \App\Models\Announcement::with(['author', 'division'])
             ->where(function ($q) use ($division) {
@@ -106,6 +114,7 @@ class StudentDashboardController extends Controller
             'activeSessions',
             'activeSession',
             'activeSessionLog',
+            'divisionSessions',
             'announcements'
         );
     }

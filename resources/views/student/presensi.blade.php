@@ -155,14 +155,36 @@
             </div>
 
             @if ($activeSession->topic_material || $activeSession->learning_outcomes)
-                <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; font-size: 0.85rem; color: #475569;">
-                    <div>
-                        <strong>Materi Hari Ini:</strong> {{ $activeSession->topic_material ?? $activeSession->title }}
+                <div style="margin-top: 1.25rem; padding-top: 1.15rem; border-top: 1px solid #f1f5f9; background: #f8fafc; border-radius: 14px; padding: 1.15rem 1.35rem; border: 1.5px solid #e2e8f0;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.5rem;">
+                        <div>
+                            <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #0284c7; letter-spacing: 0.05em; display: block; margin-bottom: 0.2rem;">
+                                Materi Hari Ini:
+                            </span>
+                            <strong style="color: #0f172a; font-size: 1rem; line-height: 1.4;">
+                                {{ $activeSession->topic_material ?? $activeSession->title }}
+                            </strong>
+                        </div>
+                        <button type="button" 
+                                onclick="openMateriModal({{ json_encode([
+                                    'title' => $activeSession->title,
+                                    'topic' => $activeSession->topic_material,
+                                    'outcomes' => $activeSession->learning_outcomes,
+                                    'instructor' => $activeSession->instructor_name,
+                                    'notes' => $activeSession->notes,
+                                    'date' => $activeSession->session_date->translatedFormat('l, d F Y'),
+                                    'time' => substr($activeSession->time_start, 0, 5) . ' - ' . substr($activeSession->time_end, 0, 5) . ' WIB',
+                                    'location' => $activeSession->location,
+                                    'type' => ucwords(str_replace('_', ' ', $activeSession->session_type)),
+                                ]) }})"
+                                class="btn btn-sm btn-outline" 
+                                style="font-size: 0.78rem; font-weight: 700; border-radius: 8px; padding: 0.4rem 0.95rem; background: #ffffff; border: 1.5px solid #cbd5e1; color: #0284c7; display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                            <i class="fas fa-book-open"></i> Baca Rangkuman Materi Lengkap
+                        </button>
                     </div>
                     @if ($activeSession->learning_outcomes)
-                        <div style="font-size: 0.8rem; color: #64748b;">
-                            <i class="fas fa-graduation-cap" style="color: #0284c7; margin-right: 0.3rem;"></i>
-                            {{ Str::limit($activeSession->learning_outcomes, 80) }}
+                        <div style="font-size: 0.85rem; color: #475569; line-height: 1.65; border-top: 1px dashed #cbd5e1; padding-top: 0.65rem; margin-top: 0.4rem;">
+                            <strong style="color: #0c2340;">Capaian & Target Pembelajaran:</strong> {{ $activeSession->learning_outcomes }}
                         </div>
                     @endif
                 </div>
@@ -208,16 +230,38 @@
                 </div>
             </div>
 
-            @if ($activeSession->topic_material)
-                <div style="background: #f8fafc; padding: 0.85rem 1.15rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.25rem; font-size: 0.85rem; color: #334155;">
-                    <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 0.2rem;">
-                        Silabus Pokok Bahasan:
+            @if ($activeSession->topic_material || $activeSession->learning_outcomes)
+                <div style="background: #f8fafc; padding: 1.15rem 1.35rem; border-radius: 14px; border: 1.5px solid #e2e8f0; margin-bottom: 1.25rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.5rem;">
+                        <div>
+                            <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #0284c7; letter-spacing: 0.05em; display: block; margin-bottom: 0.2rem;">
+                                Pokok Bahasan & Silabus Hari Ini:
+                            </span>
+                            <strong style="color: #0f172a; font-size: 1rem; line-height: 1.4;">
+                                {{ $activeSession->topic_material ?? $activeSession->title }}
+                            </strong>
+                        </div>
+                        <button type="button" 
+                                onclick="openMateriModal({{ json_encode([
+                                    'title' => $activeSession->title,
+                                    'topic' => $activeSession->topic_material,
+                                    'outcomes' => $activeSession->learning_outcomes,
+                                    'instructor' => $activeSession->instructor_name,
+                                    'notes' => $activeSession->notes,
+                                    'date' => $activeSession->session_date->translatedFormat('l, d F Y'),
+                                    'time' => substr($activeSession->time_start, 0, 5) . ' - ' . substr($activeSession->time_end, 0, 5) . ' WIB',
+                                    'location' => $activeSession->location,
+                                    'type' => ucwords(str_replace('_', ' ', $activeSession->session_type)),
+                                ]) }})"
+                                class="btn btn-sm btn-outline" 
+                                style="font-size: 0.78rem; font-weight: 700; border-radius: 8px; padding: 0.4rem 0.95rem; background: #ffffff; border: 1.5px solid #cbd5e1; color: #0284c7; display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                            <i class="fas fa-book-open"></i> Baca Rangkuman Materi Lengkap
+                        </button>
                     </div>
-                    <strong>{{ $activeSession->topic_material }}</strong>
                     @if ($activeSession->learning_outcomes)
-                        <p style="margin: 0.35rem 0 0; font-size: 0.8rem; color: #64748b; line-height: 1.5;">
-                            {{ $activeSession->learning_outcomes }}
-                        </p>
+                        <div style="font-size: 0.85rem; color: #475569; line-height: 1.65; border-top: 1px dashed #cbd5e1; padding-top: 0.65rem; margin-top: 0.4rem;">
+                            <strong style="color: #0c2340;">Capaian & Target Pembelajaran:</strong> {{ $activeSession->learning_outcomes }}
+                        </div>
                     @endif
                 </div>
             @endif
@@ -460,6 +504,7 @@
                         <th style="padding: 0.95rem 1.25rem; font-weight: 700; color: #475569;">Lokasi Ruang</th>
                         <th style="padding: 0.95rem 1.25rem; font-weight: 700; color: #475569; text-align: center;">Status Anda</th>
                         <th style="padding: 0.95rem 1.25rem; font-weight: 700; color: #475569;">Metode & Catatan</th>
+                        <th style="padding: 0.95rem 1.25rem; font-weight: 700; color: #475569; text-align: center;">Materi Sesi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -517,6 +562,28 @@
                                 </div>
                                 <div>{{ $log->notes ?? '-' }}</div>
                             </td>
+                            <td style="padding: 0.95rem 1.25rem; text-align: center;">
+                                @if ($log->session)
+                                    <button type="button" 
+                                            onclick="openMateriModal({{ json_encode([
+                                                'title' => $log->session->title,
+                                                'topic' => $log->session->topic_material,
+                                                'outcomes' => $log->session->learning_outcomes,
+                                                'instructor' => $log->session->instructor_name,
+                                                'notes' => $log->session->notes,
+                                                'date' => \Carbon\Carbon::parse($log->session->session_date)->translatedFormat('l, d F Y'),
+                                                'time' => substr($log->session->time_start, 0, 5) . ' - ' . substr($log->session->time_end, 0, 5) . ' WIB',
+                                                'location' => $log->session->location,
+                                                'type' => ucwords(str_replace('_', ' ', $log->session->session_type)),
+                                            ]) }})"
+                                            class="btn btn-outline btn-xs"
+                                            style="font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 8px; color: #0284c7; border: 1.5px solid #bae6fd; background: #f0f9ff; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.3rem;">
+                                        <i class="fas fa-book-open"></i> Baca Materi
+                                    </button>
+                                @else
+                                    <span style="color: #94a3b8; font-size: 0.75rem;">-</span>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -536,5 +603,109 @@
         </div>
     @endif
 </div>
+
+<!-- Modal Rangkuman & Detail Materi Pertemuan -->
+<div id="materiModal" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 1.25rem;">
+    <div style="background: #ffffff; border-radius: 20px; max-width: 680px; width: 100%; border: 1.5px solid #e2e8f0; box-shadow: 0 25px 50px rgba(0,0,0,0.25); overflow: hidden; animation: modalFadeIn 0.2s ease;">
+        <!-- Modal Header -->
+        <div style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); padding: 1.35rem 1.75rem; border-bottom: 1.5px solid #e2e8f0; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+            <div>
+                <span id="modalSessionType" class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.45rem; display: inline-block; border: 1px solid #bae6fd; border-radius: 9999px; padding: 0.25rem 0.75rem;">
+                    Workshop Teknis
+                </span>
+                <h3 id="modalSessionTitle" style="font-size: 1.3rem; font-weight: 900; color: #0c2340; margin: 0; line-height: 1.3;">
+                    Judul Sesi Pertemuan
+                </h3>
+                <div style="font-size: 0.825rem; color: #64748b; margin-top: 0.35rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                    <span><i class="fas fa-calendar" style="color: #0284c7; margin-right: 0.25rem;"></i><span id="modalSessionDate">Tanggal</span></span>
+                    <span><i class="fas fa-clock" style="color: #0284c7; margin-right: 0.25rem;"></i><span id="modalSessionTime">Waktu</span></span>
+                    <span><i class="fas fa-location-dot" style="color: #0284c7; margin-right: 0.25rem;"></i><span id="modalSessionLocation">Lokasi</span></span>
+                </div>
+            </div>
+            <button type="button" onclick="closeMateriModal()" style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 50%; width: 34px; height: 34px; font-size: 1.25rem; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1;">
+                &times;
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div style="padding: 1.5rem 1.75rem; max-height: 70vh; overflow-y: auto;">
+            <!-- Topik Materi -->
+            <div style="margin-bottom: 1.25rem; background: #f0f9ff; border: 1.5px solid #bae6fd; border-radius: 14px; padding: 1.15rem 1.35rem;">
+                <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #0284c7; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+                    Pokok Bahasan / Topik Pertemuan:
+                </div>
+                <div id="modalSessionTopic" style="font-weight: 800; font-size: 1.1rem; color: #0c2340; line-height: 1.45;">
+                    Topik
+                </div>
+                <div style="font-size: 0.825rem; color: #0369a1; margin-top: 0.45rem; font-weight: 600;">
+                    Instruktur / Pemateri: <span id="modalSessionInstructor" style="color: #0c2340; font-weight: 800;">-</span>
+                </div>
+            </div>
+
+            <!-- Capaian Pembelajaran -->
+            <div style="margin-bottom: 1.25rem;">
+                <h4 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin: 0 0 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <i class="fas fa-graduation-cap" style="color: #0284c7;"></i> Target & Capaian Pembelajaran:
+                </h4>
+                <div id="modalSessionOutcomes" style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1.1rem 1.25rem; font-size: 0.885rem; color: #334155; line-height: 1.7; white-space: pre-line;">
+                    Capaian
+                </div>
+            </div>
+
+            <!-- Catatan Pengurus / Arahan Tambahan -->
+            <div id="modalNotesContainer" style="margin-bottom: 0.5rem;">
+                <h4 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin: 0 0 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <i class="fas fa-clipboard-list" style="color: #10b981;"></i> Catatan Khusus & Arahan Divisi:
+                </h4>
+                <div id="modalSessionNotes" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1rem 1.25rem; font-size: 0.865rem; color: #475569; line-height: 1.65;">
+                    Catatan
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div style="background: #f8fafc; padding: 1rem 1.75rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
+            <button type="button" onclick="closeMateriModal()" class="btn btn-primary btn-sm" style="border-radius: 9999px; padding: 0.55rem 1.75rem; font-weight: 800; background: linear-gradient(135deg, #0284c7, #0369a1); border: none; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);">
+                Tutup Jendela
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openMateriModal(data) {
+    document.getElementById('modalSessionType').innerText = data.type || 'Sesi Pertemuan';
+    document.getElementById('modalSessionTitle').innerText = data.title || 'Detail Sesi Pertemuan';
+    document.getElementById('modalSessionDate').innerText = data.date || '-';
+    document.getElementById('modalSessionTime').innerText = data.time || '-';
+    document.getElementById('modalSessionLocation').innerText = data.location || '-';
+    document.getElementById('modalSessionTopic').innerText = data.topic || data.title || '-';
+    document.getElementById('modalSessionInstructor').innerText = data.instructor || 'Pengurus Divisi';
+    document.getElementById('modalSessionOutcomes').innerText = data.outcomes || 'Peserta mempelajari topik bahasan tertera secara mendalam.';
+    
+    const notesElem = document.getElementById('modalSessionNotes');
+    const notesContainer = document.getElementById('modalNotesContainer');
+    if (data.notes && data.notes.trim() !== '') {
+        notesElem.innerText = data.notes;
+        notesContainer.style.display = 'block';
+    } else {
+        notesContainer.style.display = 'none';
+    }
+
+    const modal = document.getElementById('materiModal');
+    modal.style.display = 'flex';
+}
+
+function closeMateriModal() {
+    document.getElementById('materiModal').style.display = 'none';
+}
+
+window.addEventListener('click', function(e) {
+    const modal = document.getElementById('materiModal');
+    if (e.target === modal) {
+        closeMateriModal();
+    }
+});
+</script>
 
 @endsection
