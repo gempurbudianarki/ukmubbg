@@ -12,89 +12,104 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background: var(--bg-body, #eef3f8);
-            min-height: 100vh;
+            background: radial-gradient(circle at 50% 10%, #ffffff 0%, #f1f5f9 100%);
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2.5rem 1rem;
-            margin: 0;
+            padding: 1rem;
             font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
             color: #1e293b;
+            overflow: hidden;
+        }
+
+        @media (max-height: 640px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto;
+                padding: 1.5rem 1rem;
+            }
         }
 
         .login-wrapper {
             width: 100%;
-            max-width: 440px;
+            max-width: 410px;
             margin: 0 auto;
         }
 
         /* Logo & Brand Header */
         .login-header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.15rem;
         }
 
         .login-logo-link {
             display: inline-block;
             text-decoration: none;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             transition: transform 0.25s ease;
         }
 
         .login-logo-link:hover {
-            transform: scale(1.05);
+            transform: scale(1.06);
         }
 
         .login-logo-img {
-            height: 95px;
+            height: 58px;
             width: auto;
-            max-width: 110px;
+            max-width: 80px;
             object-fit: contain;
             display: block;
             margin: 0 auto;
-            filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.1));
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.08));
         }
 
         .login-title {
-            color: var(--slate-900);
-            font-size: 1.75rem;
-            font-weight: 800;
+            color: #0c2340;
+            font-size: 1.45rem;
+            font-weight: 850;
             letter-spacing: -0.02em;
-            margin: 0 0 0.35rem 0;
-            line-height: 1.25;
+            margin: 0 0 0.2rem 0;
+            line-height: 1.2;
         }
 
         .login-subtitle {
-            color: var(--slate-500);
-            font-size: 0.9rem;
+            color: #64748b;
+            font-size: 0.825rem;
             margin: 0;
             font-weight: 500;
-            line-height: 1.4;
+            line-height: 1.35;
         }
 
-        /* Card Container */
+        /* Card Container (White Claymorphism Compact) */
         .login-card {
             background: #ffffff;
-            border-radius: var(--radius-xl);
-            padding: 2.5rem 2.25rem;
-            box-shadow: var(--clay-card);
-            border: none;
+            border-radius: 20px;
+            padding: 1.75rem 1.85rem;
+            box-shadow: 0 15px 35px -5px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.02);
+            border: 1.5px solid rgba(226, 232, 240, 0.95);
             position: relative;
         }
 
         /* Form Controls */
         .form-row {
-            margin-bottom: 1.35rem;
+            margin-bottom: 0.95rem;
         }
 
         .form-label-custom {
             display: block;
             font-weight: 700;
             color: #1e293b;
-            font-size: 0.85rem;
-            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+            margin-bottom: 0.35rem;
             letter-spacing: -0.01em;
         }
 
@@ -106,9 +121,9 @@
 
         .input-icon-lead {
             position: absolute;
-            left: 1.15rem;
+            left: 1rem;
             color: #94a3b8;
-            font-size: 0.95rem;
+            font-size: 0.875rem;
             pointer-events: none;
             z-index: 2;
             transition: color 0.2s ease;
@@ -116,13 +131,13 @@
 
         .input-field {
             width: 100%;
-            height: 50px;
-            padding: 0 1rem 0 3rem;
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 0.95rem;
+            height: 44px;
+            padding: 0 0.85rem 0 2.65rem;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.875rem;
             color: #0f172a;
-            background: var(--bg-body);
+            background: #f8fafc;
             box-shadow: var(--clay-debossed);
             transition: all 0.2s ease;
             outline: none;
@@ -130,23 +145,23 @@
 
         .input-field:focus {
             background: #ffffff;
-            box-shadow: var(--clay-debossed), 0 0 0 3.5px rgba(37, 99, 235, 0.15);
+            border-color: #0284c7;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
         }
 
-        .input-field:focus + .input-icon-lead,
         .input-box:focus-within .input-icon-lead {
-            color: #2563eb;
+            color: #0284c7;
         }
 
         .toggle-pw-btn {
             position: absolute;
-            right: 1rem;
+            right: 0.85rem;
             background: none;
             border: none;
             color: #94a3b8;
             cursor: pointer;
-            padding: 0.35rem;
-            font-size: 0.95rem;
+            padding: 0.3rem;
+            font-size: 0.875rem;
             z-index: 2;
             transition: color 0.2s ease;
         }
@@ -155,20 +170,20 @@
             color: #334155;
         }
 
-        /* Remember & Forgot Row (Pixel-Perfect Symmetrical Layout) */
+        /* Remember & Forgot Row */
         .options-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: 0.35rem;
-            margin-bottom: 1.5rem;
-            font-size: 0.825rem;
+            margin-top: 0.25rem;
+            margin-bottom: 1.15rem;
+            font-size: 0.775rem;
         }
 
         .remember-wrap {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
             color: #64748b;
             cursor: pointer;
             user-select: none;
@@ -177,16 +192,16 @@
         }
 
         .remember-checkbox {
-            width: 16px;
-            height: 16px;
-            accent-color: #2563eb;
+            width: 15px;
+            height: 15px;
+            accent-color: #0284c7;
             cursor: pointer;
             margin: 0;
         }
 
         .forgot-link {
             color: #0284c7;
-            font-weight: 600;
+            font-weight: 700;
             text-decoration: none;
             transition: color 0.2s ease;
         }
@@ -199,47 +214,46 @@
         /* Submit Button */
         .btn-submit-login {
             width: 100%;
-            height: 50px;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            height: 44px;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             color: #ffffff;
             border: none;
-            border-radius: var(--radius-full);
-            font-size: 0.975rem;
+            border-radius: 9999px;
+            font-size: 0.9rem;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: var(--clay-btn);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            gap: 0.45rem;
         }
 
         .btn-submit-login:hover {
             transform: translateY(-2px);
-            box-shadow: var(--clay-btn-hover);
+            box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
         }
 
         .btn-submit-login:active {
             transform: translateY(1px);
-            box-shadow: var(--clay-btn-active);
         }
 
         /* Bottom Footer in Card */
         .card-bottom-links {
-            margin-top: 1.75rem;
-            padding-top: 1.25rem;
-            border-top: 1px solid rgba(226, 232, 240, 0.8);
+            margin-top: 1.15rem;
+            padding-top: 0.85rem;
+            border-top: 1px solid #f1f5f9;
             text-align: center;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             color: #64748b;
         }
 
         .register-link {
-            color: #2563eb;
+            color: #0284c7;
             font-weight: 700;
             text-decoration: none;
-            margin-left: 0.25rem;
+            margin-left: 0.2rem;
         }
 
         .register-link:hover {
@@ -249,22 +263,22 @@
         /* External Back Link */
         .back-home-wrap {
             text-align: center;
-            margin-top: 1.75rem;
+            margin-top: 0.95rem;
         }
 
         .back-home-link {
             color: #64748b;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             text-decoration: none;
             font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.35rem;
             transition: color 0.2s ease;
         }
 
         .back-home-link:hover {
-            color: #0f172a;
+            color: #0c2340;
         }
 
         /* Modal Bantuan Lupa Password */
@@ -275,7 +289,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(4px);
             z-index: 100;
             align-items: center;
@@ -285,10 +299,10 @@
 
         .modal-card {
             background: #ffffff;
-            border-radius: 16px;
-            max-width: 430px;
+            border-radius: 18px;
+            max-width: 420px;
             width: 100%;
-            padding: 2rem;
+            padding: 1.75rem;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
             animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -299,24 +313,24 @@
         }
 
         .modal-icon-badge {
-            width: 52px;
-            height: 52px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             background: #e0f2fe;
             color: #0284c7;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.35rem;
-            margin: 0 auto 1rem;
+            font-size: 1.25rem;
+            margin: 0 auto 0.85rem;
         }
 
         .whatsapp-box {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            padding: 1.25rem;
-            margin: 1.25rem 0;
+            padding: 1rem;
+            margin: 1rem 0;
         }
     </style>
 </head>
@@ -335,17 +349,17 @@
             </p>
         </div>
 
-        <!-- Kartu Formulir Presisi -->
+        <!-- Kartu Formulir Presisi Compact -->
         <div class="login-card">
             @if ($errors->any())
-                <div class="alert alert-error" style="font-size: 0.85rem; margin-bottom: 1.25rem; padding: 0.75rem 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.5rem;">
+                <div class="alert alert-error" style="font-size: 0.8rem; margin-bottom: 0.95rem; padding: 0.65rem 0.85rem; border-radius: 8px; display: flex; align-items: center; gap: 0.4rem;">
                     <i class="fas fa-circle-exclamation"></i>
                     <span>{{ $errors->first() }}</span>
                 </div>
             @endif
 
             @if (session('success'))
-                <div class="alert alert-success" style="font-size: 0.85rem; margin-bottom: 1.25rem; padding: 0.75rem 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.5rem;">
+                <div class="alert alert-success" style="font-size: 0.8rem; margin-bottom: 0.95rem; padding: 0.65rem 0.85rem; border-radius: 8px; display: flex; align-items: center; gap: 0.4rem;">
                     <i class="fas fa-check-circle"></i>
                     <span>{{ session('success') }}</span>
                 </div>
@@ -372,7 +386,7 @@
                     </label>
                     <div class="input-box">
                         <i class="fas fa-lock input-icon-lead"></i>
-                        <input type="password" id="password" name="password" class="input-field" style="padding-right: 2.75rem;" placeholder="Masukkan kata sandi Anda" required>
+                        <input type="password" id="password" name="password" class="input-field" style="padding-right: 2.5rem;" placeholder="Masukkan kata sandi Anda" required>
                         <button type="button" class="toggle-pw-btn" onclick="togglePasswordVisibility()" aria-label="Lihat kata sandi">
                             <i class="fas fa-eye" id="passwordEyeIcon"></i>
                         </button>
@@ -393,7 +407,7 @@
                 <!-- Tombol Submit -->
                 <button type="submit" class="btn-submit-login">
                     <span>Masuk ke Dashboard</span>
-                    <i class="fas fa-arrow-right" style="font-size: 0.875rem;"></i>
+                    <i class="fas fa-arrow-right" style="font-size: 0.8rem;"></i>
                 </button>
             </form>
 
@@ -422,30 +436,30 @@
                 <i class="fas fa-key"></i>
             </div>
             
-            <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; text-align: center; margin: 0 0 0.35rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 850; color: #0c2340; text-align: center; margin: 0 0 0.35rem;">
                 Bantuan Pemulihan Kata Sandi
             </h3>
             
-            <p style="font-size: 0.85rem; color: #64748b; text-align: center; margin: 0; line-height: 1.5;">
+            <p style="font-size: 0.825rem; color: #64748b; text-align: center; margin: 0; line-height: 1.5;">
                 Untuk menjaga keamanan akun mahasiswa & pengurus, proses reset kata sandi diverifikasi langsung oleh administrator resmi UKM.
             </p>
 
             <div class="whatsapp-box">
-                <div style="font-size: 0.825rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
-                    <i class="fab fa-whatsapp" style="color: #16a34a; font-size: 1rem;"></i>
+                <div style="font-size: 0.8rem; font-weight: 700; color: #1e293b; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <i class="fab fa-whatsapp" style="color: #16a34a; font-size: 0.95rem;"></i>
                     Layanan WhatsApp Hotline Admin UKM:
                 </div>
-                <p style="font-size: 0.8rem; color: #64748b; margin: 0 0 0.85rem; line-height: 1.5;">
+                <p style="font-size: 0.775rem; color: #64748b; margin: 0 0 0.75rem; line-height: 1.5;">
                     Sertakan informasi <strong>Nama Lengkap</strong>, <strong>NIM</strong>, dan <strong>Alamat Email</strong> terdaftar untuk verifikasi akun Anda.
                 </p>
-                <a href="https://wa.me/{{ \App\Models\Setting::get('contact_whatsapp', '6281234567890') }}?text=Halo%20Admin%20UKM%20Ilmu%20Komputer,%20saya%20memerlukan%20bantuan%20reset%20kata%20sandi%20akun%20saya." target="_blank" style="background: #16a34a; color: #ffffff; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.45rem; font-weight: 700; text-decoration: none; border-radius: 8px; padding: 0.65rem; font-size: 0.85rem; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.3);">
-                    <i class="fab fa-whatsapp" style="font-size: 1.05rem;"></i>
+                <a href="https://wa.me/{{ \App\Models\Setting::get('contact_whatsapp', '6281234567890') }}?text=Halo%20Admin%20UKM%20Ilmu%20Komputer,%20saya%20memerlukan%20bantuan%20reset%20kata%20sandi%20akun%20saya." target="_blank" style="background: #16a34a; color: #ffffff; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.4rem; font-weight: 700; text-decoration: none; border-radius: 8px; padding: 0.6rem; font-size: 0.825rem; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.3);">
+                    <i class="fab fa-whatsapp" style="font-size: 0.95rem;"></i>
                     <span>Hubungi Admin via WhatsApp</span>
                 </a>
             </div>
 
             <div>
-                <button type="button" onclick="closeForgotModal()" style="width: 100%; height: 42px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: background 0.2s ease;">
+                <button type="button" onclick="closeForgotModal()" style="width: 100%; height: 38px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; color: #475569; font-weight: 700; font-size: 0.825rem; cursor: pointer; transition: background 0.2s ease;">
                     Tutup Jendela Bantuan
                 </button>
             </div>
