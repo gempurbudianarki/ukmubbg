@@ -57,9 +57,9 @@
         transform: scale(1.06);
     }
     .info-badge {
-        background: var(--bg-body);
+        background: #f8fafc;
         box-shadow: var(--clay-debossed);
-        border: none;
+        border: 1px solid #e2e8f0;
         border-radius: var(--radius-md);
         padding: 0.95rem 1.15rem;
         margin-bottom: 0.85rem;
@@ -76,6 +76,20 @@
         font-weight: 700;
         color: var(--slate-800);
         margin-top: 0.15rem;
+    }
+    .profile-card .form-control {
+        border-radius: var(--radius-md);
+        border: 1.5px solid #cbd5e1;
+        padding: 0.75rem 1rem;
+        font-size: 0.925rem;
+        transition: all 0.2s ease;
+        box-shadow: var(--clay-debossed);
+        background: #ffffff;
+    }
+    .profile-card .form-control:focus {
+        border-color: #0284c7;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        outline: none;
     }
 </style>
 @endsection
@@ -208,8 +222,8 @@
                 </div>
 
                 <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
-                    <a href="{{ route('student.dashboard') }}" class="btn btn-outline">Batal</a>
-                    <button type="submit" class="btn btn-primary" style="padding-left: 2rem; padding-right: 2rem;">
+                    <a href="{{ route('student.dashboard') }}" class="btn btn-outline" style="border-radius: 9999px; font-weight: 700; background: #ffffff; border: 1.5px solid #cbd5e1; box-shadow: var(--clay-pill); padding: 0.65rem 1.5rem;">Batal</a>
+                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0369a1); border: none; font-weight: 800; padding: 0.65rem 2rem; border-radius: 9999px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);">
                         <i class="fas fa-check" style="margin-right: 0.4rem;"></i> Simpan Perubahan Profil
                     </button>
                 </div>

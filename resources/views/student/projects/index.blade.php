@@ -130,9 +130,9 @@
             @endforeach
         </div>
 
-        @if ($projects->hasPages())
+        @if ($projects->total() > 0)
             <div style="margin-top: 2rem;">
-                {{ $projects->links() }}
+                {{ $projects->links('pagination.clay') }}
             </div>
         @endif
     @else

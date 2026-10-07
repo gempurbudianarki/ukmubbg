@@ -30,27 +30,28 @@
             transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Sidebar Styling - Compact & Sleek */
+        /* Sidebar Styling - Compact & Sleek Fixed */
         .student-sidebar {
             width: var(--sidebar-width);
             background: var(--sidebar-bg);
             color: var(--sidebar-text);
             display: flex;
             flex-direction: column;
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            bottom: 0;
             height: 100vh;
-            flex-shrink: 0;
             z-index: 50;
             box-shadow: 4px 0 20px rgba(15, 23, 42, 0.03);
             border-right: 1px solid rgba(226, 232, 240, 0.85);
-            transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
         }
 
         /* Desktop Collapse State */
         .student-layout.sidebar-closed .student-sidebar {
-            margin-left: calc(-1 * var(--sidebar-width));
+            transform: translateX(calc(-1 * var(--sidebar-width)));
         }
 
         .student-brand-row {
@@ -210,12 +211,19 @@
 
         /* Main Content Wrapper */
         .student-main-wrap {
-            flex: 1;
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             min-width: 0;
             background: #f1f5f9;
-            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1), width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .student-layout.sidebar-closed .student-main-wrap {
+            margin-left: 0;
+            width: 100%;
         }
 
         /* Top Bar */
@@ -283,15 +291,15 @@
 
         @media (max-width: 992px) {
             .student-sidebar {
-                position: fixed;
-                left: -260px;
-                top: 0;
-                bottom: 0;
-                margin-left: 0 !important;
+                transform: translateX(-100%);
+                box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.25);
             }
             .student-layout.sidebar-mobile-open .student-sidebar {
-                left: 0;
-                box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.25);
+                transform: translateX(0);
+            }
+            .student-main-wrap {
+                margin-left: 0 !important;
+                width: 100% !important;
             }
             .student-topbar {
                 padding: 0 1.25rem;
