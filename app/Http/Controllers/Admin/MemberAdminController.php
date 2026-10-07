@@ -34,7 +34,12 @@ class MemberAdminController extends Controller
             });
         }
 
-        $members = $query->latest()->paginate(15)->withQueryString();
+        $perPage = (int) $request->input('per_page', 10);
+        if (!in_array($perPage, [5, 10, 25, 50])) {
+            $perPage = 10;
+        }
+
+        $members = $query->latest()->paginate($perPage)->withQueryString();
         $divisions = Division::all();
 
         // Calculate quick summary metrics

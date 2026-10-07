@@ -2183,3 +2183,78 @@ main {
     font-weight: 800;
 }
 
+/* ==========================================================================
+   MODERN WHITE CLAYMORPHISM PAGINATION (1 2 3)
+   ========================================================================== */
+.clay-pagination-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+}
+
+.clay-pagination-info {
+    font-size: 0.825rem;
+    color: var(--slate-500);
+    font-weight: 600;
+}
+
+.clay-pagination-info span {
+    font-weight: 800;
+    color: var(--slate-900);
+    font-family: var(--font-mono);
+}
+
+.clay-pagination-list {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.clay-pagination-list li a,
+.clay-pagination-list li span {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 0.5rem;
+    border-radius: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.825rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    background: #ffffff;
+    color: var(--slate-700);
+    box-shadow: var(--clay-pill);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.clay-pagination-list li a:hover {
+    background: #ffffff;
+    color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: var(--clay-btn-hover);
+}
+
+.clay-pagination-list li.active span {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    font-weight: 800;
+}
+
+.clay-pagination-list li.disabled span {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #f8fafc;
+    box-shadow: none;
+}
+
+

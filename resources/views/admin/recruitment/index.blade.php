@@ -154,7 +154,7 @@
         </table>
     </div>
 
-    @if ($applicants->hasPages())
+    @if ($applicants->total() > 0)
         <div style="padding: 1.25rem 1.75rem; border-top: 1px solid rgba(226, 232, 240, 0.8); background: #f8fafc;">
             {{ $applicants->links() }}
         </div>

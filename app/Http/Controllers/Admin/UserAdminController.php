@@ -43,7 +43,12 @@ class UserAdminController extends Controller
             });
         }
 
-        $users = $query->paginate(15)->withQueryString();
+        $perPage = (int) $request->input('per_page', 10);
+        if (!in_array($perPage, [5, 10, 25, 50])) {
+            $perPage = 10;
+        }
+
+        $users = $query->paginate($perPage)->withQueryString();
         $divisions = Division::all();
 
         $stats = [

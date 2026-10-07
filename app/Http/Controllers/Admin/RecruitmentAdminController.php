@@ -36,7 +36,12 @@ class RecruitmentAdminController extends Controller
             });
         }
 
-        $applicants = $query->latest()->paginate(15)->withQueryString();
+        $perPage = (int) $request->input('per_page', 10);
+        if (!in_array($perPage, [5, 10, 25, 50])) {
+            $perPage = 10;
+        }
+
+        $applicants = $query->latest()->paginate($perPage)->withQueryString();
         $divisions = Division::all();
 
         return view('admin.recruitment.index', compact('applicants', 'divisions', 'user'));

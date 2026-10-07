@@ -18,10 +18,8 @@
             display: flex;
             min-height: 100vh;
             background: var(--bg-body, #eef3f8);
-            overflow-x: hidden;
-            max-width: 100vw;
             width: 100%;
-            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
         .admin-sidebar {
             width: 275px;
@@ -30,16 +28,17 @@
             border-right: 1px solid rgba(226, 232, 240, 0.85);
             display: flex;
             flex-direction: column;
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            bottom: 0;
             height: 100vh;
-            flex-shrink: 0;
             z-index: 50;
             overflow: hidden;
-            transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .admin-layout.sidebar-closed .admin-sidebar {
-            margin-left: -275px;
+            transform: translateX(-275px);
         }
         .admin-brand {
             padding: 1.15rem 1.25rem;
@@ -116,14 +115,27 @@
             color: #2563eb;
         }
         .admin-main-wrap {
-            flex: 1;
+            margin-left: 275px;
+            width: calc(100% - 275px);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             min-width: 0;
             background: var(--bg-body, #eef3f8);
-            overflow-x: hidden;
+            transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1), width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .admin-layout.sidebar-closed .admin-main-wrap {
+            margin-left: 0;
             width: 100%;
-            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .admin-sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 45;
+            transition: opacity 0.2s ease;
         }
         .admin-header {
             height: 70px;
@@ -177,15 +189,18 @@
         }
         @media (max-width: 992px) {
             .admin-sidebar {
-                position: fixed !important;
-                left: -280px;
-                top: 0;
-                bottom: 0;
-                margin-left: 0 !important;
+                transform: translateX(-100%);
                 box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15) !important;
             }
             .admin-layout.sidebar-mobile-open .admin-sidebar {
-                left: 0 !important;
+                transform: translateX(0) !important;
+            }
+            .admin-sidebar-backdrop.show {
+                display: block;
+            }
+            .admin-main-wrap {
+                margin-left: 0 !important;
+                width: 100% !important;
             }
             .admin-header {
                 padding: 0 1.25rem;

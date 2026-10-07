@@ -202,8 +202,8 @@
         </table>
     </div>
 
-    @if ($members->hasPages())
-        <div style="padding: 1.25rem 1.75rem; border-top: 1px solid rgba(226, 232, 240, 0.8); background: #f8fafc; display: flex; justify-content: center;">
+    @if ($members->total() > 0)
+        <div style="padding: 1.25rem 1.75rem; border-top: 1px solid rgba(226, 232, 240, 0.8); background: #f8fafc;">
             {{ $members->links() }}
         </div>
     @endif
