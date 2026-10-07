@@ -61,4 +61,9 @@ class HomeController extends Controller
         $divisions = Division::all();
         return view('home.about', compact('divisions'));
     }
+
+    public function developer()
+    {
+        return view('pages.developer');
+    }
 }

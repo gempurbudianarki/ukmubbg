@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tentang', [HomeController::class, 'about'])->name('about');
+Route::get('/developer', [HomeController::class, 'developer'])->name('developer');
 
 Route::get('/divisi', [DivisionController::class, 'index'])->name('divisions.index');
 Route::get('/divisi/{slug}', [DivisionController::class, 'show'])->name('divisions.show');

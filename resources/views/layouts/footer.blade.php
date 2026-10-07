@@ -92,6 +92,11 @@
                             Verifikasi E-Sertifikat
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('developer') }}">
+                            Tentang Developer
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -120,6 +125,10 @@
                 <span>&copy; {{ date('Y') }} <strong>UKM Ilmu Komputer</strong>. Hak Cipta Dilindungi Undang-Undang.</span>
             </div>
             <div style="display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap;">
+                <a href="{{ route('developer') }}" style="color: #0284c7; font-weight: 700; text-decoration: none;">
+                    Tentang Developer
+                </a>
+                <span style="color: #cbd5e1;">|</span>
                 <a href="{{ route('login') }}" style="color: #0284c7; font-weight: 700; text-decoration: none;">
                     Portal Pengurus CMS
                 </a>
