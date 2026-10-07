@@ -27,7 +27,7 @@
                 </h1>
 
                 <p class="hero-subtitle">
-                    Portal kolaborasi resmi UKM Fakultas Ilmu Komputer. Eksplorasi rekayasa perangkat lunak modern, karya multimedia interaktif, otomasi mikrokontroler IoT, dan pengujian ketahanan siber.
+                    Portal kolaborasi riset resmi UKM Program Studi Ilmu Komputer, Fakultas Sains, Teknologi, dan Ilmu Kesehatan (FSTIK) Universitas Bina Bangsa Getsempena. Eksplorasi rekayasa perangkat lunak modern, karya multimedia interaktif, otomasi mikrokontroler IoT, dan pengujian ketahanan siber.
                 </p>
 
                 <div class="hero-actions">

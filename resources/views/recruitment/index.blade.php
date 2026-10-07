@@ -182,7 +182,7 @@
             Formulir Pendaftaran Anggota Baru
         </h1>
         <p style="color: var(--slate-600); font-size: 1.05rem; line-height: 1.6; max-width: 650px; margin: 0 auto;">
-            Satu pintu pendaftaran resmi mahasiswa Fakultas Ilmu Komputer. Pengisian formulir dibagi menjadi <strong>3 tahapan mudah</strong>: Biodata, Pilihan Divisi, dan Unggah Berkas.
+            Satu pintu pendaftaran resmi mahasiswa Program Studi Ilmu Komputer, Fakultas Sains, Teknologi, dan Ilmu Kesehatan (FSTIK) UBBG. Pengisian formulir dibagi menjadi <strong>3 tahapan mudah</strong>: Biodata, Pilihan Divisi, dan Unggah Berkas.
         </p>
     </div>
 </div>

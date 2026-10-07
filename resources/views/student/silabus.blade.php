@@ -67,7 +67,7 @@
                 Dosen Pembina Divisi
             </div>
             <div style="font-weight: 800; font-size: 1.05rem; color: #0c2340; margin-bottom: 0.15rem;">
-                {{ $division?->adviser_name ?? 'Dosen Fasilkom' }}
+                {{ $division?->adviser_name ?? 'Dosen FSTIK UBBG' }}
             </div>
             <div style="font-size: 0.775rem; color: #009688; font-weight: 700;">
                 {{ $division?->adviser_title ?? 'Dosen Pembimbing' }}
