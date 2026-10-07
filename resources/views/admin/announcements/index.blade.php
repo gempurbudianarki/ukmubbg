@@ -20,7 +20,7 @@
 </div>
 
 <!-- Layout 2 Kolom: Form Buat Pengumuman & Feed Pengumuman -->
-<div style="display: grid; grid-template-columns: minmax(320px, 380px) 1fr; gap: 1.75rem; align-items: flex-start;">
+<div class="admin-split-layout reverse">
     
     <!-- Form Buat Pengumuman Baru -->
     <div class="admin-clay-card">

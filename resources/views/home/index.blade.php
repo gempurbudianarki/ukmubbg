@@ -53,7 +53,7 @@
 </section>
 
 <!-- 2. Metric Stat Strip Overview -->
-<section class="stat-section" style="padding: 2.75rem 0; background: #ffffff; border-top: 1px solid var(--slate-200);">
+<section class="stat-section" style="padding: 2rem 0 3.5rem;">
     <div class="container">
         <div class="stat-strip">
             <div class="stat-item">
@@ -61,8 +61,8 @@
                 <div class="stat-label">Divisi Spesialisasi</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">{{ $stats['posts_count'] ?? 15 }}+</div>
-                <div class="stat-label">Publikasi & Riset</div>
+                <div class="stat-number">{{ $stats['projects_count'] ?? 12 }}+</div>
+                <div class="stat-label">Karya & Inovasi</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number">{{ $stats['active_members'] ?? 120 }}+</div>
@@ -77,7 +77,7 @@
 </section>
 
 <!-- 3. Bento Grid 4 Divisions Showcase -->
-<section id="divisions" style="padding: 5rem 0; background: #f8fafc; border-top: 1px solid var(--slate-200); border-bottom: 1px solid var(--slate-200);">
+<section id="divisions" style="padding: 4.5rem 0;">
     <div class="container">
         <div class="section-header">
             <div class="section-tag">Struktur Keahlian</div>
@@ -96,14 +96,14 @@
                         </div>
                         <h3 class="division-title">{{ $division->name }}</h3>
                         <p class="division-tagline">{{ $division->tagline }}</p>
-                        <p style="font-size: 0.9rem; color: var(--slate-600); margin-bottom: 1.25rem; line-height: 1.6;">
-                            {{ Str::limit($division->description, 135) }}
+                        <p style="font-size: 0.925rem; color: var(--slate-600); margin-bottom: 1.25rem; line-height: 1.6;">
+                            {{ Str::limit($division->description, 140) }}
                         </p>
 
                         <!-- Key topics tags -->
-                        <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.25rem;">
                             @foreach (array_slice($division->focus_topics_list, 0, 3) as $topic)
-                                <span style="font-size: 0.775rem; background: var(--slate-100); padding: 0.2rem 0.55rem; border-radius: var(--radius-sm); color: var(--slate-700); font-weight: 500;">
+                                <span style="display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 700; padding: 0.35rem 0.85rem; background: var(--bg-body); color: var(--slate-700); border-radius: var(--radius-full); box-shadow: var(--clay-pill);">
                                     {{ $topic }}
                                 </span>
                             @endforeach
@@ -111,21 +111,46 @@
                     </div>
 
                     <div>
-                        <div class="division-leader-info">
-                            <div class="avatar-round" style="background: {{ $division->color_accent }}20; color: {{ $division->color_accent }};">
-                                {{ strtoupper(substr($division->leader_name, 0, 2)) }}
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="font-size: 0.85rem; font-weight: 700; color: var(--slate-900);">
-                                    {{ $division->leader_name }}
+                        <!-- Leadership & Mentorship Strip -->
+                        <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.25rem;">
+                            <!-- Dosen Pembina Divisi -->
+                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 0.95rem; background: var(--bg-body); border-radius: var(--radius-md); box-shadow: var(--clay-pill); border-left: 3.5px solid {{ $division->color_accent }};">
+                                <div style="width: 38px; height: 38px; border-radius: 50%; background: {{ $division->color_accent }}18; color: {{ $division->color_accent }}; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; box-shadow: var(--clay-pill);">
+                                    <i class="fa-solid fa-chalkboard-user"></i>
                                 </div>
-                                <div style="font-size: 0.75rem; color: var(--slate-500);">
-                                    Ketua Divisi &bull; NIM: {{ $division->leader_nim }}
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-size: 0.68rem; font-weight: 800; color: {{ $division->color_accent }}; text-transform: uppercase; letter-spacing: 0.04em;">
+                                        Dosen Pembina {{ $division->name }}
+                                    </div>
+                                    <div style="font-size: 0.85rem; font-weight: 800; color: var(--slate-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ $division->adviser_name }}">
+                                        {{ $division->adviser_name }}
+                                    </div>
+                                    <div style="font-size: 0.72rem; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ $division->adviser_title }}">
+                                        {{ $division->adviser_title }}
+                                    </div>
                                 </div>
                             </div>
-                            <a href="{{ route('divisions.show', $division->slug) }}" class="btn btn-outline btn-sm" style="border-radius: var(--radius-full);">
-                                Detail &rarr;
-                            </a>
+
+                            <!-- Ketua Divisi Mahasiswa -->
+                            <div class="division-leader-info" style="margin-top: 0; padding: 0.75rem 0.95rem;">
+                                <div class="avatar-round" style="width: 38px; height: 38px; font-size: 0.8rem; background: {{ $division->color_accent }}15; color: {{ $division->color_accent }};">
+                                    {{ strtoupper(substr($division->leader_name, 0, 2)) }}
+                                </div>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-size: 0.68rem; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.04em;">
+                                        Ketua Divisi Mahasiswa
+                                    </div>
+                                    <div style="font-size: 0.85rem; font-weight: 800; color: var(--slate-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        {{ $division->leader_name }}
+                                    </div>
+                                    <div style="font-size: 0.72rem; color: var(--slate-500); font-weight: 600;">
+                                        NIM: {{ $division->leader_nim }}
+                                    </div>
+                                </div>
+                                <a href="{{ route('divisions.show', $division->slug) }}" class="btn btn-outline btn-sm" style="padding: 0.4rem 0.75rem; font-size: 0.775rem;">
+                                    Detail &rarr;
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -149,32 +174,34 @@
             @forelse ($featuredProjects as $project)
                 <div class="project-card">
                     <div class="project-thumb">
-                        <img src="{{ $project->thumbnail_url }}" alt="{{ $project->title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="{{ $project->thumbnail_url }}" alt="{{ $project->title }}">
                         <div class="project-thumb-overlay"></div>
                     </div>
 
                     <div class="project-body">
-                        <div style="margin-bottom: 0.5rem;">
-                            @if ($project->division)
-                                <span class="badge" style="background: {{ $project->division->color_accent }}15; color: {{ $project->division->color_accent }}; font-size: 0.725rem;">
-                                    {{ $project->division->name }}
-                                </span>
-                            @else
-                                <span class="badge badge-neutral" style="font-size: 0.725rem;">Multi-Divisi</span>
-                            @endif
-                        </div>
+                        <div>
+                            <div style="margin-bottom: 0.6rem;">
+                                @if ($project->division)
+                                    <span class="badge" style="background: {{ $project->division->color_accent }}15; color: {{ $project->division->color_accent }}; font-size: 0.725rem; font-weight: 700;">
+                                        {{ $project->division->name }}
+                                    </span>
+                                @else
+                                    <span class="badge badge-neutral" style="font-size: 0.725rem; font-weight: 700;">Multi-Divisi</span>
+                                @endif
+                            </div>
 
-                        <h3 class="project-title">{{ $project->title }}</h3>
-                        <p class="project-desc">{{ Str::limit($project->description, 110) }}</p>
+                            <h3 class="project-title">{{ $project->title }}</h3>
+                            <p class="project-desc">{{ Str::limit($project->description, 115) }}</p>
 
-                        <div class="tech-tags">
-                            @foreach ($project->tech_stack ?? [] as $tech)
-                                <span class="tech-tag">{{ $tech }}</span>
-                            @endforeach
+                            <div class="tech-tags">
+                                @foreach ($project->tech_stack ?? [] as $tech)
+                                    <span class="tech-tag">{{ $tech }}</span>
+                                @endforeach
+                            </div>
                         </div>
 
                         <div class="project-footer">
-                            <span style="color: var(--slate-500); font-size: 0.8rem;">
+                            <span style="color: var(--slate-600); font-size: 0.8rem; font-weight: 600;">
                                 Tim: {{ Str::limit($project->author_names, 24) }}
                             </span>
                             <div style="display: flex; gap: 0.4rem;">
@@ -211,7 +238,7 @@
 </section>
 
 <!-- 4. Upcoming Events & Workshop Hub -->
-<section style="padding: 5rem 0; background: var(--slate-100); border-top: 1px solid var(--slate-200); border-bottom: 1px solid var(--slate-200);">
+<section style="padding: 4.5rem 0;">
     <div class="container">
         <div class="section-header">
             <div class="section-tag">Kalender Pelatihan</div>
@@ -223,48 +250,48 @@
 
         <div class="events-grid">
             @forelse ($upcomingEvents as $event)
-                <div class="event-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-                    <div style="height: 160px; position: relative; overflow: hidden;">
-                        <img src="{{ $event->banner_url }}" alt="{{ $event->title }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.75) 100%);"></div>
-                        <div style="position: absolute; top: 0.75rem; left: 0.75rem;">
-                            <div class="event-date-box" style="box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+                <div class="event-card">
+                    <div class="event-banner">
+                        <img src="{{ $event->banner_url }}" alt="{{ $event->title }}">
+                        <div class="event-banner-overlay"></div>
+                        <div style="position: absolute; top: 0.85rem; left: 0.85rem;">
+                            <div class="event-date-box">
                                 <span class="event-day">{{ $event->event_date->format('d') }}</span>
                                 <span class="event-month">{{ $event->event_date->format('M') }}</span>
                             </div>
                         </div>
-                        <div style="position: absolute; top: 0.75rem; right: 0.75rem;">
-                            <span class="badge {{ $event->location_type === 'online' ? 'badge-info' : 'badge-neutral' }}" style="background: rgba(15,23,42,0.85); color: #ffffff; backdrop-filter: blur(8px);">
+                        <div style="position: absolute; top: 0.85rem; right: 0.85rem;">
+                            <span class="badge {{ $event->location_type === 'online' ? 'badge-info' : 'badge-neutral' }}" style="backdrop-filter: blur(8px); text-transform: uppercase; font-weight: 800; font-size: 0.7rem;">
                                 {{ $event->location_type }}
                             </span>
                         </div>
                     </div>
 
-                    <div style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; flex: 1;">
+                    <div class="event-body">
                         <div>
-                            <div style="margin-bottom: 0.4rem;">
+                            <div style="margin-bottom: 0.5rem;">
                                 @if ($event->division)
-                                    <span class="badge" style="background: {{ $event->division->color_accent }}15; color: {{ $event->division->color_accent }}; font-size: 0.7rem;">
+                                    <span class="badge" style="background: {{ $event->division->color_accent }}15; color: {{ $event->division->color_accent }}; font-size: 0.725rem; font-weight: 700;">
                                         {{ $event->division->name }}
                                     </span>
                                 @else
-                                    <span class="badge badge-neutral" style="font-size: 0.7rem;">Agenda Umum</span>
+                                    <span class="badge badge-neutral" style="font-size: 0.725rem; font-weight: 700;">Agenda Umum</span>
                                 @endif
                             </div>
 
-                            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900); margin-bottom: 0.5rem; line-height: 1.35;">
+                            <h3 class="event-title">
                                 {{ $event->title }}
                             </h3>
 
-                            <p style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6; margin-bottom: 1.25rem;">
-                                {{ Str::limit($event->description, 100) }}
+                            <p class="event-desc">
+                                {{ Str::limit($event->description, 110) }}
                             </p>
                         </div>
 
                         <div>
-                            <div style="font-size: 0.8rem; color: var(--slate-500); margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.3rem;">
-                                <div><strong>Lokasi:</strong> {{ $event->location_venue }}</div>
-                                <div><strong>Waktu:</strong> {{ substr($event->time_start, 0, 5) }} - {{ $event->time_end ? substr($event->time_end, 0, 5) : 'Selesai' }} WIB</div>
+                            <div class="event-meta-box">
+                                <div><strong style="color: var(--slate-800);">Lokasi:</strong> {{ $event->location_venue }}</div>
+                                <div><strong style="color: var(--slate-800);">Waktu:</strong> {{ substr($event->time_start, 0, 5) }} - {{ $event->time_end ? substr($event->time_end, 0, 5) : 'Selesai' }} WIB</div>
                             </div>
 
                             @if ($event->registration_link)
@@ -294,81 +321,28 @@
     </div>
 </section>
 
-<!-- 5. Latest Insights / Publications -->
-<section style="padding: 5.5rem 0;">
+<!-- 6. Oprec Call to Action Banner (Clay Card) -->
+<section style="padding: 2rem 0 5rem;">
     <div class="container">
-        <div class="section-header">
-            <div class="section-tag">Kanal Publikasi</div>
-            <h2 class="section-title">Wawasan, Riset & Dokumentasi</h2>
-            <p class="section-desc">
-                Artikel kajian teknis, dokumentasi workshop, dan ulasan perkembangan teknologi mutakhir.
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff; padding: 4.5rem 2rem; border-radius: var(--radius-xl); box-shadow: 10px 20px 40px rgba(15,23,42,0.25), inset 2px 2px 5px rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.2); text-align: center; position: relative; overflow: hidden;">
+            <span class="badge badge-success" style="margin-bottom: 1.5rem;">
+                <span class="badge-pulse"></span>
+                <span>Pendaftaran Anggota Baru Terbuka</span>
+            </span>
+            <h2 style="font-size: clamp(2rem, 3.5vw, 2.75rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1rem; color: #ffffff;">
+                Siap Menjadi Bagian dari Inovator Kampus?
+            </h2>
+            <p style="color: var(--slate-300); max-width: 650px; margin: 0 auto 2.25rem; font-size: 1.05rem; line-height: 1.7;">
+                Satu formulir pendaftaran untuk semua divisi spesialisasi. Pilih bidang minat utama, tunjukkan potensimu, dan bangun portofolio terbaikmu bersama kami.
             </p>
-        </div>
-
-        <div class="projects-grid">
-            @foreach ($latestPosts as $post)
-                <article class="project-card">
-                    <div class="project-thumb">
-                        <div style="color: var(--slate-400); display: flex; flex-direction: column; align-items: center; gap: 0.4rem;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                            </svg>
-                            <span style="font-size: 0.75rem; font-weight: 600;">{{ $post->division->name }}</span>
-                        </div>
-                    </div>
-
-                    <div class="project-body">
-                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                            <span class="badge" style="background: {{ $post->division->color_accent }}15; color: {{ $post->division->color_accent }}; font-size: 0.725rem;">
-                                {{ $post->division->name }}
-                            </span>
-                            <span style="font-size: 0.75rem; color: var(--slate-400);">&bull;</span>
-                            <span style="font-size: 0.75rem; color: var(--slate-500); text-transform: capitalize;">{{ $post->category }}</span>
-                        </div>
-
-                        <h3 class="project-title">
-                            <a href="{{ route('posts.show', $post->slug) }}">
-                                {{ $post->title }}
-                            </a>
-                        </h3>
-
-                        <p class="project-desc">{{ Str::limit($post->excerpt, 110) }}</p>
-
-                        <div class="project-footer">
-                            <span style="color: var(--slate-400); font-size: 0.775rem;">
-                                {{ $post->created_at->format('d M Y') }}
-                            </span>
-                            <a href="{{ route('posts.show', $post->slug) }}" style="font-size: 0.8rem; font-weight: 600; color: var(--accent-blue);">
-                                Baca Selengkapnya &rarr;
-                            </a>
-                        </div>
-                    </div>
-                </article>
-            @endforeach
-        </div>
-    </div>
-</section>
-
-<!-- 6. Oprec Call to Action Banner -->
-<section style="background: #0f172a; color: #ffffff; padding: 5rem 0; position: relative; overflow: hidden;">
-    <div class="container" style="text-align: center; position: relative; z-index: 1;">
-        <span class="badge badge-success" style="margin-bottom: 1.5rem;">
-            <span class="badge-pulse"></span>
-            <span>Pendaftaran Anggota Baru Terbuka</span>
-        </span>
-        <h2 style="font-size: 2.75rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1rem; color: #ffffff;">
-            Siap Menjadi Bagian dari Inovator Kampus?
-        </h2>
-        <p style="color: var(--slate-300); max-width: 650px; margin: 0 auto 2.25rem; font-size: 1.1rem; line-height: 1.7;">
-            Satu formulir pendaftaran untuk semua divisi spesialisasi. Pilih bidang minat utama, tunjukkan potensimu, dan bangun portofolio terbaikmu bersama kami.
-        </p>
-        <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-            <a href="{{ route('recruitment.index') }}" class="btn btn-accent btn-lg">
-                Daftar Online Sekarang &rarr;
-            </a>
-            <a href="{{ route('recruitment.status') }}" class="btn btn-glass btn-lg" style="color: #ffffff; border-color: var(--slate-700); background: rgba(255, 255, 255, 0.1);">
-                Cek Status Seleksi
-            </a>
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <a href="{{ route('recruitment.index') }}" class="btn btn-accent btn-lg">
+                    Daftar Online Sekarang &rarr;
+                </a>
+                <a href="{{ route('recruitment.status') }}" class="btn btn-glass btn-lg" style="color: #0f172a;">
+                    Cek Status Seleksi
+                </a>
+            </div>
         </div>
     </div>
 </section>

@@ -12,6 +12,7 @@ class Project extends Model
 
     protected $fillable = [
         'division_id',
+        'user_id',
         'title',
         'slug',
         'description',
@@ -21,6 +22,7 @@ class Project extends Model
         'repo_url',
         'thumbnail',
         'is_featured',
+        'submission_status',
     ];
 
     protected $casts = [
@@ -31,6 +33,16 @@ class Project extends Model
     public function division(): BelongsTo
     {
         return $this->belongsTo(Division::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('submission_status', 'published');
     }
 
     public function getThumbnailUrlAttribute(): string

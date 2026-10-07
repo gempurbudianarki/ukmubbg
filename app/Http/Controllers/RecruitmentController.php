@@ -121,16 +121,16 @@ class RecruitmentController extends Controller
             $avatarPath = $request->file('profile_photo')->store('avatars', 'public');
         }
 
-        // Handle or create user account
+        // Handle or create user account securely
         $user = \Illuminate\Support\Facades\Auth::user();
         if (!$user) {
             $user = \App\Models\User::where('email', $validated['email'])->first();
             if (!$user) {
-                $passwordToUse = !empty($validated['password']) ? $validated['password'] : ($validated['nim'] ?? 'password123');
+                $rawPassword = !empty($validated['password']) ? $validated['password'] : ($validated['nim'] . '@Ukm' . date('Y'));
                 $user = \App\Models\User::create([
                     'name' => $validated['full_name'],
                     'email' => $validated['email'],
-                    'password' => \Illuminate\Support\Facades\Hash::make($passwordToUse),
+                    'password' => \Illuminate\Support\Facades\Hash::make($rawPassword),
                     'role' => 'member',
                     'nim' => $validated['nim'],
                     'phone_number' => $validated['phone_whatsapp'],

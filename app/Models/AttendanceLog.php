@@ -15,6 +15,13 @@ class AttendanceLog extends Model
         'member_id',
         'status',
         'notes',
+        'attachment',
+        'checkin_type',
+        'checked_in_at',
+    ];
+
+    protected $casts = [
+        'checked_in_at' => 'datetime',
     ];
 
     public function session(): BelongsTo

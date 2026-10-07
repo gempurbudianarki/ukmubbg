@@ -13,12 +13,12 @@
         }
 
         body {
-            background: radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 55%, #020617 100%);
+            background: var(--bg-body, #eef3f8);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem 1rem;
+            padding: 2.5rem 1rem;
             margin: 0;
             font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
             color: #1e293b;
@@ -33,7 +33,7 @@
         /* Logo & Brand Header */
         .login-header {
             text-align: center;
-            margin-bottom: 1.75rem;
+            margin-bottom: 2rem;
         }
 
         .login-logo-link {
@@ -44,22 +44,22 @@
         }
 
         .login-logo-link:hover {
-            transform: scale(1.04);
+            transform: scale(1.05);
         }
 
         .login-logo-img {
-            height: 105px;
+            height: 95px;
             width: auto;
-            max-width: 120px;
+            max-width: 110px;
             object-fit: contain;
             display: block;
             margin: 0 auto;
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.45));
+            filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.1));
         }
 
         .login-title {
-            color: #ffffff;
-            font-size: 1.65rem;
+            color: var(--slate-900);
+            font-size: 1.75rem;
             font-weight: 800;
             letter-spacing: -0.02em;
             margin: 0 0 0.35rem 0;
@@ -67,8 +67,8 @@
         }
 
         .login-subtitle {
-            color: #94a3b8;
-            font-size: 0.875rem;
+            color: var(--slate-500);
+            font-size: 0.9rem;
             margin: 0;
             font-weight: 500;
             line-height: 1.4;
@@ -77,15 +77,16 @@
         /* Card Container */
         .login-card {
             background: #ffffff;
-            border-radius: 18px;
-            padding: 2.25rem 2rem;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem 2.25rem;
+            box-shadow: var(--clay-card);
+            border: none;
             position: relative;
         }
 
         /* Form Controls */
         .form-row {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.35rem;
         }
 
         .form-label-custom {
@@ -93,7 +94,7 @@
             font-weight: 700;
             color: #1e293b;
             font-size: 0.85rem;
-            margin-bottom: 0.45rem;
+            margin-bottom: 0.5rem;
             letter-spacing: -0.01em;
         }
 
@@ -105,7 +106,7 @@
 
         .input-icon-lead {
             position: absolute;
-            left: 1rem;
+            left: 1.15rem;
             color: #94a3b8;
             font-size: 0.95rem;
             pointer-events: none;
@@ -115,21 +116,21 @@
 
         .input-field {
             width: 100%;
-            height: 48px;
-            padding: 0 1rem 0 2.75rem;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 10px;
-            font-size: 0.925rem;
+            height: 50px;
+            padding: 0 1rem 0 3rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
             color: #0f172a;
-            background: #f8fafc;
+            background: var(--bg-body);
+            box-shadow: var(--clay-debossed);
             transition: all 0.2s ease;
             outline: none;
         }
 
         .input-field:focus {
             background: #ffffff;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.12);
+            box-shadow: var(--clay-debossed), 0 0 0 3.5px rgba(37, 99, 235, 0.15);
         }
 
         .input-field:focus + .input-icon-lead,
@@ -139,7 +140,7 @@
 
         .toggle-pw-btn {
             position: absolute;
-            right: 0.85rem;
+            right: 1rem;
             background: none;
             border: none;
             color: #94a3b8;
@@ -159,7 +160,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: 0.25rem;
+            margin-top: 0.35rem;
             margin-bottom: 1.5rem;
             font-size: 0.825rem;
         }
@@ -198,15 +199,15 @@
         /* Submit Button */
         .btn-submit-login {
             width: 100%;
-            height: 48px;
-            background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
+            height: 50px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: #ffffff;
             border: none;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 700;
+            border-radius: var(--radius-full);
+            font-size: 0.975rem;
+            font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            box-shadow: var(--clay-btn);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             display: flex;
             align-items: center;
@@ -215,21 +216,22 @@
         }
 
         .btn-submit-login:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+            transform: translateY(-2px);
+            box-shadow: var(--clay-btn-hover);
         }
 
         .btn-submit-login:active {
-            transform: translateY(0);
+            transform: translateY(1px);
+            box-shadow: var(--clay-btn-active);
         }
 
         /* Bottom Footer in Card */
         .card-bottom-links {
-            margin-top: 1.5rem;
+            margin-top: 1.75rem;
             padding-top: 1.25rem;
-            border-top: 1px solid #f1f5f9;
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             color: #64748b;
         }
 
@@ -251,8 +253,8 @@
         }
 
         .back-home-link {
-            color: #94a3b8;
-            font-size: 0.85rem;
+            color: #64748b;
+            font-size: 0.875rem;
             text-decoration: none;
             font-weight: 600;
             display: inline-flex;
@@ -262,7 +264,7 @@
         }
 
         .back-home-link:hover {
-            color: #ffffff;
+            color: #0f172a;
         }
 
         /* Modal Bantuan Lupa Password */
@@ -436,7 +438,7 @@
                 <p style="font-size: 0.8rem; color: #64748b; margin: 0 0 0.85rem; line-height: 1.5;">
                     Sertakan informasi <strong>Nama Lengkap</strong>, <strong>NIM</strong>, dan <strong>Alamat Email</strong> terdaftar untuk verifikasi akun Anda.
                 </p>
-                <a href="https://wa.me/6281234567890?text=Halo%20Admin%20UKM%20Ilmu%20Komputer,%20saya%20memerlukan%20bantuan%20reset%20kata%20sandi%20akun%20saya." target="_blank" style="background: #16a34a; color: #ffffff; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.45rem; font-weight: 700; text-decoration: none; border-radius: 8px; padding: 0.65rem; font-size: 0.85rem; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.3);">
+                <a href="https://wa.me/{{ \App\Models\Setting::get('contact_whatsapp', '6281234567890') }}?text=Halo%20Admin%20UKM%20Ilmu%20Komputer,%20saya%20memerlukan%20bantuan%20reset%20kata%20sandi%20akun%20saya." target="_blank" style="background: #16a34a; color: #ffffff; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.45rem; font-weight: 700; text-decoration: none; border-radius: 8px; padding: 0.65rem; font-size: 0.85rem; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.3);">
                     <i class="fab fa-whatsapp" style="font-size: 1.05rem;"></i>
                     <span>Hubungi Admin via WhatsApp</span>
                 </a>

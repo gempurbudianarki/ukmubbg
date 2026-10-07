@@ -40,18 +40,13 @@ class UkmPortalTest extends TestCase
         $response->assertSee('Ketua Divisi');
     }
 
-    public function test_publications_feed_and_detail_page()
+    public function test_publications_feed_and_detail_page_removed()
     {
-        $post = Post::published()->first();
-        $this->assertNotNull($post);
-
         $response = $this->get('/berita');
-        $response->assertStatus(200);
-        $response->assertSee($post->title);
+        $response->assertStatus(404);
 
-        $detailResponse = $this->get('/berita/' . $post->slug);
-        $detailResponse->assertStatus(200);
-        $detailResponse->assertSee($post->title);
+        $detailResponse = $this->get('/berita/test-slug');
+        $detailResponse->assertStatus(404);
     }
 
     public function test_recruitment_submission_and_status_check()

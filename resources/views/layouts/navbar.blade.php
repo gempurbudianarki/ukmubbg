@@ -14,7 +14,6 @@
             <li><a href="{{ route('officers.index') }}" class="nav-link {{ request()->routeIs('officers.*') ? 'active' : '' }}">Pengurus</a></li>
             <li><a href="{{ route('galleries.index') }}" class="nav-link {{ request()->routeIs('galleries.*') ? 'active' : '' }}">Galeri</a></li>
             <li><a href="{{ route('certificates.verify') }}" class="nav-link {{ request()->routeIs('certificates.*') ? 'active' : '' }}">Verifikasi</a></li>
-            <li><a href="{{ route('posts.index') }}" class="nav-link {{ request()->routeIs('posts.*') ? 'active' : '' }}">Riset</a></li>
         </ul>
 
         <!-- Action Buttons -->
@@ -24,7 +23,11 @@
                 <span>Oprec</span>
             </a>
             @auth
-                <a href="{{ route('admin.dashboard') }}" class="btn btn-glass btn-sm">Dashboard</a>
+                @if(auth()->user()->isMember())
+                    <a href="{{ route('student.dashboard') }}" class="btn btn-glass btn-sm">Portal Mahasiswa</a>
+                @else
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-glass btn-sm">Dashboard Admin</a>
+                @endif
             @else
                 <a href="{{ route('login') }}" class="btn btn-glass btn-sm">Masuk</a>
             @endauth
@@ -48,12 +51,15 @@
             <li><a href="{{ route('officers.index') }}">Struktur Pengurus</a></li>
             <li><a href="{{ route('galleries.index') }}">Galeri Momen</a></li>
             <li><a href="{{ route('certificates.verify') }}">Verifikasi Sertifikat</a></li>
-            <li><a href="{{ route('posts.index') }}">Publikasi & Riset</a></li>
             <li><a href="{{ route('recruitment.status') }}">Cek Status Oprec</a></li>
             <li style="padding-top: 0.5rem; border-top: 1px solid var(--slate-100); display: flex; gap: 0.5rem;">
                 <a href="{{ route('recruitment.index') }}" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">Daftar Anggota</a>
                 @auth
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">Dashboard</a>
+                    @if(auth()->user()->isMember())
+                        <a href="{{ route('student.dashboard') }}" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">Portal</a>
+                    @else
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">Dashboard</a>
+                    @endif
                 @else
                     <a href="{{ route('login') }}" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">Masuk</a>
                 @endauth

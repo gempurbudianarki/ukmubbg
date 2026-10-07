@@ -300,11 +300,21 @@
             </div>
         </aside>
 
+        <!-- Mobile Sidebar Backdrop -->
+        <div id="adminSidebarBackdrop" class="admin-sidebar-backdrop" onclick="toggleAdminSidebar()"></div>
+
         <!-- Main Content -->
         <div class="admin-main-wrap">
             <header class="admin-header">
-                <div style="font-weight: 800; font-size: 1.1rem; color: var(--slate-900);">
-                    @yield('page_title', 'Dashboard')
+                <div style="display: flex; align-items: center; gap: 0.85rem;">
+                    <button type="button" class="admin-mobile-toggle" onclick="toggleAdminSidebar()" aria-label="Buka Navigasi">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <div style="font-weight: 800; font-size: 1.1rem; color: var(--slate-900);">
+                        @yield('page_title', 'Dashboard')
+                    </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.85rem;">
                     <div style="text-align: right;">
@@ -344,5 +354,16 @@
             </main>
         </div>
     </div>
+
+    <script>
+        function toggleAdminSidebar() {
+            const sidebar = document.querySelector('.admin-sidebar');
+            const backdrop = document.getElementById('adminSidebarBackdrop');
+            if (sidebar && backdrop) {
+                sidebar.classList.toggle('open');
+                backdrop.classList.toggle('show');
+            }
+        }
+    </script>
 </body>
 </html>

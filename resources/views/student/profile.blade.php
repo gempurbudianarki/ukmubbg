@@ -18,9 +18,9 @@
     .profile-card {
         background: #ffffff;
         border-radius: var(--radius-xl);
-        padding: 2rem;
-        border: 1px solid var(--slate-200);
-        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05);
+        padding: 2.25rem 2rem;
+        border: none;
+        box-shadow: var(--clay-card);
     }
     .avatar-preview-wrapper {
         position: relative;
@@ -33,35 +33,36 @@
         height: 140px;
         border-radius: 50%;
         object-fit: cover;
-        border: 4px solid var(--primary-100);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border: 4px solid #ffffff;
+        box-shadow: var(--clay-pill);
     }
     .avatar-upload-btn {
         position: absolute;
         bottom: 4px;
         right: 4px;
-        width: 38px;
-        height: 38px;
-        background: var(--primary-600);
+        width: 40px;
+        height: 40px;
+        background: #2563eb;
         color: #ffffff;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--clay-pill);
         transition: all 0.2s;
     }
     .avatar-upload-btn:hover {
-        background: var(--primary-700);
-        transform: scale(1.05);
+        background: #1d4ed8;
+        transform: scale(1.06);
     }
     .info-badge {
-        background: var(--slate-50);
-        border: 1px solid var(--slate-200);
+        background: var(--bg-body);
+        box-shadow: var(--clay-debossed);
+        border: none;
         border-radius: var(--radius-md);
-        padding: 0.875rem 1rem;
-        margin-bottom: 0.75rem;
+        padding: 0.95rem 1.15rem;
+        margin-bottom: 0.85rem;
     }
     .info-badge-label {
         font-size: 0.725rem;

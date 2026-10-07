@@ -59,7 +59,7 @@
 <!-- Posts Table Card (Flat Symmetrical Clay) -->
 <div class="admin-clay-card-flat">
     <div class="admin-table-container">
-        <table class="admin-table">
+        <table class="admin-table admin-table-posts">
             <thead>
                 <tr>
                     <th style="width: 70px;">Media</th>

@@ -30,6 +30,20 @@
                 </select>
                 @error('division_id') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
             </div>
+        @else
+            <div class="form-group">
+                <label class="form-label">Divisi Pengelola (Terkunci)</label>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: var(--slate-100); border: 1px solid var(--slate-200); border-radius: var(--radius-md);">
+                    <div style="font-weight: 700; color: var(--slate-900); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-layer-group" style="color: #0284c7;"></i>
+                        <span>{{ auth()->user()->division?->name }}</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--slate-500); font-weight: 600;">
+                        <i class="fas fa-lock"></i> Terkunci Divisi Anda
+                    </span>
+                </div>
+                <input type="hidden" name="division_id" value="{{ auth()->user()->division_id }}">
+            </div>
         @endif
 
         <div class="form-group">

@@ -3,41 +3,43 @@
 @section('title', 'Publikasi & Riset - UKM Ilmu Komputer')
 
 @section('content')
-<div style="background-color: #ffffff; border-bottom: 1px solid var(--slate-200); padding: 3.5rem 0;">
+<div style="padding: 4rem 0 1.5rem;">
     <div class="container text-center" style="text-align: center;">
-        <span class="badge badge-primary" style="margin-bottom: 0.75rem;">Kanal Riset & Informasi</span>
-        <h1 style="font-size: 2.75rem; font-weight: 800; color: var(--slate-900); letter-spacing: -0.02em; margin-bottom: 0.75rem;">
+        <span class="badge badge-primary" style="margin-bottom: 0.85rem; box-shadow: var(--clay-pill);">Kanal Riset & Informasi</span>
+        <h1 style="font-size: 2.75rem; font-weight: 800; color: var(--slate-900); letter-spacing: -0.02em; margin-bottom: 0.85rem;">
             Publikasi, Berita & Tutorial
         </h1>
-        <p style="color: var(--slate-600); max-width: 650px; margin: 0 auto; font-size: 1.1rem;">
+        <p style="color: var(--slate-600); max-width: 650px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">
             Kumpulan artikel ilmiah populer, dokumentasi kegiatan, proyek riset, dan panduan teknis yang dipublikasikan oleh 4 divisi UKM Ilmu Komputer.
         </p>
 
-        <!-- Search and Filter Bar -->
-        <form action="{{ route('posts.index') }}" method="GET" style="max-width: 780px; margin: 2rem auto 0; display: flex; gap: 0.75rem; flex-wrap: wrap;">
-            <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari judul artikel atau topik riset..." class="form-control" style="flex: 2; min-width: 220px;">
-            
-            <select name="divisi" class="form-select" style="flex: 1; min-width: 160px;">
-                <option value="">Semua Divisi</option>
-                @foreach ($divisions as $div)
-                    <option value="{{ $div->slug }}" {{ request('divisi') === $div->slug ? 'selected' : '' }}>
-                        {{ $div->name }}
-                    </option>
-                @endforeach
-            </select>
+        <!-- Search and Filter Bar Capsule -->
+        <div style="max-width: 820px; margin: 2.5rem auto 0; background: #ffffff; padding: 1.25rem 1.5rem; border-radius: var(--radius-xl); box-shadow: var(--clay-card);">
+            <form action="{{ route('posts.index') }}" method="GET" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari judul artikel atau topik riset..." class="form-control" style="flex: 2; min-width: 220px;">
+                
+                <select name="divisi" class="form-select" style="flex: 1; min-width: 160px;">
+                    <option value="">Semua Divisi</option>
+                    @foreach ($divisions as $div)
+                        <option value="{{ $div->slug }}" {{ request('divisi') === $div->slug ? 'selected' : '' }}>
+                            {{ $div->name }}
+                        </option>
+                    @endforeach
+                </select>
 
-            <select name="kategori" class="form-select" style="flex: 1; min-width: 140px;">
-                <option value="">Semua Kategori</option>
-                <option value="kegiatan" {{ request('kategori') === 'kegiatan' ? 'selected' : '' }}>Kegiatan</option>
-                <option value="tutorial" {{ request('kategori') === 'tutorial' ? 'selected' : '' }}>Tutorial</option>
-                <option value="berita" {{ request('kategori') === 'berita' ? 'selected' : '' }}>Berita</option>
-                <option value="proyek" {{ request('kategori') === 'proyek' ? 'selected' : '' }}>Proyek</option>
-            </select>
+                <select name="kategori" class="form-select" style="flex: 1; min-width: 140px;">
+                    <option value="">Semua Kategori</option>
+                    <option value="kegiatan" {{ request('kategori') === 'kegiatan' ? 'selected' : '' }}>Kegiatan</option>
+                    <option value="tutorial" {{ request('kategori') === 'tutorial' ? 'selected' : '' }}>Tutorial</option>
+                    <option value="berita" {{ request('kategori') === 'berita' ? 'selected' : '' }}>Berita</option>
+                    <option value="proyek" {{ request('kategori') === 'proyek' ? 'selected' : '' }}>Proyek</option>
+                </select>
 
-            <button type="submit" class="btn btn-primary">
-                Cari
-            </button>
-        </form>
+                <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 0.65rem 1.5rem;">
+                    Cari
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 

@@ -113,7 +113,7 @@
 <!-- Members Table Card -->
 <div class="admin-clay-card-flat">
     <div class="admin-table-container">
-        <table class="admin-table">
+        <table class="admin-table admin-table-members">
             <thead>
                 <tr>
                     <th>Mahasiswa</th>

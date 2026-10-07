@@ -40,4 +40,17 @@ class CertificateVerificationTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Tidak Ditemukan', false);
     }
+
+    public function test_valid_member_nim_returns_verified_member_kta()
+    {
+        $member = \App\Models\Member::first();
+        $this->assertNotNull($member);
+
+        $response = $this->get(route('certificates.verify', ['code' => $member->nim]));
+        $response->assertStatus(200);
+        $response->assertSee($member->name);
+        $response->assertSee($member->nim);
+        $response->assertSee('KEANGGOTAAN TERVERIFIKASI & AKTIF', false);
+        $response->assertSee('KARTU TANDA ANGGOTA UKM', false);
+    }
 }

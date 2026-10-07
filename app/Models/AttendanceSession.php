@@ -26,11 +26,40 @@ class AttendanceSession extends Model
         'created_by',
         'notes',
         'status',
+        'passcode',
+        'passcode_expires_at',
+        'allow_self_checkin',
     ];
 
     protected $casts = [
         'session_date' => 'date',
+        'passcode_expires_at' => 'datetime',
+        'allow_self_checkin' => 'boolean',
     ];
+
+    public function isPasscodeExpired(): bool
+    {
+        if (!$this->passcode_expires_at) {
+            return false;
+        }
+
+        return now()->gt($this->passcode_expires_at);
+    }
+
+    public static function generatePasscode(): string
+    {
+        $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        $code = '';
+        for ($i = 0; $i < 6; $i++) {
+            $code .= $chars[random_int(0, strlen($chars) - 1)];
+        }
+        return $code;
+    }
+
+    public function isOpen(): bool
+    {
+        return $this->status === 'open';
+    }
 
     public function division(): BelongsTo
     {

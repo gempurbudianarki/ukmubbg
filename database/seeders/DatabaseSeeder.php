@@ -418,14 +418,15 @@ class DatabaseSeeder extends Seeder
 
         DB::table('events')->insert($sampleEvents);
 
-        // 7. Seed Officers (Struktur Organisasi)
+        // 7. Seed Officers (Struktur Organisasi & Dewan Pembina)
         $sampleOfficers = [
+            // Dewan Pembina Utama & Badan Pengurus Harian (BPH)
             [
                 'name' => 'Dr. Ir. Hendra Saputra, M.Kom.',
                 'nim' => '198004122005011002',
                 'period' => '2026/2027',
                 'department_level' => 'bph',
-                'position' => 'Dosen Pembina UKM',
+                'position' => 'Dosen Pembina Utama UKM',
                 'photo' => null,
                 'social_links' => json_encode(['linkedin' => 'https://linkedin.com']),
                 'sort_order' => 1,
@@ -468,6 +469,20 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // 1. Divisi Pemrograman
+            [
+                'name' => 'Dr. Ir. Hendra Saputra, M.Kom.',
+                'nim' => '198004122005011002',
+                'period' => '2026/2027',
+                'department_level' => 'pemrograman',
+                'position' => 'Dosen Pembimbing Divisi Pemrograman',
+                'photo' => null,
+                'social_links' => json_encode(['linkedin' => 'https://linkedin.com']),
+                'sort_order' => 5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             [
                 'name' => 'Muhammad Rayhan Fajar',
                 'nim' => '210103045',
@@ -476,7 +491,21 @@ class DatabaseSeeder extends Seeder
                 'position' => 'Koordinator Divisi Pemrograman',
                 'photo' => null,
                 'social_links' => json_encode(['github' => 'https://github.com/rayhanfajar']),
-                'sort_order' => 5,
+                'sort_order' => 6,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // 2. Divisi Multimedia
+            [
+                'name' => 'Rina Anggraini, S.Sn., M.Ds.',
+                'nim' => '198506152010122001',
+                'period' => '2026/2027',
+                'department_level' => 'multimedia',
+                'position' => 'Dosen Pembimbing Divisi Multimedia',
+                'photo' => null,
+                'social_links' => json_encode(['linkedin' => 'https://linkedin.com']),
+                'sort_order' => 7,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -488,7 +517,21 @@ class DatabaseSeeder extends Seeder
                 'position' => 'Koordinator Divisi Multimedia',
                 'photo' => null,
                 'social_links' => json_encode(['instagram' => 'https://instagram.com/auliarahma.art']),
-                'sort_order' => 6,
+                'sort_order' => 8,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // 3. Divisi IoT
+            [
+                'name' => 'Budi Wicaksono, S.T., M.T.',
+                'nim' => '198203202008011003',
+                'period' => '2026/2027',
+                'department_level' => 'iot',
+                'position' => 'Dosen Pembimbing Divisi IoT',
+                'photo' => null,
+                'social_links' => json_encode(['linkedin' => 'https://linkedin.com']),
+                'sort_order' => 9,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -500,7 +543,21 @@ class DatabaseSeeder extends Seeder
                 'position' => 'Koordinator Divisi IoT',
                 'photo' => null,
                 'social_links' => json_encode(['github' => 'https://github.com/dimasbagus-tech']),
-                'sort_order' => 7,
+                'sort_order' => 10,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // 4. Divisi Cyber Security
+            [
+                'name' => 'Faisal Akbar, M.Cs., CEH',
+                'nim' => '198711082012121002',
+                'period' => '2026/2027',
+                'department_level' => 'cyber',
+                'position' => 'Dosen Pembimbing Divisi Cyber Security',
+                'photo' => null,
+                'social_links' => json_encode(['linkedin' => 'https://linkedin.com']),
+                'sort_order' => 11,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -512,7 +569,7 @@ class DatabaseSeeder extends Seeder
                 'position' => 'Koordinator Divisi Cyber Security',
                 'photo' => null,
                 'social_links' => json_encode(['linkedin' => 'https://linkedin.com/in/kevin-danuarta']),
-                'sort_order' => 8,
+                'sort_order' => 12,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -112,4 +112,29 @@ class FormalAttendanceSessionTest extends TestCase
         $response->assertSee('Penyelesaian soal kompetisi ICPC regional.');
         $response->assertSee('Ketua Divisi');
     }
+
+    public function test_division_admin_can_view_and_print_formal_bap_sheet(): void
+    {
+        $session = AttendanceSession::create([
+            'division_id' => $this->division->id,
+            'created_by' => $this->divisionAdmin->id,
+            'title' => 'Sesi Riset Algoritma',
+            'day_name' => 'Rabu',
+            'session_date' => '2026-10-07',
+            'time_start' => '16:00',
+            'time_end' => '18:00',
+            'session_type' => 'riset_rutin',
+            'location' => 'Ruang Riset 301',
+            'topic_material' => 'Graph Theory & Shortest Path',
+            'learning_outcomes' => 'Penyelesaian soal kompetisi ICPC regional.',
+            'instructor_name' => 'Ketua Divisi',
+            'status' => 'open',
+        ]);
+
+        $response = $this->actingAs($this->divisionAdmin)->get(route('admin.attendance.bap', $session));
+        $response->assertStatus(200);
+        $response->assertSee('BERITA ACARA PERTEMUAN');
+        $response->assertSee('Graph Theory & Shortest Path');
+        $response->assertSee('Dosen Pembina UKM');
+    }
 }

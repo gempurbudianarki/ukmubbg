@@ -128,15 +128,62 @@
                 <textarea name="learning_outcomes" rows="3" placeholder="Rangkuman apa saja yang dipelajari anggota serta target capaian kompetensi..." class="form-control">{{ old('learning_outcomes') }}</textarea>
             </div>
 
-            <div style="margin-bottom: 2rem;">
-                <label class="form-label" style="font-weight: 600; font-size: 0.85rem; color: var(--slate-700);">Catatan Tambahan / Perlengkapan</label>
-                <textarea name="notes" rows="2" placeholder="Catatan khusus, software/library yang wajib diinstall sebelumnya..." class="form-control">{{ old('notes') }}</textarea>
+            <!-- Section 4: Password Sesi & Presensi Mandiri -->
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin: 1.75rem 0 1.25rem; border-bottom: 1px solid var(--slate-100); padding-bottom: 0.75rem;">
+                <span style="font-weight: 700; color: var(--slate-800); font-size: 1rem;">4. Keamanan & Password Presensi Mandiri</span>
+            </div>
+
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1.25rem; margin-bottom: 1.75rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; align-items: center;">
+                    <div>
+                        <label class="form-label" style="font-weight: 700; font-size: 0.85rem; color: var(--slate-800); display: flex; justify-content: space-between;">
+                            <span>Password / Kode Sesi *</span>
+                            <span style="font-size: 0.75rem; color: #0284c7; cursor: pointer; text-decoration: underline;" onclick="generateRandomCode()">Acak Kode Baru</span>
+                        </label>
+                        <div style="position: relative; display: flex; gap: 0.5rem;">
+                            <input type="text" id="passcodeInput" name="passcode" required value="{{ old('passcode', \App\Models\AttendanceSession::generatePasscode()) }}" placeholder="Contoh: KOMP88" class="form-control" style="font-family: var(--font-mono); font-weight: 800; font-size: 1.15rem; letter-spacing: 0.1em; text-transform: uppercase; color: #0284c7;">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="generateRandomCode()" title="Buat password acak baru" style="flex-shrink: 0;">
+                                <i class="fas fa-arrows-rotate"></i>
+                            </button>
+                        </div>
+                        <small style="color: var(--slate-500); font-size: 0.75rem; margin-top: 0.35rem; display: block;">
+                            Bagikan kode ini saat sesi tatap muka / online berlangsung.
+                        </small>
+                    </div>
+
+                    <div>
+                        <label class="form-label" style="font-weight: 700; font-size: 0.85rem; color: var(--slate-800);">
+                            Masa Aktif Kode (Anti Titip Absen)
+                        </label>
+                        <select name="passcode_duration_minutes" class="form-control" style="font-size: 0.875rem;">
+                            <option value="30">30 Menit (Rekomendasi Riset)</option>
+                            <option value="60" selected>60 Menit (1 Jam)</option>
+                            <option value="120">120 Menit (2 Jam)</option>
+                            <option value="0">Tanpa Batas Waktu (Manual)</option>
+                        </select>
+                        <small style="color: var(--slate-500); font-size: 0.75rem; margin-top: 0.35rem; display: block;">
+                            Setelah waktu habis, mahasiswa tidak dapat menggunakan passcode ini.
+                        </small>
+                    </div>
+
+                    <div style="padding-left: 0.5rem;">
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; margin: 0;">
+                            <input type="checkbox" name="allow_self_checkin" value="1" {{ old('allow_self_checkin', '1') == '1' ? 'checked' : '' }} style="margin-top: 0.25rem; width: 18px; height: 18px; accent-color: #0284c7;">
+                            <div>
+                                <strong style="font-size: 0.9rem; color: var(--slate-900); display: block;">Izinkan Presensi Mandiri</strong>
+                                <span style="font-size: 0.785rem; color: var(--slate-500); line-height: 1.4; display: block;">
+                                    Mahasiswa dapat input passcode dari portal akun mereka.
+                                </span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 0.75rem; border-top: 1px solid var(--slate-100); padding-top: 1.5rem;">
                 <a href="{{ route('admin.attendance.index') }}" class="btn btn-secondary">Batal</a>
                 <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.75rem; font-weight: 700; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
-                    Buka Sesi & Isi Presensi &rarr;
+                    Buka Sesi & Mulai Presensi &rarr;
                 </button>
             </div>
         </form>
@@ -159,5 +206,14 @@
     dateInput.addEventListener('change', updateDayName);
     // Initialize day name immediately
     updateDayName();
+
+    function generateRandomCode() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        document.getElementById('passcodeInput').value = code;
+    }
 </script>
 @endsection

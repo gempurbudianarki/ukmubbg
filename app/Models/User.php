@@ -53,6 +53,16 @@ class User extends Authenticatable
         return $this->hasOne(Member::class);
     }
 
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class, 'author_id');
+    }
+
     public function isSuperAdmin(): bool
     {
         return $this->role === 'super_admin';

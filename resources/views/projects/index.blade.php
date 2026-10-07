@@ -14,8 +14,8 @@
             </p>
         </div>
 
-        <!-- Filter & Search Toolbar -->
-        <div style="background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-bottom: 3rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; box-shadow: var(--shadow-subtle);">
+        <!-- Filter & Search Toolbar (Clay Card) -->
+        <div style="background: #ffffff; border: 2px solid rgba(255, 255, 255, 0.95); border-radius: var(--radius-xl); box-shadow: var(--clay-card); padding: 1.25rem 1.75rem; margin-bottom: 3rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
             <!-- Division Pill Filters -->
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
                 <a href="{{ route('projects.index') }}" class="btn {{ !request('division') ? 'btn-primary' : 'btn-outline' }} btn-sm" style="border-radius: var(--radius-full);">
@@ -33,7 +33,7 @@
                 @if (request('division'))
                     <input type="hidden" name="division" value="{{ request('division') }}">
                 @endif
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari karya / tech stack..." class="form-control" style="padding: 0.45rem 0.85rem; font-size: 0.85rem;">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari karya / tech stack..." class="form-control" style="padding: 0.55rem 1rem; font-size: 0.85rem;">
                 <button type="submit" class="btn btn-primary btn-sm">Cari</button>
             </form>
         </div>
@@ -83,7 +83,7 @@
                     </div>
                 </div>
             @empty
-                <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: #ffffff; border-radius: var(--radius-lg); border: 1px solid var(--slate-200);">
+                <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: #ffffff; border-radius: var(--radius-xl); border: 2px solid #ffffff; box-shadow: var(--clay-card);">
                     <div style="font-size: 1.1rem; font-weight: 700; color: var(--slate-700); margin-bottom: 0.5rem;">
                         Tidak ada karya yang sesuai kriteria pencarian.
                     </div>

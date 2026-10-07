@@ -60,7 +60,7 @@
 <!-- Events Table Card (Flat Symmetrical Clay) -->
 <div class="admin-clay-card-flat">
     <div class="admin-table-container">
-        <table class="admin-table">
+        <table class="admin-table admin-table-events">
             <thead>
                 <tr>
                     <th>Judul Kegiatan & Divisi</th>

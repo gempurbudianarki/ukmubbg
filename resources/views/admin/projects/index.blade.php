@@ -62,7 +62,7 @@
 <!-- Symmetrical Projects Table Card -->
 <div class="admin-clay-card-flat">
     <div class="admin-table-container">
-        <table class="admin-table">
+        <table class="admin-table admin-table-projects">
             <thead>
                 <tr>
                     <th>Judul Karya & Deskripsi</th>

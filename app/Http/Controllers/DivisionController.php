@@ -3,28 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Division;
-use App\Models\Post;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class DivisionController extends Controller
 {
     public function index()
     {
-        $divisions = Division::withCount('posts')->get();
+        $divisions = Division::withCount('projects')->get();
         return view('divisions.index', compact('divisions'));
     }
 
     public function show(string $slug)
     {
         $division = Division::where('slug', $slug)->firstOrFail();
-        $posts = Post::with('author')
-            ->where('division_id', $division->id)
+        $projects = Project::where('division_id', $division->id)
             ->published()
             ->latest()
             ->paginate(6);
 
         $otherDivisions = Division::where('id', '!=', $division->id)->get();
 
-        return view('divisions.show', compact('division', 'posts', 'otherDivisions'));
+        return view('divisions.show', compact('division', 'projects', 'otherDivisions'));
     }
 }

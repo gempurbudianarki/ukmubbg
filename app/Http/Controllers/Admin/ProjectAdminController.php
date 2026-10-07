@@ -10,22 +10,57 @@ use Illuminate\Support\Str;
 
 class ProjectAdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
-        $query = Project::with('division')->latest();
+        $query = Project::with(['division', 'user'])->latest();
 
         if ($user->isDivisionAdmin()) {
             $query->where('division_id', $user->division_id);
+        } elseif ($request->filled('division_id')) {
+            $query->where('division_id', $request->division_id);
         }
 
-        $projects = $query->paginate(15);
-        return view('admin.projects.index', compact('projects'));
+        if ($request->filled('q')) {
+            $search = $request->input('q');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('author_names', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('submission_status', $request->status);
+        }
+
+        $projects = $query->paginate(15)->withQueryString();
+        $divisions = Division::all();
+
+        return view('admin.projects.index', compact('projects', 'divisions', 'user'));
+    }
+
+    public function toggleFeatured(Project $project)
+    {
+        $user = auth()->user();
+        if ($user->isDivisionAdmin() && $project->division_id !== $user->division_id) {
+            abort(403, 'Anda tidak berwenang mengubah status featured karya divisi lain.');
+        }
+
+        $project->update([
+            'is_featured' => !$project->is_featured,
+        ]);
+
+        $statusText = $project->is_featured ? 'dijadikan Karya Unggulan' : 'dilepas dari status Unggulan';
+        return back()->with('success', "Karya '{$project->title}' berhasil {$statusText}.");
     }
 
     public function create()
     {
-        $divisions = Division::all();
+        $user = auth()->user();
+        $divisions = $user->isSuperAdmin()
+            ? Division::all()
+            : Division::where('id', $user->division_id)->get();
+
         return view('admin.projects.form', [
             'project' => new Project(),
             'divisions' => $divisions,
@@ -65,11 +100,37 @@ class ProjectAdminController extends Controller
         }
 
         $validated['is_featured'] = $request->boolean('is_featured');
+        $validated['submission_status'] = 'published';
+        $validated['user_id'] = $user->id;
 
         Project::create($validated);
 
         return redirect()->route('admin.projects.index')
             ->with('success', 'Karya mahasiswa berhasil dipublikasikan!');
+    }
+
+    public function moderate(Request $request, Project $project)
+    {
+        $user = auth()->user();
+        if ($user->isDivisionAdmin() && $project->division_id !== $user->division_id) {
+            abort(403, 'Anda tidak memiliki hak untuk memoderasi karya divisi lain.');
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|in:published,rejected,pending_review',
+        ]);
+
+        $project->update([
+            'submission_status' => $validated['status'],
+        ]);
+
+        $statusText = match ($validated['status']) {
+            'published' => 'disetujui dan ditayangkan ke publik',
+            'rejected' => 'ditolak / dikembalikan untuk revisi',
+            default => 'diubah statusnya',
+        };
+
+        return back()->with('success', "Karya '{$project->title}' berhasil {$statusText}.");
     }
 
     public function edit(Project $project)
@@ -79,7 +140,10 @@ class ProjectAdminController extends Controller
             abort(403, 'Anda tidak memiliki hak untuk mengedit proyek divisi lain.');
         }
 
-        $divisions = Division::all();
+        $divisions = $user->isSuperAdmin()
+            ? Division::all()
+            : Division::where('id', $user->division_id)->get();
+
         return view('admin.projects.form', [
             'project' => $project,
             'divisions' => $divisions,

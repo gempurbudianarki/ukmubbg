@@ -21,6 +21,7 @@ class HomeController extends Controller
 
         $stats = [
             'divisions_count' => $divisions->count(),
+            'projects_count' => \App\Models\Project::count(),
             'posts_count' => Post::published()->count(),
             'applicants_count' => Recruitment::count(),
             'active_members' => 120,
@@ -31,6 +32,7 @@ class HomeController extends Controller
         $recruitmentDeadline = Setting::get('recruitment_deadline', '31 Oktober 2026');
 
         $featuredProjects = \App\Models\Project::with('division')
+            ->published()
             ->where('is_featured', true)
             ->latest()
             ->take(6)

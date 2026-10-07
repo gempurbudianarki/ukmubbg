@@ -36,7 +36,6 @@
                     <li><a href="{{ route('officers.index') }}">Struktur Pengurus</a></li>
                     <li><a href="{{ route('galleries.index') }}">Galeri Momen</a></li>
                     <li><a href="{{ route('certificates.verify') }}">Verifikasi E-Sertifikat</a></li>
-                    <li><a href="{{ route('posts.index') }}">Publikasi & Riset</a></li>
                 </ul>
             </div>
 

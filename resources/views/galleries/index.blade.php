@@ -29,16 +29,16 @@
         <!-- Gallery Grid -->
         <div class="projects-grid">
             @forelse ($galleries as $gallery)
-                <div class="project-card" style="border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;">
+                <div class="project-card" style="border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; border: none;">
                     <div style="height: 240px; background: #0f172a; position: relative; overflow: hidden;">
                         <img src="{{ $gallery->image_url }}" alt="{{ $gallery->title }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
-                        <span class="badge badge-neutral" style="position: absolute; top: 1rem; right: 1rem; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); color: #ffffff; border: 1px solid rgba(255,255,255,0.15); font-size: 0.725rem;">
+                        <span class="badge badge-neutral" style="position: absolute; top: 1rem; right: 1rem; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); color: var(--slate-800); box-shadow: var(--clay-pill); font-weight: 700; font-size: 0.75rem;">
                             {{ $gallery->category }}
                         </span>
                     </div>
 
                     <div style="padding: 1.5rem;">
-                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--slate-900); margin-bottom: 0.5rem; line-height: 1.4;">
+                        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--slate-900); margin-bottom: 0.5rem; line-height: 1.4;">
                             {{ $gallery->title }}
                         </h3>
                         @if ($gallery->caption)
@@ -54,7 +54,7 @@
                     </div>
                 </div>
             @empty
-                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #ffffff; border-radius: var(--radius-lg); border: 1px solid var(--slate-200); color: var(--slate-500);">
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3.5rem 2rem; background: #ffffff; border-radius: var(--radius-xl); box-shadow: var(--clay-card); color: var(--slate-500);">
                     Belum ada foto dokumentasi yang diunggah dalam kategori ini.
                 </div>
             @endforelse

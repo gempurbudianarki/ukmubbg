@@ -176,4 +176,20 @@ class PostAdminController extends Controller
 
         return redirect()->route('admin.posts.index')->with('success', 'Artikel telah dihapus.');
     }
+
+    public function toggleStatus(Post $post)
+    {
+        $user = Auth::user();
+
+        if (!$user->isSuperAdmin() && $post->division_id !== $user->division_id) {
+            abort(403, 'Anda tidak berwenang mengubah status artikel divisi lain.');
+        }
+
+        $newStatus = $post->status === 'published' ? 'draft' : 'published';
+        $post->update(['status' => $newStatus]);
+
+        $label = $newStatus === 'published' ? 'dipublikasikan ke publik' : 'diarsipkan sebagai draf';
+        return back()->with('success', "Status artikel '{$post->title}' berhasil {$label}.");
+    }
 }
+

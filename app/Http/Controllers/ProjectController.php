@@ -11,7 +11,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $divisions = Division::all();
-        $query = Project::with('division')->latest();
+        $query = Project::with('division')->published()->latest();
 
         if ($request->filled('division')) {
             $query->whereHas('division', function ($q) use ($request) {

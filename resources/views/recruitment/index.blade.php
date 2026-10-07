@@ -9,14 +9,15 @@
     .wizard-stepper-container {
         margin-bottom: 2.5rem;
         background: #ffffff;
-        border: 1px solid var(--slate-200);
-        border-radius: 16px;
-        padding: 1.5rem 2rem;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+        border: none;
+        border-radius: var(--radius-xl);
+        padding: 1.75rem 2.25rem;
+        box-shadow: var(--clay-card);
     }
     .wizard-progress-bar-bg {
-        height: 6px;
-        background: var(--slate-100);
+        height: 8px;
+        background: var(--bg-body);
+        box-shadow: var(--clay-debossed);
         border-radius: 9999px;
         margin-bottom: 1.5rem;
         position: relative;
@@ -46,11 +47,12 @@
         transition: all 0.2s ease;
     }
     .wizard-step-circle {
-        width: 44px;
-        height: 44px;
+        width: 46px;
+        height: 46px;
         border-radius: 50%;
-        background: #f1f5f9;
-        border: 2px solid #cbd5e1;
+        background: var(--bg-body);
+        border: none;
+        box-shadow: var(--clay-pill);
         color: #64748b;
         display: flex;
         align-items: center;
@@ -61,15 +63,16 @@
         transition: all 0.25s ease;
     }
     .wizard-step-node.active .wizard-step-circle {
-        background: #2563eb;
-        border-color: #2563eb;
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        border: none;
         color: #ffffff;
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+        box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
     }
     .wizard-step-node.completed .wizard-step-circle {
         background: #10b981;
-        border-color: #10b981;
+        border: none;
         color: #ffffff;
+        box-shadow: 0 6px 14px rgba(16, 185, 129, 0.3);
     }
     .wizard-step-meta {
         display: flex;
@@ -130,33 +133,33 @@
 
     /* Live Summary Card */
     .summary-card {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        border-radius: 14px;
-        padding: 1.5rem;
-        color: #ffffff;
-        margin-top: 1.5rem;
-        margin-bottom: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.2);
+        background: #ffffff;
+        border-radius: var(--radius-xl);
+        padding: 1.75rem 2rem;
+        color: var(--slate-900);
+        margin-top: 1.75rem;
+        margin-bottom: 1.75rem;
+        border: none;
+        box-shadow: var(--clay-card);
     }
     .summary-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
+        gap: 1.25rem;
+        margin-top: 1.25rem;
     }
     .summary-item-label {
-        font-size: 0.725rem;
-        color: #94a3b8;
+        font-size: 0.75rem;
+        color: var(--slate-400);
         text-transform: uppercase;
         font-weight: 700;
         letter-spacing: 0.05em;
     }
     .summary-item-val {
-        font-size: 0.95rem;
+        font-size: 0.975rem;
         font-weight: 700;
-        color: #f8fafc;
-        margin-top: 0.15rem;
+        color: var(--slate-800);
+        margin-top: 0.25rem;
         word-break: break-all;
     }
 
@@ -207,21 +210,21 @@
 
     @if (!$isOpen)
         <!-- Registration Closed State -->
-        <div class="glass-panel" style="text-align: center; padding: 3.5rem 2rem; border-top: 4px solid var(--warning); border-radius: 16px;">
-            <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--warning-bg); color: var(--warning); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.75rem;">
+        <div class="card" style="text-align: center; padding: 3.5rem 2rem; border-left: 6px solid var(--warning); border-radius: var(--radius-xl); box-shadow: var(--clay-card); border-top: none; border-right: none; border-bottom: none;">
+            <div style="width: 68px; height: 68px; border-radius: 50%; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 1.75rem; box-shadow: var(--clay-pill);">
                 <i class="fas fa-lock"></i>
             </div>
-            <div class="badge badge-neutral" style="margin-bottom: 0.75rem;">
+            <div class="badge badge-neutral" style="margin-bottom: 0.85rem; box-shadow: var(--clay-pill);">
                 Status: Pendaftaran Sedang Ditutup
             </div>
-            <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--slate-900); margin-bottom: 0.75rem; letter-spacing: -0.02em;">
+            <h2 style="font-size: 1.85rem; font-weight: 800; color: var(--slate-900); margin-bottom: 0.75rem; letter-spacing: -0.02em;">
                 Pendaftaran Sedang Ditutup
             </h2>
-            <p style="color: var(--slate-600); margin-bottom: 1.75rem; max-width: 540px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+            <p style="color: var(--slate-600); margin-bottom: 2rem; max-width: 540px; margin-left: auto; margin-right: auto; line-height: 1.6;">
                 {{ $closedMessage ?? 'Periode pendaftaran anggota baru saat ini sedang tidak aktif atau batas waktu gelombang telah berakhir.' }}
             </p>
             @if(!empty($startDate) || !empty($endDate))
-                <div style="background: var(--bg-muted); border-radius: 10px; padding: 0.75rem 1.25rem; display: inline-flex; gap: 1.5rem; font-size: 0.85rem; color: var(--slate-700); margin-bottom: 2rem;">
+                <div style="background: var(--bg-body); box-shadow: var(--clay-debossed); border-radius: var(--radius-md); padding: 0.85rem 1.5rem; display: inline-flex; gap: 1.5rem; font-size: 0.875rem; color: var(--slate-700); margin-bottom: 2rem;">
                     @if(!empty($startDate))
                         <div><strong>Mulai:</strong> {{ $startDate }}</div>
                     @endif
@@ -231,7 +234,7 @@
                 </div>
                 <br>
             @endif
-            <a href="{{ route('recruitment.status') }}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <a href="{{ route('recruitment.status') }}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; border-radius: var(--radius-full);">
                 <span>Cek Status Seleksi Anda</span>
                 <span>&rarr;</span>
             </a>
@@ -281,7 +284,7 @@
             </div>
         </div>
 
-        <div class="glass-panel" style="padding: 2.5rem; border-top: 4px solid var(--accent-blue); border-radius: 16px;">
+        <div class="card" style="padding: 2.75rem 2.5rem; border-radius: var(--radius-xl); box-shadow: var(--clay-card); border: none;">
             <form id="recruitmentMultiStepForm" action="{{ route('recruitment.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 

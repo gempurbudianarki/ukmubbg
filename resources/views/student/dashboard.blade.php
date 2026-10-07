@@ -14,40 +14,42 @@
     }
     .stat-card {
         background: #ffffff;
-        border-radius: var(--radius-lg);
-        padding: 1.35rem;
-        border: 1px solid #e2e8f0;
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        border: none;
         display: flex;
         align-items: center;
-        gap: 1.15rem;
-        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.03);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        gap: 1.25rem;
+        box-shadow: var(--clay-card);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
     .stat-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08);
+        transform: translateY(-3px);
+        box-shadow: var(--clay-card-hover);
     }
     .stat-icon {
-        width: 48px;
-        height: 48px;
+        width: 52px;
+        height: 52px;
         border-radius: var(--radius-md);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.35rem;
+        font-size: 1.4rem;
         flex-shrink: 0;
+        box-shadow: var(--clay-pill);
     }
 
-    /* Welcome Banner */
+    /* Welcome Banner - White Claymorphism */
     .member-banner {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0369a1 100%);
+        background: #ffffff;
         border-radius: var(--radius-xl);
-        padding: 2.25rem;
-        color: #ffffff;
+        padding: 2.25rem 2.5rem;
+        color: #0f172a;
         margin-bottom: 2rem;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
+        box-shadow: var(--clay-card);
+        border: 1.5px solid rgba(226, 232, 240, 0.9);
     }
     .member-banner::after {
         content: '';
@@ -56,18 +58,19 @@
         bottom: -30px;
         width: 220px;
         height: 220px;
-        background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0) 70%);
+        background: radial-gradient(circle, rgba(0, 150, 136, 0.06) 0%, rgba(2, 132, 199, 0.04) 40%, transparent 70%);
         border-radius: 50%;
+        pointer-events: none;
     }
 
     /* Stepper For Applicants Only */
     .stepper-box {
         background: #ffffff;
-        border-radius: var(--radius-lg);
-        padding: 1.75rem;
-        border: 1px solid #e2e8f0;
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        border: none;
         margin-bottom: 2rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        box-shadow: var(--clay-card);
     }
     .stepper-timeline {
         display: flex;
@@ -78,11 +81,13 @@
     .stepper-timeline::before {
         content: '';
         position: absolute;
-        top: 20px;
+        top: 22px;
         left: 40px;
         right: 40px;
-        height: 3px;
-        background: #e2e8f0;
+        height: 4px;
+        background: var(--bg-body);
+        box-shadow: var(--clay-debossed);
+        border-radius: 9999px;
         z-index: 1;
     }
     .step-item {
@@ -95,30 +100,30 @@
         width: 33.33%;
     }
     .step-circle {
-        width: 42px;
-        height: 42px;
+        width: 46px;
+        height: 46px;
         border-radius: 50%;
-        background: #ffffff;
-        border: 3px solid #cbd5e1;
+        background: var(--bg-body);
+        border: none;
+        box-shadow: var(--clay-pill);
         color: #94a3b8;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 700;
-        font-size: 0.95rem;
+        font-weight: 800;
+        font-size: 1rem;
         margin-bottom: 0.75rem;
-        transition: all 0.2s ease;
+        transition: all 0.25s ease;
     }
     .step-item.completed .step-circle {
         background: #10b981;
-        border-color: #10b981;
         color: #ffffff;
+        box-shadow: 0 6px 14px rgba(16, 185, 129, 0.35);
     }
     .step-item.active .step-circle {
-        background: #0284c7;
-        border-color: #0284c7;
+        background: linear-gradient(135deg, #0284c7, #2563eb);
         color: #ffffff;
-        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.2);
+        box-shadow: 0 8px 18px rgba(2, 132, 199, 0.4);
     }
     .step-title {
         font-weight: 700;
@@ -142,19 +147,18 @@
     .feature-card {
         background: #ffffff;
         border-radius: var(--radius-xl);
-        padding: 1.75rem;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        padding: 2rem;
+        border: none;
+        box-shadow: var(--clay-card);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         position: relative;
-        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
     .feature-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 20px -5px rgba(0,0,0,0.08);
-        border-color: #cbd5e1;
+        box-shadow: var(--clay-card-hover);
     }
     .feature-card-header {
         display: flex;
@@ -163,13 +167,14 @@
         margin-bottom: 1.25rem;
     }
     .feature-card-icon {
-        width: 52px;
-        height: 52px;
+        width: 54px;
+        height: 54px;
         border-radius: var(--radius-md);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.45rem;
+        box-shadow: var(--clay-pill);
     }
 
     /* Two column bottom workspace */
@@ -198,41 +203,133 @@
     <div class="member-banner">
         <div style="position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
             <div>
-                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 0.8rem; margin-bottom: 0.75rem;">
-                    <i class="fas fa-shield-halved" style="margin-right: 0.35rem;"></i> STATUS: ANGGOTA AKTIF TERDAFTAR
+                <span class="badge" style="background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; box-shadow: var(--clay-pill); font-size: 0.78rem; font-weight: 800; padding: 0.45rem 1rem; border-radius: 9999px; margin-bottom: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <i class="fas fa-shield-halved" style="color: #16a34a;"></i> STATUS: ANGGOTA AKTIF TERDAFTAR
                 </span>
-                <h1 style="font-size: 1.85rem; font-weight: 800; margin: 0 0 0.5rem; letter-spacing: -0.02em;">
+                <h1 style="font-size: 1.95rem; font-weight: 900; color: #0c2340; margin: 0 0 0.5rem; letter-spacing: -0.02em;">
                     Selamat Datang, {{ $user->name }}!
                 </h1>
-                <p style="color: #cbd5e1; font-size: 0.95rem; margin: 0 0 1.25rem; max-width: 600px; line-height: 1.5;">
+                <p style="color: #64748b; font-size: 0.95rem; margin: 0 0 1.35rem; max-width: 620px; line-height: 1.6;">
                     Portal resmi mahasiswa UKM Ilmu Komputer. Akses Kartu Tanda Anggota (KTA) Digital, rekap presensi per divisi, modul silabus pembelajaran, dan kelola biodata akun Anda secara terpusat.
                 </p>
                 <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
-                    <a href="{{ route('student.kta') }}" class="btn btn-primary btn-sm" style="background: #0284c7; border: none; font-weight: 700; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.4);">
+                    <a href="{{ route('student.kta') }}" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #0284c7, #0369a1); border: none; font-weight: 700; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); padding: 0.65rem 1.25rem; border-radius: 9999px;">
                         <i class="fas fa-id-card" style="margin-right: 0.4rem;"></i> Kartu Anggota (KTA)
                     </a>
-                    <a href="{{ route('student.presensi') }}" class="btn btn-sm" style="background: rgba(255,255,255,0.15); color: #ffffff; border: 1px solid rgba(255,255,255,0.3);">
-                        <i class="fas fa-clipboard-check" style="margin-right: 0.4rem;"></i> Presensi Divisi
+                    <a href="{{ route('student.presensi') }}" class="btn btn-outline btn-sm" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; box-shadow: var(--clay-pill); padding: 0.65rem 1.15rem; border-radius: 9999px; font-weight: 700;">
+                        <i class="fas fa-clipboard-check" style="margin-right: 0.4rem; color: #16a34a;"></i> Presensi Divisi
                     </a>
-                    <a href="{{ route('student.silabus') }}" class="btn btn-sm" style="background: rgba(255,255,255,0.15); color: #ffffff; border: 1px solid rgba(255,255,255,0.3);">
-                        <i class="fas fa-book-open" style="margin-right: 0.4rem;"></i> Silabus & Riset
+                    <a href="{{ route('student.silabus') }}" class="btn btn-outline btn-sm" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; box-shadow: var(--clay-pill); padding: 0.65rem 1.15rem; border-radius: 9999px; font-weight: 700;">
+                        <i class="fas fa-book-open" style="margin-right: 0.4rem; color: #9333ea;"></i> Silabus & Riset
                     </a>
                 </div>
             </div>
 
-            <div style="text-align: right; background: rgba(255,255,255,0.06); padding: 1.25rem 1.5rem; border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.12); min-width: 230px;">
-                <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.35rem;">
+            <div style="text-align: right; background: #f8fafc; padding: 1.35rem 1.65rem; border-radius: var(--radius-lg); border: 1.5px solid #e2e8f0; box-shadow: var(--clay-debossed); min-width: 240px;">
+                <div style="font-size: 0.725rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 0.06em; margin-bottom: 0.35rem;">
                     Divisi Resmi Anda
                 </div>
-                <div style="font-size: 1.2rem; font-weight: 800; color: #38bdf8; margin-bottom: 0.5rem;">
+                <div style="font-size: 1.25rem; font-weight: 900; color: #009688; margin-bottom: 0.45rem;">
                     {{ $division?->name ?? 'Divisi Pemrograman' }}
                 </div>
-                <div style="font-size: 0.85rem; color: #cbd5e1;">
-                    NIM: <strong>{{ $user->nim }}</strong>
+                <div style="font-size: 0.85rem; color: #475569; font-family: var(--font-mono);">
+                    NIM: <strong style="color: #0c2340;">{{ $user->nim }}</strong>
                 </div>
             </div>
         </div>
     </div>
+
+    @if (isset($activeSession) && $activeSession && (!isset($activeSessionLog) || $activeSessionLog?->status !== 'hadir'))
+        <div style="background: #ffffff; border: 1.5px solid #0284c7; border-left: 5px solid #0284c7; border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-bottom: 2rem; box-shadow: var(--clay-card); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: #f0f9ff; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="badge" style="background: #ecfdf5; color: #059669; font-size: 0.72rem; font-weight: 700;">
+                            <i class="fas fa-circle" style="font-size: 0.5rem; margin-right: 0.2rem;"></i> Sesi Berlangsung
+                        </span>
+                        <strong style="font-size: 0.95rem; color: #0f172a;">{{ $activeSession->title }}</strong>
+                    </div>
+                    <div style="font-size: 0.825rem; color: #64748b; margin-top: 0.25rem;">
+                        {{ $activeSession->day_name }}, {{ $activeSession->session_date->format('d M Y') }} &bull; {{ substr($activeSession->time_start, 0, 5) }} - {{ substr($activeSession->time_end, 0, 5) }} WIB &bull; {{ $activeSession->location }}
+                    </div>
+                </div>
+            </div>
+            <a href="{{ route('student.presensi') }}" class="btn btn-primary btn-sm" style="font-weight: 700; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);">
+                <i class="fas fa-key" style="margin-right: 0.35rem;"></i>
+                Input Password & Presensi Sekarang &rarr;
+            </a>
+        </div>
+    @endif
+
+    @if (isset($announcements) && $announcements->isNotEmpty())
+        <!-- Papan Pengumuman Resmi UKM -->
+        <div style="background: #ffffff; border-radius: var(--radius-xl); padding: 1.5rem; margin-bottom: 2rem; box-shadow: var(--clay-card); border: 1.5px solid #e2e8f0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <div style="width: 38px; height: 38px; border-radius: 10px; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: var(--clay-pill);">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin: 0;">Papan Pengumuman & Informasi Resmi</h3>
+                        <span style="font-size: 0.775rem; color: #64748b;">Instruksi kegiatan, edaran organisasi, dan agenda UKM terkini</span>
+                    </div>
+                </div>
+                <span class="badge" style="background: #f1f5f9; color: #475569; font-weight: 700; font-size: 0.75rem; border: 1px solid #e2e8f0;">
+                    {{ $announcements->count() }} Pengumuman Aktif
+                </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                @foreach ($announcements as $announce)
+                    <div style="background: {{ $announce->is_pinned ? '#fffbeb' : '#f8fafc' }}; border: 1.5px solid {{ $announce->is_pinned ? '#fde68a' : '#e2e8f0' }}; border-radius: var(--radius-lg); padding: 1.15rem; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; gap: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+                                    @if ($announce->is_pinned)
+                                        <span class="badge" style="background: #fef08a; color: #854d0e; font-size: 0.7rem; font-weight: 800;">
+                                            <i class="fas fa-thumbtack"></i> PENTING
+                                        </span>
+                                    @endif
+                                    <span class="badge" style="background: #e0f2fe; color: #0369a1; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">
+                                        {{ $announce->category }}
+                                    </span>
+                                </div>
+                                <span style="font-size: 0.72rem; color: #94a3b8; white-space: nowrap;">
+                                    {{ $announce->published_at ? $announce->published_at->diffForHumans() : $announce->created_at->diffForHumans() }}
+                                </span>
+                            </div>
+
+                            <h4 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin: 0 0 0.4rem; line-height: 1.35;">
+                                {{ $announce->title }}
+                            </h4>
+
+                            <p style="font-size: 0.825rem; color: #475569; line-height: 1.5; margin: 0 0 0.75rem;">
+                                {{ \Illuminate\Support\Str::limit($announce->content, 140) }}
+                            </p>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; color: #64748b; border-top: 1px dashed {{ $announce->is_pinned ? '#fde68a' : '#e2e8f0' }}; padding-top: 0.6rem; margin-top: 0.5rem;">
+                            <span>
+                                <i class="fas fa-user-circle" style="margin-right: 0.25rem;"></i> {{ $announce->author?->name ?? 'Pengurus UKM' }}
+                            </span>
+                            @if ($announce->division)
+                                <span class="badge badge-info" style="font-size: 0.68rem;">
+                                    {{ $announce->division->name }}
+                                </span>
+                            @else
+                                <span class="badge badge-neutral" style="font-size: 0.68rem;">
+                                    Seluruh Divisi
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
     <!-- Quick Stat KPI Cards -->
     <div class="stat-cards-grid">

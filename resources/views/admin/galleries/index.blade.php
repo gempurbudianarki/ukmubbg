@@ -20,7 +20,7 @@
 </div>
 
 <!-- Layout 2 Kolom Symmetrical: Grid Foto & Form Upload -->
-<div style="display: grid; grid-template-columns: 1fr minmax(320px, 390px); gap: 1.75rem; align-items: flex-start;">
+<div class="admin-split-layout">
     
     <!-- Gallery Photos List Column -->
     <div>

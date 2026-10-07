@@ -9,17 +9,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --sidebar-width: 270px;
-            --sidebar-bg: #0f172a;
-            --sidebar-hover: rgba(255, 255, 255, 0.08);
-            --sidebar-active: #2563eb;
-            --sidebar-text: #94a3b8;
-            --sidebar-text-active: #ffffff;
+            --sidebar-width: 250px;
+            --sidebar-bg: #ffffff;
+            --sidebar-hover: #f8fafc;
+            --sidebar-text: #475569;
+            --sidebar-text-active: #0284c7;
         }
 
         body {
-            background: #f8fafc;
-            color: #1e293b;
+            background: #f1f5f9;
+            color: #0f172a;
             font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
             margin: 0;
             padding: 0;
@@ -28,9 +27,10 @@
         .student-layout {
             display: flex;
             min-height: 100vh;
+            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Sidebar Styling */
+        /* Sidebar Styling - Compact & Sleek */
         .student-sidebar {
             width: var(--sidebar-width);
             background: var(--sidebar-bg);
@@ -42,120 +42,170 @@
             height: 100vh;
             flex-shrink: 0;
             z-index: 50;
-            border-right: 1px solid rgba(255, 255, 255, 0.06);
-            transition: transform 0.3s ease;
+            box-shadow: 4px 0 20px rgba(15, 23, 42, 0.03);
+            border-right: 1px solid rgba(226, 232, 240, 0.85);
+            transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        /* Desktop Collapse State */
+        .student-layout.sidebar-closed .student-sidebar {
+            margin-left: calc(-1 * var(--sidebar-width));
+        }
+
+        .student-brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.95rem 1rem 0.95rem 1.15rem;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .student-brand {
-            padding: 1.5rem 1.25rem;
             display: flex;
             align-items: center;
-            gap: 0.85rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 0.75rem;
             text-decoration: none;
-            color: #ffffff;
+            color: #0f172a;
+            min-width: 0;
         }
 
-        .student-brand-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #2563eb, #0ea5e9);
+        .sidebar-collapse-btn {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            color: #ffffff;
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+            color: #64748b;
+            cursor: pointer;
+            box-shadow: var(--clay-pill);
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+        .sidebar-collapse-btn:hover {
+            color: #0284c7;
+            background: #ffffff;
+            transform: scale(1.05);
         }
 
+        /* Compact Profile Badge */
         .student-profile-badge {
-            padding: 1.25rem;
-            margin: 1rem 0.85rem 0.5rem;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--radius-lg);
+            padding: 0.75rem 0.95rem;
+            margin: 0.75rem 0.85rem 0.25rem;
+            background: #ffffff;
+            box-shadow: var(--clay-card);
+            border-radius: 14px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
             display: flex;
             align-items: center;
-            gap: 0.85rem;
+            gap: 0.75rem;
         }
 
         .student-profile-avatar {
-            width: 44px;
-            height: 44px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #38bdf8;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border: 2px solid #ffffff;
+            box-shadow: var(--clay-pill);
             flex-shrink: 0;
         }
 
+        /* Nav List */
         .student-nav {
             list-style: none;
-            padding: 0.75rem;
+            padding: 0.5rem 0.75rem;
             margin: 0;
             flex: 1;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 0.35rem;
+            gap: 0.25rem;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+        .student-nav::-webkit-scrollbar {
+            width: 4px;
+        }
+        .student-nav::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
         }
 
         .student-nav-heading {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: #64748b;
-            font-weight: 700;
-            padding: 0.75rem 0.75rem 0.35rem;
+            color: #94a3b8;
+            font-weight: 800;
+            padding: 0.55rem 0.65rem 0.2rem;
         }
 
         .student-nav-link {
             display: flex;
             align-items: center;
-            gap: 0.85rem;
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-md);
-            color: var(--sidebar-text);
+            gap: 0.75rem;
+            padding: 0.58rem 0.85rem;
+            border-radius: 11px;
+            color: #475569;
             text-decoration: none;
-            font-size: 0.875rem;
+            font-size: 0.835rem;
             font-weight: 600;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
         }
 
         .student-nav-link i {
-            font-size: 1rem;
-            width: 20px;
+            font-size: 0.95rem;
+            width: 18px;
             text-align: center;
-            color: #64748b;
-            transition: color 0.2s ease;
+            color: #94a3b8;
+            transition: all 0.2s ease;
         }
 
         .student-nav-link:hover {
-            background: var(--sidebar-hover);
-            color: #ffffff;
+            background: #f8fafc;
+            color: #0284c7;
+            transform: translateX(2px);
         }
 
         .student-nav-link:hover i {
-            color: #38bdf8;
+            color: #0284c7;
         }
 
         .student-nav-link.active {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(14, 165, 233, 0.15));
-            color: #ffffff;
-            border: 1px solid rgba(56, 189, 248, 0.3);
+            background: #ffffff;
+            color: #0284c7;
+            box-shadow: var(--clay-pill);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            font-weight: 700;
+            position: relative;
+        }
+
+        .student-nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 25%;
+            bottom: 25%;
+            width: 3.5px;
+            border-radius: 0 4px 4px 0;
+            background: #009688;
         }
 
         .student-nav-link.active i {
-            color: #38bdf8;
+            color: #009688;
         }
 
         .student-sidebar-footer {
-            padding: 1rem 0.85rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.75rem 0.85rem;
+            border-top: 1px solid #f1f5f9;
             display: flex;
             flex-direction: column;
-            gap: 0.35rem;
+            gap: 0.25rem;
         }
 
         /* Main Content Wrapper */
@@ -164,14 +214,16 @@
             display: flex;
             flex-direction: column;
             min-width: 0;
-            background: #f8fafc;
+            background: #f1f5f9;
+            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Top Bar */
         .student-topbar {
-            height: 68px;
-            background: #ffffff;
-            border-bottom: 1px solid #e2e8f0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1.5px solid rgba(226, 232, 240, 0.8);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -179,11 +231,11 @@
             position: sticky;
             top: 0;
             z-index: 40;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.02);
         }
 
         .student-content-area {
-            padding: 2rem;
+            padding: 2rem 2rem 3.5rem;
             flex: 1;
             max-width: 1400px;
             width: 100%;
@@ -191,30 +243,55 @@
             box-sizing: border-box;
         }
 
-        .mobile-toggle-btn {
-            display: none;
-            background: none;
-            border: 1px solid #cbd5e1;
-            padding: 0.4rem 0.6rem;
-            border-radius: var(--radius-sm);
+        /* Toggle Button in Topbar (Accessible on both desktop and mobile) */
+        .sidebar-toggle-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            background: #ffffff;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: var(--clay-pill);
+            border-radius: 10px;
             color: #334155;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        .sidebar-toggle-btn:hover {
+            color: #0284c7;
+            transform: scale(1.05);
+        }
+
+        /* Backdrop for mobile drawer */
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 45;
+            opacity: 0;
+            transition: opacity 0.28s ease;
+        }
+
+        .student-layout.sidebar-mobile-open .sidebar-backdrop {
+            display: block;
+            opacity: 1;
         }
 
         @media (max-width: 992px) {
             .student-sidebar {
                 position: fixed;
-                left: -270px;
+                left: -260px;
                 top: 0;
                 bottom: 0;
+                margin-left: 0 !important;
             }
-            .student-sidebar.open {
+            .student-layout.sidebar-mobile-open .student-sidebar {
                 left: 0;
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-            }
-            .mobile-toggle-btn {
-                display: block;
+                box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.25);
             }
             .student-topbar {
                 padding: 0 1.25rem;
@@ -225,7 +302,7 @@
         }
 
         @media print {
-            .student-sidebar, .student-topbar, .no-print {
+            .student-sidebar, .student-topbar, .no-print, .sidebar-backdrop {
                 display: none !important;
             }
             .student-main-wrap, .student-content-area {
@@ -238,35 +315,41 @@
     @yield('styles')
 </head>
 <body>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
     <div class="student-layout">
         <!-- Sidebar Navigation Menu -->
         <aside class="student-sidebar" id="studentSidebar">
-            <!-- Brand -->
-            <a href="{{ route('student.dashboard') }}" class="student-brand">
-                <img src="{{ asset('images/logo.png') }}" alt="UKM Ilmu Komputer Logo" style="height: 44px; width: auto; max-width: 44px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));">
-                <div>
-                    <div style="font-weight: 800; font-size: 1.05rem; letter-spacing: -0.01em; color: #ffffff;">PORTAL MAHASISWA</div>
-                    <div style="font-size: 0.725rem; color: #94a3b8; font-weight: 500;">UKM ILMU KOMPUTER</div>
-                </div>
-            </a>
+            <!-- Brand & Desktop Collapse Button -->
+            <div class="student-brand-row">
+                <a href="{{ route('student.dashboard') }}" class="student-brand">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 34px; width: auto; max-width: 34px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.12));">
+                    <div>
+                        <div style="font-weight: 800; font-size: 0.88rem; letter-spacing: -0.01em; color: #0f172a; line-height: 1.2;">PORTAL MAHASISWA</div>
+                        <div style="font-size: 0.68rem; color: #64748b; font-weight: 700;">UKM ILMU KOMPUTER</div>
+                    </div>
+                </a>
+                <button type="button" class="sidebar-collapse-btn" onclick="toggleSidebar()" title="Tutup / Sembunyikan Sidebar">
+                    <i class="fas fa-angles-left"></i>
+                </button>
+            </div>
 
             <!-- Mini Profile Card in Sidebar -->
             <div class="student-profile-badge">
-                <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="student-profile-avatar">
+                <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="student-profile-avatar" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&size=100&background=0284c7&color=ffffff&bold=true';">
                 <div style="min-width: 0; flex: 1;">
-                    <div style="font-weight: 700; font-size: 0.85rem; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div style="font-weight: 800; font-size: 0.825rem; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.25;">
                         {{ auth()->user()->name }}
                     </div>
-                    <div style="font-size: 0.75rem; color: #38bdf8; font-family: var(--font-mono); font-weight: 600;">
+                    <div style="font-size: 0.725rem; color: #0284c7; font-family: var(--font-mono); font-weight: 700; margin-top: 0.1rem;">
                         {{ auth()->user()->nim ?? 'Mahasiswa' }}
                     </div>
                     <div style="margin-top: 0.25rem;">
                         @if (auth()->user()->member || optional(auth()->user()->recruitment)->status === 'accepted')
-                            <span style="display: inline-block; font-size: 0.675rem; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.15rem 0.5rem; border-radius: 9999px; font-weight: 700;">
+                            <span style="display: inline-block; font-size: 0.65rem; background: #ecfdf5; color: #059669; box-shadow: var(--clay-pill); padding: 0.15rem 0.5rem; border-radius: 9999px; font-weight: 700;">
                                 <i class="fas fa-circle-check" style="margin-right: 0.2rem;"></i> Anggota Resmi
                             </span>
                         @else
-                            <span style="display: inline-block; font-size: 0.675rem; background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.15rem 0.5rem; border-radius: 9999px; font-weight: 700;">
+                            <span style="display: inline-block; font-size: 0.65rem; background: #fffbeb; color: #d97706; box-shadow: var(--clay-pill); padding: 0.15rem 0.5rem; border-radius: 9999px; font-weight: 700;">
                                 <i class="fas fa-clock" style="margin-right: 0.2rem;"></i> Calon Anggota
                             </span>
                         @endif
@@ -301,6 +384,12 @@
                         <span>Silabus & Riset</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('student.projects.index') }}" class="student-nav-link {{ request()->routeIs('student.projects.*') ? 'active' : '' }}">
+                        <i class="fas fa-laptop-code"></i>
+                        <span>Karya & Proyek Saya</span>
+                    </a>
+                </li>
 
                 <li class="student-nav-heading">Pengaturan Akun</li>
                 <li>
@@ -313,14 +402,14 @@
 
             <!-- Sidebar Bottom Footer -->
             <div class="student-sidebar-footer">
-                <a href="{{ route('home') }}" target="_blank" class="student-nav-link" style="color: #94a3b8;">
+                <a href="{{ route('home') }}" target="_blank" class="student-nav-link" style="color: #64748b;">
                     <i class="fas fa-arrow-up-right-from-square"></i>
                     <span>Portal Publik UKM</span>
                 </a>
                 <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                     @csrf
-                    <button type="submit" class="student-nav-link" style="width: 100%; background: none; border: none; cursor: pointer; color: #f87171; text-align: left;">
-                        <i class="fas fa-right-from-bracket" style="color: #f87171;"></i>
+                    <button type="submit" class="student-nav-link" style="width: 100%; background: none; border: none; cursor: pointer; color: #ef4444; text-align: left;">
+                        <i class="fas fa-right-from-bracket" style="color: #ef4444;"></i>
                         <span>Keluar Sistem</span>
                     </button>
                 </form>
@@ -332,28 +421,29 @@
             <!-- Topbar Header -->
             <header class="student-topbar">
                 <div style="display: flex; align-items: center; gap: 1rem;">
-                    <button type="button" class="mobile-toggle-btn" onclick="toggleSidebar()">
-                        <i class="fas fa-bars"></i>
+                    <!-- Universal Toggle Button (Works on both desktop & mobile) -->
+                    <button type="button" class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Buka / Tutup Sidebar Navigasi">
+                        <i class="fas fa-bars-staggered"></i>
                     </button>
                     <div>
-                        <div style="font-size: 0.775rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">
+                        <div style="font-size: 0.72rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
                             PORTAL MAHASISWA & ANGGOTA
                         </div>
-                        <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">
+                        <h2 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0;">
                             @yield('page_title', 'Dashboard Mahasiswa')
                         </h2>
                     </div>
                 </div>
 
                 <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div style="display: none; @media(min-width: 768px){display: flex;} align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.4rem 0.85rem; border-radius: 9999px; font-size: 0.775rem; color: #475569; font-weight: 600;">
+                    <div style="display: none; @media(min-width: 768px){display: flex;} align-items: center; gap: 0.5rem; background: #ffffff; box-shadow: var(--clay-pill); padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.8rem; color: #475569; font-weight: 700;">
                         <i class="fas fa-calendar-day" style="color: #0284c7;"></i>
                         <span>Periode Ganjil 2026/2027</span>
                     </div>
 
-                    <a href="{{ route('student.profile.edit') }}" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; padding: 0.35rem 0.65rem 0.35rem 0.35rem; border-radius: 9999px; border: 1px solid #e2e8f0; background: #ffffff;">
-                        <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
-                        <div style="font-size: 0.8rem; font-weight: 700; color: #1e293b; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 0.35rem;">
+                    <a href="{{ route('student.profile.edit') }}" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; padding: 0.35rem 0.75rem 0.35rem 0.35rem; border-radius: 9999px; box-shadow: var(--clay-pill); background: #ffffff;">
+                        <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&size=100&background=0284c7&color=ffffff&bold=true';">
+                        <div style="font-size: 0.825rem; font-weight: 700; color: #1e293b; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 0.35rem;">
                             {{ auth()->user()->name }}
                         </div>
                     </a>
@@ -391,16 +481,26 @@
 
     <script>
         function toggleSidebar() {
-            const sidebar = document.getElementById('studentSidebar');
-            sidebar.classList.toggle('open');
+            const layout = document.querySelector('.student-layout');
+            const isMobile = window.innerWidth <= 992;
+            if (isMobile) {
+                layout.classList.toggle('sidebar-mobile-open');
+            } else {
+                const isClosed = layout.classList.toggle('sidebar-closed');
+                try {
+                    localStorage.setItem('student_sidebar_closed', isClosed ? 'true' : 'false');
+                } catch(e) {}
+            }
         }
 
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('studentSidebar');
-            const toggleBtn = document.querySelector('.mobile-toggle-btn');
-            if (sidebar.classList.contains('open') && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
-                sidebar.classList.remove('open');
+        // Restore saved desktop state on load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.innerWidth > 992) {
+                try {
+                    if (localStorage.getItem('student_sidebar_closed') === 'true') {
+                        document.querySelector('.student-layout')?.classList.add('sidebar-closed');
+                    }
+                } catch(e) {}
             }
         });
     </script>

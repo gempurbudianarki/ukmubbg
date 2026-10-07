@@ -3,7 +3,7 @@
 @section('title', 'Tentang UKM Ilmu Komputer - Wadah Riset & Inovasi')
 
 @section('content')
-<div style="background-color: #ffffff; border-bottom: 1px solid var(--slate-200); padding: 4rem 0;">
+<div style="padding: 4rem 0 2rem;">
     <div class="container text-center" style="text-align: center;">
         <span class="badge badge-primary" style="margin-bottom: 0.75rem;">Profil Organisasi</span>
         <h1 style="font-size: 2.75rem; font-weight: 800; color: var(--slate-900); letter-spacing: -0.02em; margin-bottom: 0.75rem;">
@@ -15,7 +15,7 @@
     </div>
 </div>
 
-<div class="container" style="padding: 4rem 1.5rem;">
+<div class="container" style="padding: 2rem 1.5rem 5rem;">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 4rem;">
         <div class="card">
             <div class="section-tag">Landasan Utama</div>
@@ -49,19 +49,19 @@
 
     <div class="division-grid" style="margin-bottom: 4rem;">
         @foreach ($divisions as $div)
-            <div class="card" style="border-left: 4px solid {{ $div->color_accent }};">
+            <div class="card" style="border-top: 6px solid {{ $div->color_accent }};">
                 <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
                     <div style="color: {{ $div->color_accent }};">
                         {!! $div->icon_svg !!}
                     </div>
-                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--slate-900);">
+                    <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--slate-900);">
                         {{ $div->name }}
                     </h3>
                 </div>
                 <p style="color: var(--slate-600); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem;">
                     {{ $div->tagline }}
                 </p>
-                <div style="font-size: 0.85rem; color: var(--slate-700); background: var(--slate-50); padding: 0.75rem; border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                <div style="font-size: 0.85rem; color: var(--slate-700); background: #f6f9fc; padding: 0.85rem; border-radius: var(--radius-md); box-shadow: var(--clay-input); margin-bottom: 1.25rem;">
                     <strong>Pembina:</strong> {{ $div->adviser_name }}<br>
                     <strong>Ketua:</strong> {{ $div->leader_name }} ({{ $div->leader_nim }})
                 </div>
