@@ -1,190 +1,627 @@
 @extends('layouts.app')
 
-@section('title', 'Struktur Kepengurusan - UKM Ilmu Komputer')
+@section('title', 'Struktur Kepengurusan & Dewan Pembina - UKM Ilmu Komputer')
+
+@section('styles')
+<style>
+    /* ==========================================================================
+       OFFICERS LUXURY WHITE CLAYMORPHISM SYSTEM
+       ========================================================================== */
+    .officers-hero {
+        text-align: center;
+        padding: 4rem 1.5rem 3rem;
+        position: relative;
+    }
+
+    .officers-nav-pills {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin: 2.25rem auto 0;
+        max-width: 960px;
+    }
+
+    .officer-nav-pill {
+        background: #ffffff;
+        color: #475569;
+        font-size: 0.825rem;
+        font-weight: 700;
+        padding: 0.55rem 1.15rem;
+        border-radius: 9999px;
+        border: 1.5px solid #e2e8f0;
+        box-shadow: var(--clay-pill);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .officer-nav-pill:hover {
+        transform: translateY(-2px);
+        color: #0284c7;
+        border-color: #7dd3fc;
+        box-shadow: 0 8px 20px rgba(2, 132, 199, 0.15);
+    }
+
+    /* Section Subheadings */
+    .officer-section-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .officer-section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: #e0f2fe;
+        color: #0284c7;
+        font-size: 0.775rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 0.35rem 0.95rem;
+        border-radius: 9999px;
+        box-shadow: var(--clay-pill);
+        margin-bottom: 0.75rem;
+    }
+
+    /* Grid Layouts */
+    .officers-bph-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 1.75rem;
+    }
+
+    .officers-div-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.5rem;
+    }
+
+    /* Executive & Officer Card Base */
+    .executive-card {
+        background: #ffffff;
+        border-radius: 20px;
+        border: 1.5px solid rgba(226, 232, 240, 0.95);
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.02);
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.28s ease;
+    }
+
+    .executive-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(0, 0, 0, 0.05);
+        border-color: rgba(2, 132, 199, 0.4);
+    }
+
+    /* Card Top Gradient Banner */
+    .card-banner-stripe {
+        height: 75px;
+        position: relative;
+        background: linear-gradient(135deg, #0c2340 0%, #0369a1 60%, #009688 100%);
+    }
+
+    .card-banner-stripe.pemrograman {
+        background: linear-gradient(135deg, #0f172a 0%, #0284c7 60%, #38bdf8 100%);
+    }
+
+    .card-banner-stripe.multimedia {
+        background: linear-gradient(135deg, #311042 0%, #7c3aed 60%, #ec4899 100%);
+    }
+
+    .card-banner-stripe.iot {
+        background: linear-gradient(135deg, #451a03 0%, #d97706 60%, #fbbf24 100%);
+    }
+
+    .card-banner-stripe.cyber {
+        background: linear-gradient(135deg, #062c21 0%, #059669 60%, #10b981 100%);
+    }
+
+    .card-banner-stripe.dosen {
+        background: linear-gradient(135deg, #451a03 0%, #b45309 50%, #f59e0b 100%);
+    }
+
+    /* Avatar Staging */
+    .avatar-stage {
+        margin-top: -46px;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .executive-avatar-box {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 4px solid #ffffff;
+        box-shadow: 0 10px 20px -3px rgba(15, 23, 42, 0.15), var(--clay-card);
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .executive-avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .executive-avatar-initials {
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 30%, #f8fafc 0%, #e2e8f0 100%);
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.85rem;
+        font-weight: 900;
+        font-family: var(--font-sans);
+        letter-spacing: -0.02em;
+    }
+
+    /* Role Badge Pill */
+    .executive-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.725rem;
+        font-weight: 800;
+        padding: 0.28rem 0.75rem;
+        border-radius: 9999px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.5rem;
+        box-shadow: var(--clay-pill);
+    }
+
+    .badge-bph {
+        background: #e0f2fe;
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+    }
+
+    .badge-dosen {
+        background: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fde68a;
+    }
+
+    .badge-lead {
+        background: #ecfdf5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+    }
+
+    .badge-staff {
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+    }
+
+    /* Card Details */
+    .executive-body {
+        padding: 1rem 1.5rem 1.5rem;
+        text-align: center;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .executive-name {
+        font-size: 1.12rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0 0 0.25rem;
+        line-height: 1.3;
+    }
+
+    .executive-position {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #0284c7;
+        margin-bottom: 0.4rem;
+    }
+
+    .executive-id-badge {
+        font-size: 0.75rem;
+        color: #64748b;
+        font-family: var(--font-mono, monospace);
+        background: #f8fafc;
+        padding: 0.2rem 0.65rem;
+        border-radius: 6px;
+        display: inline-block;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 1rem;
+    }
+
+    /* Social Action Strip */
+    .executive-social-strip {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.6rem;
+        padding-top: 0.85rem;
+        border-top: 1px dashed #e2e8f0;
+    }
+
+    .social-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        text-decoration: none;
+        box-shadow: var(--clay-pill);
+        transition: all 0.2s ease;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        color: #64748b;
+    }
+
+    .social-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .social-btn.linkedin:hover {
+        background: #0a66c2;
+        color: #ffffff;
+        border-color: #0a66c2;
+    }
+
+    .social-btn.github:hover {
+        background: #0f172a;
+        color: #ffffff;
+        border-color: #0f172a;
+    }
+
+    .social-btn.instagram:hover {
+        background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+        color: #ffffff;
+        border-color: transparent;
+    }
+
+    /* Division Container Box */
+    .division-org-container {
+        background: #ffffff;
+        border-radius: 24px;
+        border: 1.5px solid rgba(226, 232, 240, 0.95);
+        box-shadow: var(--clay-card);
+        padding: 2.25rem;
+        margin-bottom: 3.5rem;
+        position: relative;
+    }
+</style>
+@endsection
 
 @section('content')
-<div style="padding: 4rem 0 5rem;">
+<div style="background: #f8fafc; padding-bottom: 5rem;">
+
+    <!-- ==========================================
+         HERO SECTION
+         ========================================== -->
     <div class="container">
-        <!-- Header -->
-        <div class="section-header">
-            <div class="section-tag">Struktur Kepengurusan</div>
-            <h1 class="section-title">Susunan Organisasi & Pengurus</h1>
-            <p class="section-desc">
-                Mengenal nakhoda dan tim penggerak UKM Ilmu Komputer periode 2026/2027 yang berdedikasi memajukan riset, kompetensi, dan inovasi mahasiswa.
+        <div class="officers-hero">
+            <span class="officer-section-badge">
+                <i class="fas fa-sitemap"></i> STRUKTUR ORGANISASI RESMI 2026/2027
+            </span>
+            <h1 style="font-size: 2.65rem; font-weight: 900; color: #0c2340; letter-spacing: -0.02em; margin: 0 0 0.85rem; line-height: 1.2;">
+                Susunan Pengurus & Dewan Pembina UKM
+            </h1>
+            <p style="color: #64748b; font-size: 1.05rem; max-width: 720px; margin: 0 auto; line-height: 1.6;">
+                Mengenal nakhoda, para pembimbing ahli, dan tim koordinator 4 divisi spesialisasi UKM Ilmu Komputer yang berdedikasi memajukan riset, kurikulum, dan teknologi kampus.
+            </p>
+
+            <!-- Quick Navigation Jump Pills -->
+            <div class="officers-nav-pills">
+                <a href="#bph-section" class="officer-nav-pill">
+                    <i class="fas fa-crown" style="color: #0284c7;"></i> Dewan Pembina & BPH
+                </a>
+                <a href="#pemrograman-section" class="officer-nav-pill">
+                    <i class="fas fa-code" style="color: #0284c7;"></i> Pemrograman
+                </a>
+                <a href="#multimedia-section" class="officer-nav-pill">
+                    <i class="fas fa-palette" style="color: #7c3aed;"></i> Multimedia
+                </a>
+                <a href="#iot-section" class="officer-nav-pill">
+                    <i class="fas fa-microchip" style="color: #d97706;"></i> IoT & Hardware
+                </a>
+                <a href="#cyber-section" class="officer-nav-pill">
+                    <i class="fas fa-shield-halved" style="color: #059669;"></i> Cyber Security
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- ==========================================
+             1. DEWAN PEMBINA & BPH (BADAN PENGURUS HARIAN)
+             ========================================== -->
+        <section id="bph-section" style="margin-bottom: 4.5rem; scroll-margin-top: 80px;">
+            <div class="officer-section-header">
+                <span class="officer-section-badge" style="background: #e0f2fe; color: #0284c7;">
+                    <i class="fas fa-award"></i> TATA KELOLA TERTINGGI
+                </span>
+                <h2 style="font-size: 1.85rem; font-weight: 850; color: #0f172a; margin: 0 0 0.35rem;">
+                    Dewan Pembina & Badan Pengurus Harian (BPH)
+                </h2>
+                <p style="color: #64748b; font-size: 0.95rem; margin: 0; max-width: 600px; margin: 0 auto;">
+                    Penanggung jawab arah kebijakan strategis, tata kelola administrasi, dan koordinasi umum organisasi UKM.
+                </p>
+            </div>
+
+            <div class="officers-bph-grid">
+                @foreach ($bphOfficers as $officer)
+                    @php
+                        $posLower = strtolower($officer->position);
+                        $isDosen = str_contains($posLower, 'pembina') || str_contains($posLower, 'pembimbing') || str_contains($posLower, 'dosen');
+                        $isLeader = str_contains($posLower, 'ketua') || str_contains($posLower, 'presiden') || str_contains($posLower, 'wakil');
+                    @endphp
+                    <div class="executive-card">
+                        <!-- Top Stripe -->
+                        <div class="card-banner-stripe {{ $isDosen ? 'dosen' : '' }}"></div>
+
+                        <!-- Avatar Stage -->
+                        <div class="avatar-stage">
+                            <div class="executive-avatar-box">
+                                @if ($officer->photo)
+                                    <img src="{{ asset('storage/' . $officer->photo) }}" alt="{{ $officer->name }}" class="executive-avatar-img">
+                                @else
+                                    <div class="executive-avatar-initials" style="{{ $isDosen ? 'background: #fef3c7; color: #b45309;' : '' }}">
+                                        {{ strtoupper(substr($officer->name, 0, 2)) }}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="executive-body">
+                            <div>
+                                <!-- Role Badge -->
+                                <div>
+                                    @if ($isDosen)
+                                        <span class="executive-badge badge-dosen">
+                                            <i class="fas fa-graduation-cap"></i> Dewan Pembina
+                                        </span>
+                                    @elseif ($isLeader)
+                                        <span class="executive-badge badge-bph">
+                                            <i class="fas fa-crown"></i> Pimpinan Inti
+                                        </span>
+                                    @else
+                                        <span class="executive-badge badge-bph">
+                                            <i class="fas fa-user-check"></i> Pengurus Harian
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <h3 class="executive-name">{{ $officer->name }}</h3>
+                                <div class="executive-position">{{ $officer->position }}</div>
+                                <div class="executive-id-badge">
+                                    <i class="fas {{ $isDosen ? 'fa-id-badge' : 'fa-id-card' }}" style="margin-right: 0.25rem;"></i>
+                                    {{ $isDosen ? 'NIP' : 'NIM' }}: {{ $officer->nim ?? '-' }}
+                                </div>
+                            </div>
+
+                            <!-- Social Links Strip -->
+                            <div class="executive-social-strip">
+                                @if (isset($officer->social_links['linkedin']) && $officer->social_links['linkedin'])
+                                    <a href="{{ $officer->social_links['linkedin'] }}" target="_blank" rel="noopener noreferrer" class="social-btn linkedin" title="LinkedIn">
+                                        <i class="fab fa-linkedin-in"></i>
+                                    </a>
+                                @endif
+                                @if (isset($officer->social_links['github']) && $officer->social_links['github'])
+                                    <a href="{{ $officer->social_links['github'] }}" target="_blank" rel="noopener noreferrer" class="social-btn github" title="GitHub">
+                                        <i class="fab fa-github"></i>
+                                    </a>
+                                @endif
+                                @if (isset($officer->social_links['instagram']) && $officer->social_links['instagram'])
+                                    <a href="{{ $officer->social_links['instagram'] }}" target="_blank" rel="noopener noreferrer" class="social-btn instagram" title="Instagram">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                @endif
+                                @if (empty($officer->social_links) || (!isset($officer->social_links['linkedin']) && !isset($officer->social_links['github']) && !isset($officer->social_links['instagram'])))
+                                    <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 600;">
+                                        <i class="fas fa-circle-check" style="color: #10b981;"></i> Pengurus Terverifikasi
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+
+        <!-- ==========================================
+             2. STRUKTUR 4 DIVISI SPESIALISASI
+             ========================================== -->
+        @php
+            $divisionsData = [
+                [
+                    'id' => 'pemrograman-section',
+                    'name' => 'Divisi Pemrograman',
+                    'slug' => 'pemrograman',
+                    'accent' => '#0284c7',
+                    'icon' => 'fa-code',
+                    'officers' => $pemrogramanOfficers,
+                    'desc' => 'Rekayasa Perangkat Lunak, Fullstack Web, Mobile App & Algoritma Tingkat Lanjut',
+                    'bg_light' => '#f0f9ff',
+                ],
+                [
+                    'id' => 'multimedia-section',
+                    'name' => 'Divisi Multimedia',
+                    'slug' => 'multimedia',
+                    'accent' => '#7c3aed',
+                    'icon' => 'fa-palette',
+                    'officers' => $multimediaOfficers,
+                    'desc' => 'UI/UX Design, Motion Graphic, Animasi, 3D Modelling & Produksi Audio Visual',
+                    'bg_light' => '#faf5ff',
+                ],
+                [
+                    'id' => 'iot-section',
+                    'name' => 'Divisi Internet of Things (IoT)',
+                    'slug' => 'iot',
+                    'accent' => '#d97706',
+                    'icon' => 'fa-microchip',
+                    'officers' => $iotOfficers,
+                    'desc' => 'Embedded Systems, Smart Devices, Sensor Jaringan, Mikrokontroler & Robotika',
+                    'bg_light' => '#fffbeb',
+                ],
+                [
+                    'id' => 'cyber-section',
+                    'name' => 'Divisi Cyber Security',
+                    'slug' => 'cyber',
+                    'accent' => '#059669',
+                    'icon' => 'fa-shield-halved',
+                    'officers' => $cyberOfficers,
+                    'desc' => 'Keamanan Informasi, Ethical Hacking, Forensik Digital, CTF & Cyber Defense',
+                    'bg_light' => '#ecfdf5',
+                ],
+            ];
+        @endphp
+
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <span class="officer-section-badge" style="background: #f1f5f9; color: #475569;">
+                <i class="fas fa-layer-group"></i> BIDANG SPESIALISASI
+            </span>
+            <h2 style="font-size: 1.85rem; font-weight: 850; color: #0f172a; margin: 0 0 0.35rem;">
+                Struktur Kepengurusan 4 Divisi Spesialisasi
+            </h2>
+            <p style="color: #64748b; font-size: 0.95rem; margin: 0; max-width: 600px; margin: 0 auto;">
+                Dipandu oleh Dosen Pembina keilmuan dan dipimpin oleh Koordinator Divisi mahasiswa.
             </p>
         </div>
 
-        <!-- 1. BPH (Badan Pengurus Harian & Pembina) -->
-        <div style="margin-bottom: 4.5rem;">
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--slate-900);">
-                    Dewan Pembina & Badan Pengurus Harian (BPH)
-                </h2>
-                <p style="color: var(--slate-500); font-size: 0.9rem;">
-                    Penanggung jawab arah kebijakan, tata kelola administrasi, dan keuangan organisasi.
-                </p>
-            </div>
-
-            <div class="officers-grid">
-                @foreach ($bphOfficers as $officer)
-                    <div class="officer-card">
-                        <div class="officer-photo">
-                            @if ($officer->photo)
-                                <img src="{{ asset('storage/' . $officer->photo) }}" alt="{{ $officer->name }}">
-                            @else
-                                {{ strtoupper(substr($officer->name, 0, 2)) }}
-                            @endif
+        <div style="margin-top: 1rem;">
+            @foreach ($divisionsData as $divGroup)
+                <div class="division-org-container" id="{{ $divGroup['id'] }}" style="border-top: 5px solid {{ $divGroup['accent'] }}; scroll-margin-top: 80px;">
+                    <!-- Division Box Header -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; padding-bottom: 1.5rem; border-bottom: 1px solid #f1f5f9;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 50px; height: 50px; border-radius: 14px; background: {{ $divGroup['bg_light'] }}; color: {{ $divGroup['accent'] }}; display: flex; align-items: center; justify-content: center; font-size: 1.45rem; box-shadow: var(--clay-pill); border: 1.5px solid {{ $divGroup['accent'] }}30;">
+                                <i class="fas {{ $divGroup['icon'] }}"></i>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.45rem; font-weight: 850; color: #0c2340; margin: 0 0 0.2rem;">
+                                    {{ $divGroup['name'] }}
+                                </h3>
+                                <p style="font-size: 0.875rem; color: #64748b; margin: 0;">
+                                    {{ $divGroup['desc'] }}
+                                </p>
+                            </div>
                         </div>
-                        <h3 class="officer-name">{{ $officer->name }}</h3>
-                        <div class="officer-pos">{{ $officer->position }}</div>
-                        <div class="officer-nim">NIM/NIP: {{ $officer->nim }}</div>
 
-                        @if ($officer->social_links)
-                            <div class="social-strip">
-                                @if (isset($officer->social_links['linkedin']))
-                                    <a href="{{ $officer->social_links['linkedin'] }}" target="_blank" title="LinkedIn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                                    </a>
-                                @endif
-                                @if (isset($officer->social_links['github']))
-                                    <a href="{{ $officer->social_links['github'] }}" target="_blank" title="GitHub">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                                    </a>
-                                @endif
-                            </div>
-                        @endif
-                    </div>
-                @endforeach
-            </div>
-        </div>
-
-        <!-- 2. Division Teams: Pemrograman, Multimedia, IoT, Cyber Security -->
-        <div>
-            <div style="text-align: center; margin-bottom: 2.5rem;">
-                <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--slate-900);">
-                    Struktur Kepengurusan 4 Divisi Spesialisasi
-                </h2>
-                <p style="color: var(--slate-500); font-size: 0.9rem;">
-                    Dipandu oleh Dosen Pembina bidang keilmuan dan dipimpin oleh Koordinator Divisi mahasiswa.
-                </p>
-            </div>
-
-            @php
-                $divisionsData = [
-                    [
-                        'name' => 'Divisi Pemrograman',
-                        'accent' => '#0284c7',
-                        'icon' => 'fa-code',
-                        'officers' => $pemrogramanOfficers,
-                        'desc' => 'Rekayasa Perangkat Lunak, Fullstack Web, Mobile App & Algoritma'
-                    ],
-                    [
-                        'name' => 'Divisi Multimedia',
-                        'accent' => '#8b5cf6',
-                        'icon' => 'fa-palette',
-                        'officers' => $multimediaOfficers,
-                        'desc' => 'UI/UX Design, Motion Graphic, Animasi, 3D Modelling & Audio Visual'
-                    ],
-                    [
-                        'name' => 'Divisi Internet of Things (IoT)',
-                        'accent' => '#d97706',
-                        'icon' => 'fa-microchip',
-                        'officers' => $iotOfficers,
-                        'desc' => 'Embedded Systems, Smart Devices, Sensor Jaringan & Robotika'
-                    ],
-                    [
-                        'name' => 'Divisi Cyber Security',
-                        'accent' => '#059669',
-                        'icon' => 'fa-shield-halved',
-                        'officers' => $cyberOfficers,
-                        'desc' => 'Keamanan Informasi, Ethical Hacking, Forensik Digital & Defense'
-                    ],
-                ];
-            @endphp
-
-            <div style="display: flex; flex-direction: column; gap: 3rem;">
-                @foreach ($divisionsData as $divGroup)
-                    <div class="glass-panel" style="padding: 1.75rem 2rem; border-top: 4px solid {{ $divGroup['accent'] }};">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
-                            <div style="display: flex; align-items: center; gap: 0.85rem;">
-                                <div style="width: 42px; height: 42px; border-radius: var(--radius-md); background: {{ $divGroup['accent'] }}15; color: {{ $divGroup['accent'] }}; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; box-shadow: var(--clay-pill);">
-                                    <i class="fa-solid {{ $divGroup['icon'] }}"></i>
-                                </div>
-                                <div>
-                                    <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--slate-900); margin: 0;">
-                                        {{ $divGroup['name'] }}
-                                    </h3>
-                                    <p style="font-size: 0.8rem; color: var(--slate-500); margin: 0.15rem 0 0;">
-                                        {{ $divGroup['desc'] }}
-                                    </p>
-                                </div>
-                            </div>
-                            <span class="badge" style="background: {{ $divGroup['accent'] }}15; color: {{ $divGroup['accent'] }}; font-weight: 800; font-size: 0.75rem; padding: 0.4rem 0.85rem; border-radius: var(--radius-full);">
-                                {{ $divGroup['officers']->count() }} Pengurus & Pembina
+                        <div style="display: flex; align-items: center; gap: 0.65rem;">
+                            <span class="badge" style="background: {{ $divGroup['bg_light'] }}; color: {{ $divGroup['accent'] }}; font-weight: 800; font-size: 0.775rem; padding: 0.45rem 1rem; border-radius: 9999px; border: 1px solid {{ $divGroup['accent'] }}30; box-shadow: var(--clay-pill);">
+                                {{ $divGroup['officers']->count() }} Anggota Tim & Pembimbing
                             </span>
+                            <a href="{{ route('divisions.show', $divGroup['slug']) }}" class="btn btn-outline btn-sm" style="font-size: 0.75rem; padding: 0.45rem 0.85rem; border-radius: 9999px; font-weight: 700;">
+                                Kanal Divisi &rarr;
+                            </a>
                         </div>
+                    </div>
 
-                        <div class="officers-grid">
-                            @forelse ($divGroup['officers'] as $officer)
-                                @php
-                                    $posLower = strtolower($officer->position);
-                                    $isDosen = str_contains($posLower, 'pembina') || str_contains($posLower, 'pembimbing') || str_contains($posLower, 'dosen');
-                                @endphp
-                                <div class="officer-card" style="{{ $isDosen ? 'border-top: 3px solid ' . $divGroup['accent'] . ';' : '' }}">
-                                    <!-- Role Badge -->
-                                    <div style="margin-bottom: 0.75rem;">
-                                        @if ($isDosen)
-                                            <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; font-weight: 800; padding: 0.25rem 0.65rem; border-radius: var(--radius-full); background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">
-                                                <i class="fa-solid fa-chalkboard-user"></i> Dosen Pembimbing
-                                            </span>
-                                        @else
-                                            <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; font-weight: 800; padding: 0.25rem 0.65rem; border-radius: var(--radius-full); background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;">
-                                                <i class="fa-solid fa-user-tie"></i> Koordinator Mahasiswa
-                                            </span>
-                                        @endif
-                                    </div>
+                    <!-- Officers Grid -->
+                    <div class="officers-div-grid">
+                        @forelse ($divGroup['officers'] as $officer)
+                            @php
+                                $posLower = strtolower($officer->position);
+                                $isDosen = str_contains($posLower, 'pembina') || str_contains($posLower, 'pembimbing') || str_contains($posLower, 'dosen');
+                                $isLeader = str_contains($posLower, 'ketua') || str_contains($posLower, 'koordinator');
+                            @endphp
+                            <div class="executive-card">
+                                <!-- Top Stripe -->
+                                <div class="card-banner-stripe {{ $isDosen ? 'dosen' : $divGroup['slug'] }}"></div>
 
-                                    <div class="officer-photo">
+                                <!-- Avatar Stage -->
+                                <div class="avatar-stage">
+                                    <div class="executive-avatar-box">
                                         @if ($officer->photo)
-                                            <img src="{{ asset('storage/' . $officer->photo) }}" alt="{{ $officer->name }}">
+                                            <img src="{{ asset('storage/' . $officer->photo) }}" alt="{{ $officer->name }}" class="executive-avatar-img">
                                         @else
-                                            {{ strtoupper(substr($officer->name, 0, 2)) }}
+                                            <div class="executive-avatar-initials" style="{{ $isDosen ? 'background: #fef3c7; color: #b45309;' : 'background: ' . $divGroup['bg_light'] . '; color: ' . $divGroup['accent'] . ';' }}">
+                                                {{ strtoupper(substr($officer->name, 0, 2)) }}
+                                            </div>
                                         @endif
                                     </div>
-                                    <h3 class="officer-name">{{ $officer->name }}</h3>
-                                    <div class="officer-pos">{{ $officer->position }}</div>
-                                    <div class="officer-nim">{{ $isDosen ? 'NIP' : 'NIM' }}: {{ $officer->nim }}</div>
+                                </div>
 
-                                    @if ($officer->social_links)
-                                        <div class="social-strip">
-                                            @if (isset($officer->social_links['linkedin']))
-                                                <a href="{{ $officer->social_links['linkedin'] }}" target="_blank" title="LinkedIn">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                                                </a>
-                                            @endif
-                                            @if (isset($officer->social_links['github']))
-                                                <a href="{{ $officer->social_links['github'] }}" target="_blank" title="GitHub">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                                                </a>
-                                            @endif
-                                            @if (isset($officer->social_links['instagram']))
-                                                <a href="{{ $officer->social_links['instagram'] }}" target="_blank" title="Instagram">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                                                </a>
+                                <!-- Card Body -->
+                                <div class="executive-body">
+                                    <div>
+                                        <!-- Role Badge -->
+                                        <div>
+                                            @if ($isDosen)
+                                                <span class="executive-badge badge-dosen">
+                                                    <i class="fas fa-chalkboard-user"></i> Dosen Pembimbing
+                                                </span>
+                                            @elseif ($isLeader)
+                                                <span class="executive-badge" style="background: {{ $divGroup['bg_light'] }}; color: {{ $divGroup['accent'] }}; border: 1px solid {{ $divGroup['accent'] }}40;">
+                                                    <i class="fas fa-user-tie"></i> Koordinator Divisi
+                                                </span>
+                                            @else
+                                                <span class="executive-badge badge-staff">
+                                                    <i class="fas fa-laptop-code"></i> Pengurus Divisi
+                                                </span>
                                             @endif
                                         </div>
-                                    @endif
+
+                                        <h4 class="executive-name" style="font-size: 1.05rem;">{{ $officer->name }}</h4>
+                                        <div class="executive-position" style="color: {{ $divGroup['accent'] }};">{{ $officer->position }}</div>
+                                        <div class="executive-id-badge">
+                                            <i class="fas {{ $isDosen ? 'fa-id-badge' : 'fa-id-card' }}" style="margin-right: 0.25rem;"></i>
+                                            {{ $isDosen ? 'NIP' : 'NIM' }}: {{ $officer->nim ?? '-' }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Social Links Strip -->
+                                    <div class="executive-social-strip">
+                                        @if (isset($officer->social_links['linkedin']) && $officer->social_links['linkedin'])
+                                            <a href="{{ $officer->social_links['linkedin'] }}" target="_blank" rel="noopener noreferrer" class="social-btn linkedin" title="LinkedIn">
+                                                <i class="fab fa-linkedin-in"></i>
+                                            </a>
+                                        @endif
+                                        @if (isset($officer->social_links['github']) && $officer->social_links['github'])
+                                            <a href="{{ $officer->social_links['github'] }}" target="_blank" rel="noopener noreferrer" class="social-btn github" title="GitHub">
+                                                <i class="fab fa-github"></i>
+                                            </a>
+                                        @endif
+                                        @if (isset($officer->social_links['instagram']) && $officer->social_links['instagram'])
+                                            <a href="{{ $officer->social_links['instagram'] }}" target="_blank" rel="noopener noreferrer" class="social-btn instagram" title="Instagram">
+                                                <i class="fab fa-instagram"></i>
+                                            </a>
+                                        @endif
+                                        @if (empty($officer->social_links) || (!isset($officer->social_links['linkedin']) && !isset($officer->social_links['github']) && !isset($officer->social_links['instagram'])))
+                                            <span style="font-size: 0.725rem; color: #94a3b8; font-weight: 600;">
+                                                <i class="fas fa-check" style="color: {{ $divGroup['accent'] }};"></i> Tim Riset Aktif
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
-                            @empty
-                                <div style="color: var(--slate-400); font-style: italic; grid-column: 1 / -1; text-align: center; padding: 1.5rem;">
-                                    Belum ada data pengurus untuk divisi ini.
-                                </div>
-                            @endforelse
-                        </div>
+                            </div>
+                        @empty
+                            <div style="color: #94a3b8; font-style: italic; grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                                Belum ada data pengurus yang dipublikasikan untuk divisi ini.
+                            </div>
+                        @endforelse
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
+
     </div>
 </div>
 @endsection
