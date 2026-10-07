@@ -188,10 +188,10 @@
         @method('PUT')
 
         <div style="background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 16px; overflow: hidden; box-shadow: var(--clay-card);">
-            <div style="overflow-x: auto; overflow-y: auto; max-height: 62vh; position: relative;">
-                <table id="attendanceTable" style="width: 100%; min-width: 860px; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+            <div style="overflow-x: auto;">
+                <table id="attendanceTable" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
                     <thead>
-                        <tr style="background: #0f172a; color: #f8fafc; position: sticky; top: 0; z-index: 10;">
+                        <tr style="background: #0f172a; color: #f8fafc;">
                             <th style="padding: 0.85rem 1rem; width: 45px; text-align: center;">No</th>
                             <th style="padding: 0.85rem 1rem;">Nama & NIM Anggota</th>
                             <th style="padding: 0.85rem 1rem;">Divisi</th>

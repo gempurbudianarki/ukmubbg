@@ -7,10 +7,19 @@
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/portal.css') }}">
     <style>
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+            margin: 0;
+            padding: 0;
+        }
         .admin-layout {
             display: flex;
             min-height: 100vh;
             background: var(--bg-body, #eef3f8);
+            overflow-x: hidden;
+            max-width: 100vw;
+            width: 100%;
         }
         .admin-sidebar {
             width: 275px;
@@ -70,6 +79,8 @@
             flex-direction: column;
             min-width: 0;
             background: var(--bg-body, #eef3f8);
+            overflow-x: hidden;
+            width: 100%;
         }
         .admin-header {
             height: 72px;
