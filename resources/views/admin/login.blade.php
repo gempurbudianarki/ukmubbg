@@ -375,7 +375,7 @@
                     </label>
                     <div class="input-box">
                         <i class="fas fa-envelope input-icon-lead"></i>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" class="input-field" placeholder="nama@ukmilkom.id atau email mahasiswa" required autofocus>
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" class="input-field" placeholder="gempurbudianarki@gmail.com" required autofocus>
                     </div>
                 </div>
 
