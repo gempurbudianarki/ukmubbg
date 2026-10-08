@@ -250,6 +250,15 @@
         background: #f1f5f9;
         box-shadow: none;
     }
+
+    .dropzone-error-msg {
+        display: none;
+        color: #ef4444;
+        font-size: 0.8rem;
+        margin-top: 0.45rem;
+        font-weight: 600;
+        animation: errorShake 0.4s ease-in-out;
+    }
 </style>
 @endsection
 
