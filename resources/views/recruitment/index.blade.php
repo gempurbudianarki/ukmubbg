@@ -681,15 +681,21 @@
                                         $defaultDesc = 'Keamanan siber, ethical hacking, CTF challenges, dan threat audit.';
                                     }
 
-                                    $isSelected = (old('first_choice_division_id', optional($preselectedDivision)->id) == $d->id);
+                                    $quota = $d->recruitment_quota;
+                                    $remainingQuota = $d->remaining_quota;
+                                    $isFull = (bool)$d->is_quota_full;
+                                    $registeredCount = (int)($d->first_choice_applicants_count ?? 0);
+                                    $isSelected = !$isFull && (old('first_choice_division_id', optional($preselectedDivision)->id) == $d->id);
+                                    $percentage = ($quota && $quota > 0) ? min(100, round(($registeredCount / $quota) * 100)) : null;
                                 @endphp
-                                <div class="division-select-card {{ $themeClass }} {{ $isSelected ? 'selected' : '' }}" 
+                                <div class="division-select-card {{ $themeClass }} {{ $isSelected ? 'selected' : '' }} {{ $isFull ? 'is-full disabled' : '' }}" 
                                      id="divCardPrimary_{{ $d->id }}" 
                                      data-id="{{ $d->id }}" 
                                      data-name="{{ $d->name }}" 
-                                     onclick="selectPrimaryDivision('{{ $d->id }}', '{{ $d->name }}')">
+                                     data-is-full="{{ $isFull ? '1' : '0' }}"
+                                     onclick="selectPrimaryDivision('{{ $d->id }}', '{{ addslashes($d->name) }}', {{ $isFull ? 'true' : 'false' }})">
                                     <div class="division-card-header">
-                                        <div class="division-card-icon">
+                                        <div class="division-card-icon" style="{{ $isFull ? 'background: #fee2e2; color: #ef4444;' : '' }}">
                                             <i class="fas {{ $divIcon }}"></i>
                                         </div>
                                         <div class="division-card-radio"></div>
@@ -698,13 +704,42 @@
                                     <p class="division-card-desc">
                                         {{ $d->description ?: $defaultDesc }}
                                     </p>
-                                    <div class="division-card-footer">
-                                        <span class="badge" style="background: rgba(37,99,235,0.08); color: #2563eb; font-weight: 700;">
-                                            <i class="fas fa-users" style="margin-right: 0.3rem;"></i> Kuota: {{ $d->recruitment_quota ?: 'Terbuka' }}
-                                        </span>
-                                        <span style="font-weight: 600; color: #10b981;">
-                                            <i class="fas fa-circle-check"></i> Buka
-                                        </span>
+
+                                    @if ($percentage !== null)
+                                        <div style="margin: 0.75rem 0 0.25rem;">
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.72rem; font-weight: 700; color: {{ $isFull ? '#dc2626' : 'var(--slate-500)' }}; margin-bottom: 0.25rem;">
+                                                <span>Keterisian Kuota</span>
+                                                <span>{{ $registeredCount }} / {{ $quota }} ({{ $percentage }}%)</span>
+                                            </div>
+                                            <div style="width: 100%; background: #e2e8f0; height: 6px; border-radius: 999px; overflow: hidden;">
+                                                <div style="width: {{ $percentage }}%; background: {{ $isFull ? '#ef4444' : ($percentage >= 80 ? '#f59e0b' : '#3b82f6') }}; height: 100%; border-radius: 999px; transition: width 0.3s ease;"></div>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="division-card-footer" style="margin-top: 0.6rem;">
+                                        @if ($isFull)
+                                            <span class="badge" style="background: rgba(239,68,68,0.12); color: #dc2626; font-weight: 700;">
+                                                <i class="fas fa-ban" style="margin-right: 0.3rem;"></i> Kuota Penuh
+                                            </span>
+                                            <span style="font-weight: 700; color: #dc2626; font-size: 0.75rem;">
+                                                <i class="fas fa-circle-xmark"></i> Ditutup
+                                            </span>
+                                        @elseif ($quota !== null)
+                                            <span class="badge" style="background: rgba(37,99,235,0.08); color: #2563eb; font-weight: 700;">
+                                                <i class="fas fa-users" style="margin-right: 0.3rem;"></i> Sisa: {{ $remainingQuota }} Kursi
+                                            </span>
+                                            <span style="font-weight: 600; color: #10b981; font-size: 0.75rem;">
+                                                <i class="fas fa-circle-check"></i> Tersedia
+                                            </span>
+                                        @else
+                                            <span class="badge" style="background: rgba(16,185,129,0.08); color: #059669; font-weight: 700;">
+                                                <i class="fas fa-infinity" style="margin-right: 0.3rem;"></i> Kuota: Terbuka
+                                            </span>
+                                            <span style="font-weight: 600; color: #10b981; font-size: 0.75rem;">
+                                                <i class="fas fa-circle-check"></i> Buka
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach
@@ -727,12 +762,22 @@
                         </p>
                         <div class="secondary-division-pills">
                             @foreach ($divisions as $d)
-                                <div class="secondary-division-pill {{ (old('second_choice_division_id') == $d->id) ? 'selected' : '' }}" 
+                                @php
+                                    $secIsFull = (bool)$d->is_quota_full;
+                                    $secSelected = !$secIsFull && (old('second_choice_division_id') == $d->id);
+                                @endphp
+                                <div class="secondary-division-pill {{ $secSelected ? 'selected' : '' }} {{ $secIsFull ? 'disabled is-full' : '' }}" 
                                      id="divPillSecondary_{{ $d->id }}" 
                                      data-id="{{ $d->id }}" 
-                                     onclick="selectSecondaryDivision('{{ $d->id }}')">
-                                    <i class="fas fa-check-circle" style="font-size: 0.8rem; display: {{ (old('second_choice_division_id') == $d->id) ? 'inline-block' : 'none' }};"></i>
+                                     data-is-full="{{ $secIsFull ? '1' : '0' }}"
+                                     onclick="selectSecondaryDivision('{{ $d->id }}', {{ $secIsFull ? 'true' : 'false' }})">
+                                    <i class="fas fa-check-circle" style="font-size: 0.8rem; display: {{ $secSelected ? 'inline-block' : 'none' }};"></i>
                                     <span>{{ $d->name }}</span>
+                                    @if ($secIsFull)
+                                        <span style="font-size: 0.675rem; font-weight: 700; color: #dc2626; margin-left: 0.35rem;">[Penuh]</span>
+                                    @elseif ($d->recruitment_quota !== null)
+                                        <span style="font-size: 0.675rem; font-weight: 600; color: #64748b; margin-left: 0.35rem;">({{ $d->remaining_quota }} sisa)</span>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>

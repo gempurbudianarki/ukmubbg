@@ -29,12 +29,17 @@ class RecruitmentController extends Controller
         $isOpen = ($status === 'open') && $isWithinSchedule;
 
         // Retrieve only divisions where recruitment is open
-        $divisions = Division::where('is_recruitment_open', true)->get();
+        $divisions = Division::where('is_recruitment_open', true)
+            ->withCount('firstChoiceApplicants')
+            ->get();
 
         // Optional preselected division from query parameter ?divisi=pemrograman
         $preselectedDivision = null;
         if ($request->filled('divisi')) {
-            $preselectedDivision = Division::where('slug', $request->divisi)->where('is_recruitment_open', true)->first();
+            $preselectedDivision = Division::where('slug', $request->divisi)
+                ->where('is_recruitment_open', true)
+                ->withCount('firstChoiceApplicants')
+                ->first();
         }
 
         return view('recruitment.index', compact('status', 'isOpen', 'batch', 'deadline', 'startDate', 'endDate', 'closedMessage', 'divisions', 'preselectedDivision'));
@@ -137,16 +142,32 @@ class RecruitmentController extends Controller
             'file_cv.max' => 'Ukuran file CV maksimal 3MB.',
         ]);
 
-        // Verify that selected divisions are currently open for recruitment
-        $firstDiv = Division::where('id', $validated['first_choice_division_id'])->where('is_recruitment_open', true)->first();
+        // Verify that selected divisions are currently open for recruitment and have available quota
+        $firstDiv = Division::where('id', $validated['first_choice_division_id'])
+            ->where('is_recruitment_open', true)
+            ->withCount('firstChoiceApplicants')
+            ->first();
+
         if (!$firstDiv) {
             return back()->withErrors(['first_choice_division_id' => 'Divisi pilihan utama saat ini sedang tidak membuka pendaftaran atau kuota telah terpenuhi.'])->withInput();
         }
 
+        if ($firstDiv->is_quota_full) {
+            return back()->withErrors(['first_choice_division_id' => 'Mohon maaf, kuota pendaftaran untuk Divisi ' . $firstDiv->name . ' sudah penuh (' . $firstDiv->first_choice_applicants_count . '/' . $firstDiv->recruitment_quota . '). Silakan pilih divisi lain yang masih tersedia.'])->withInput();
+        }
+
         if (!empty($validated['second_choice_division_id'])) {
-            $secondDiv = Division::where('id', $validated['second_choice_division_id'])->where('is_recruitment_open', true)->first();
+            $secondDiv = Division::where('id', $validated['second_choice_division_id'])
+                ->where('is_recruitment_open', true)
+                ->withCount('firstChoiceApplicants')
+                ->first();
+
             if (!$secondDiv) {
                 return back()->withErrors(['second_choice_division_id' => 'Divisi pilihan kedua saat ini sedang tidak membuka pendaftaran atau kuota telah terpenuhi.'])->withInput();
+            }
+
+            if ($secondDiv->is_quota_full) {
+                return back()->withErrors(['second_choice_division_id' => 'Mohon maaf, kuota pendaftaran untuk Divisi ' . $secondDiv->name . ' (pilihan kedua) sudah penuh.'])->withInput();
             }
         }
 

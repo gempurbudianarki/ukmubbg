@@ -2544,6 +2544,31 @@ html, body {
     filter: grayscale(0.8);
 }
 
+.division-select-card.is-full {
+    opacity: 0.62;
+    cursor: not-allowed;
+    border-color: #fca5a5 !important;
+    background: #fff8f8 !important;
+}
+
+.division-select-card.is-full:hover {
+    transform: none !important;
+    box-shadow: var(--clay-card) !important;
+    border-color: #fca5a5 !important;
+}
+
+.division-select-card.is-full .division-card-radio {
+    display: none;
+}
+
+.secondary-division-pill.is-full {
+    opacity: 0.55;
+    cursor: not-allowed !important;
+    background: #fff1f2 !important;
+    border-color: #fca5a5 !important;
+    color: #991b1b !important;
+}
+
 .division-card-header {
     display: flex;
     align-items: center;

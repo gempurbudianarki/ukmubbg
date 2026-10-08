@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Division;
+use App\Models\Recruitment;
 use App\Models\Setting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -118,5 +119,87 @@ class RecruitmentWindowGuardTest extends TestCase
 
         $storeResponse->assertRedirect();
         $storeResponse->assertSessionHas('error');
+    }
+
+    public function test_division_calculates_remaining_quota_and_detects_full(): void
+    {
+        $this->assertEquals(20, $this->divOpen->remaining_quota);
+        $this->assertFalse($this->divOpen->is_quota_full);
+
+        // Add 1 applicant to divOpen
+        Recruitment::create([
+            'registration_code' => 'REG-240103001',
+            'nim' => '240103001',
+            'full_name' => 'Peserta Satu',
+            'email' => 'peserta1@mail.com',
+            'phone_whatsapp' => '081234567890',
+            'semester' => 1,
+            'first_choice_division_id' => $this->divOpen->id,
+            'reason_to_join' => 'Motivasi belajar coding web.',
+            'github_url' => 'https://github.com/peserta1',
+            'selection_stage' => 'administrasi',
+        ]);
+
+        $this->divOpen->refresh();
+        $this->assertEquals(19, $this->divOpen->remaining_quota);
+        $this->assertFalse($this->divOpen->is_quota_full);
+
+        // Update quota to 1 to simulate reaching capacity
+        $this->divOpen->update(['recruitment_quota' => 1]);
+        $this->divOpen->refresh();
+        $this->assertEquals(0, $this->divOpen->remaining_quota);
+        $this->assertTrue($this->divOpen->is_quota_full);
+    }
+
+    public function test_registration_submission_rejects_division_when_quota_is_full(): void
+    {
+        Setting::set('recruitment_status', 'open');
+        Setting::set('recruitment_start_date', now()->subDay()->format('Y-m-d H:i'));
+        Setting::set('recruitment_end_date', now()->addDays(5)->format('Y-m-d H:i'));
+
+        // Fill up quota for divOpen (quota = 1)
+        $this->divOpen->update(['recruitment_quota' => 1]);
+        Recruitment::create([
+            'registration_code' => 'REG-240103001',
+            'nim' => '240103001',
+            'full_name' => 'Peserta Satu',
+            'email' => 'peserta1@mail.com',
+            'phone_whatsapp' => '081234567890',
+            'semester' => 1,
+            'first_choice_division_id' => $this->divOpen->id,
+            'reason_to_join' => 'Motivasi belajar coding web.',
+            'github_url' => 'https://github.com/peserta1',
+            'selection_stage' => 'administrasi',
+        ]);
+
+        // Attempt new registration on full division
+        $response = $this->post(route('recruitment.store'), [
+            'full_name' => 'Peserta Kedua',
+            'nim' => '240103002',
+            'email' => 'peserta2@mail.com',
+            'phone_whatsapp' => '081234567899',
+            'semester' => 1,
+            'class_group' => 'IF-1B',
+            'first_choice_division_id' => $this->divOpen->id,
+            'reason_to_join' => 'Saya sangat ingin bergabung di pemrograman web.',
+            'github_url' => 'https://github.com/peserta2',
+            'profile_photo' => UploadedFile::fake()->image('photo.jpg'),
+            'file_ktm' => UploadedFile::fake()->image('ktm.jpg'),
+            'file_cv' => UploadedFile::fake()->create('cv.pdf', 100, 'application/pdf'),
+        ]);
+
+        $response->assertSessionHasErrors('first_choice_division_id');
+    }
+
+    public function test_registration_page_renders_remaining_quota_countdown(): void
+    {
+        Setting::set('recruitment_status', 'open');
+        Setting::set('recruitment_start_date', now()->subDay()->format('Y-m-d H:i'));
+        Setting::set('recruitment_end_date', now()->addDays(5)->format('Y-m-d H:i'));
+
+        $response = $this->get(route('recruitment.index'));
+        $response->assertStatus(200);
+        $response->assertSee('Sisa: 20 Kursi');
+        $response->assertSee('Keterisian Kuota');
     }
 }

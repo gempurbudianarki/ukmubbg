@@ -40,6 +40,24 @@ class Division extends Model
         'recruitment_quota' => 'integer',
     ];
 
+    public function getRemainingQuotaAttribute(): ?int
+    {
+        if ($this->recruitment_quota === null) {
+            return null;
+        }
+        $count = $this->first_choice_applicants_count ?? $this->firstChoiceApplicants()->count();
+        return max(0, (int)$this->recruitment_quota - (int)$count);
+    }
+
+    public function getIsQuotaFullAttribute(): bool
+    {
+        if ($this->recruitment_quota === null) {
+            return false;
+        }
+        $count = $this->first_choice_applicants_count ?? $this->firstChoiceApplicants()->count();
+        return (int)$count >= (int)$this->recruitment_quota;
+    }
+
     public function getFocusTopicsListAttribute(): array
     {
         if (is_array($this->focus_topics)) {

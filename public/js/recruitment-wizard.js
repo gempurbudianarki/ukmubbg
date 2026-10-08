@@ -178,6 +178,15 @@ function validateStep2() {
             cardGrid.classList.add('shake-error');
             setTimeout(() => cardGrid.classList.remove('shake-error'), 450);
         }
+    } else {
+        const primCard = document.getElementById('divCardPrimary_' + primId);
+        if (primCard && primCard.getAttribute('data-is-full') === '1') {
+            isValid = false;
+            errorMessage = 'Mohon maaf, kuota untuk divisi yang dipilih sudah penuh. Silakan pilih divisi lain.';
+            const primInput = document.getElementById('first_choice_division_id');
+            if (primInput) primInput.value = '';
+            primCard.classList.remove('selected');
+        }
     } else if (secId && secId === primId) {
         isValid = false;
         errorMessage = 'Divisi pilihan kedua tidak boleh sama dengan divisi pilihan utama. Silakan pilih divisi cadangan lain atau klik Reset.';
@@ -387,18 +396,26 @@ function jumpToStep(target) {
 /* -------------------------------------------------------------
    TACTILE DIVISION CARDS SELECTOR
    ------------------------------------------------------------- */
-function selectPrimaryDivision(id, name) {
+function selectPrimaryDivision(id, name, isFull) {
     hideServerErrorsAlert();
     setStepAlert(2, null);
+
+    const card = document.getElementById('divCardPrimary_' + id);
+    const fullCheck = isFull === true || (card && card.getAttribute('data-is-full') === '1');
+
+    if (fullCheck) {
+        setStepAlert(2, 'Mohon maaf, kuota untuk Divisi ' + (name || 'yang dipilih') + ' sudah penuh. Silakan pilih divisi lain yang masih tersedia.');
+        return;
+    }
+
     const primInput = document.getElementById('first_choice_division_id');
     if (primInput) primInput.value = id;
 
-    document.querySelectorAll('.division-select-card').forEach(card => {
-        card.classList.remove('selected');
+    document.querySelectorAll('.division-select-card').forEach(c => {
+        c.classList.remove('selected');
     });
-    const activeCard = document.getElementById('divCardPrimary_' + id);
-    if (activeCard) {
-        activeCard.classList.add('selected');
+    if (card) {
+        card.classList.add('selected');
     }
 
     // Auto reset secondary division if it was the same
@@ -412,7 +429,7 @@ function selectPrimaryDivision(id, name) {
     document.querySelectorAll('.secondary-division-pill').forEach(pill => {
         if (pill.getAttribute('data-id') === id) {
             pill.classList.add('disabled');
-        } else {
+        } else if (pill.getAttribute('data-is-full') !== '1') {
             pill.classList.remove('disabled');
         }
     });
@@ -421,11 +438,19 @@ function selectPrimaryDivision(id, name) {
     refreshSummary();
 }
 
-function selectSecondaryDivision(id) {
+function selectSecondaryDivision(id, isFull) {
     hideServerErrorsAlert();
     setStepAlert(2, null);
-    const primId = document.getElementById('first_choice_division_id')?.value;
 
+    const activePill = document.getElementById('divPillSecondary_' + id);
+    const fullCheck = isFull === true || (activePill && activePill.getAttribute('data-is-full') === '1');
+
+    if (fullCheck) {
+        setStepAlert(2, 'Mohon maaf, kuota untuk divisi pilihan cadangan ini sudah penuh.');
+        return;
+    }
+
+    const primId = document.getElementById('first_choice_division_id')?.value;
     if (id === primId) {
         setStepAlert(2, 'Divisi cadangan tidak boleh sama dengan divisi pilihan utama.');
         return;
@@ -440,7 +465,6 @@ function selectSecondaryDivision(id) {
         if (check) check.style.display = 'none';
     });
 
-    const activePill = document.getElementById('divPillSecondary_' + id);
     if (activePill) {
         activePill.classList.add('selected');
         const check = activePill.querySelector('i');
