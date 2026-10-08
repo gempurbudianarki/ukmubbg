@@ -194,6 +194,23 @@
         transform: translateY(0);
     }
 
+    /* Inline Step Error Alert */
+    .step-error-alert {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: var(--radius-lg);
+        padding: 0.85rem 1.15rem;
+        margin-bottom: 1.25rem;
+        color: #991b1b;
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: none;
+        align-items: center;
+        gap: 0.6rem;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
+        animation: errorShake 0.4s ease-in-out;
+    }
+
     /* Division Secondary Pills */
     .secondary-division-pills {
         display: flex;
@@ -230,6 +247,8 @@
         opacity: 0.35;
         pointer-events: none;
         text-decoration: line-through;
+        background: #f1f5f9;
+        box-shadow: none;
     }
 </style>
 @endsection
@@ -245,7 +264,7 @@
             Formulir Pendaftaran Anggota Baru
         </h1>
         <p style="color: var(--slate-600); font-size: 1.05rem; line-height: 1.6; max-width: 650px; margin: 0 auto;">
-            Satu pintu pendaftaran resmi mahasiswa Program Studi Ilmu Komputer UBBG. Sistem dilengkapi <strong>Autosave Cerdas</strong>, validasi instan, dan alur 3 tahap terintegrasi.
+            Satu pintu pendaftaran resmi mahasiswa Program Studi Ilmu Komputer UBBG. Sistem dilengkapi <strong>Autosave Cerdas</strong>, validasi berlapis per-tahap, dan pembuatan akun otomatis.
         </p>
     </div>
 </div>
@@ -261,7 +280,7 @@
             <div>
                 <strong style="color: #1e3a8a; font-size: 0.95rem; display: block;">Draft Pendaftaran Ditemukan</strong>
                 <span style="font-size: 0.8rem; color: #475569;">
-                    Data yang sebelumnya Anda isi telah dipulihkan otomatis. Anda dapat melanjutkan atau memulai dari awal.
+                    Data yang sebelumnya Anda isi telah dipulihkan otomatis. Anda dapat melanjutkan pengisian formulir.
                 </span>
             </div>
         </div>
@@ -275,18 +294,24 @@
         </div>
     </div>
 
-    <!-- Server Flash Errors -->
+    <!-- Server Flash Error Message -->
     @if(session('error'))
         <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; color: #991b1b; display: flex; align-items: center; gap: 0.75rem;">
             <i class="fas fa-circle-exclamation" style="font-size: 1.25rem;"></i>
-            <span style="font-weight: 500; font-size: 0.95rem;">{{ session('error') }}</span>
+            <span style="font-weight: 600; font-size: 0.95rem;">{{ session('error') }}</span>
         </div>
     @endif
 
+    <!-- Server Validation Errors Alert (Dismissable & Interactive) -->
     @if ($errors->any())
-        <div class="shake-error" style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; color: #991b1b; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);">
-            <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 800; font-size: 1rem; margin-bottom: 0.5rem;">
-                <i class="fas fa-triangle-exclamation"></i> Mohon Periksa Kembali Isian Anda:
+        <div id="serverErrorsAlert" class="shake-error" style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; color: #991b1b; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1); position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 800; font-size: 1rem; margin-bottom: 0.5rem;">
+                    <i class="fas fa-triangle-exclamation"></i> Terdapat data yang perlu diperbaiki:
+                </div>
+                <button type="button" onclick="document.getElementById('serverErrorsAlert').style.display='none'" style="background: none; border: none; font-size: 1.25rem; color: #991b1b; cursor: pointer; padding: 0 4px;" title="Tutup">
+                    &times;
+                </button>
             </div>
             <ul style="margin: 0; padding-left: 1.5rem; font-size: 0.875rem; line-height: 1.5;">
                 @foreach ($errors->all() as $err)
@@ -373,14 +398,15 @@
         </div>
 
         <div class="card" style="padding: 2.75rem 2.5rem; border-radius: var(--radius-xl); box-shadow: var(--clay-card); border: none;">
-            <form id="recruitmentMultiStepForm" action="{{ route('recruitment.store') }}" method="POST" enctype="multipart/form-data">
+            <!-- IMPORTANT: novalidate prevents browser blocking submit on hidden steps with is not focusable -->
+            <form id="recruitmentMultiStepForm" action="{{ route('recruitment.store') }}" method="POST" enctype="multipart/form-data" novalidate>
                 @csrf
 
                 <!-- ============================================== -->
                 <!-- TAHAP 1: BIODATA MAHASISWA & AKUN LOGIN        -->
                 <!-- ============================================== -->
                 <div class="step-section active" id="stepSection1">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--slate-200);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--slate-200);">
                         <div>
                             <span class="badge badge-info" style="font-size: 0.775rem; margin-bottom: 0.4rem;">
                                 Tahap 1 dari 3: Identitas Diri
@@ -398,10 +424,16 @@
                         </div>
                     </div>
 
+                    <!-- Inline Step Error Alert -->
+                    <div id="stepAlert1" class="step-error-alert">
+                        <i class="fas fa-circle-exclamation" style="font-size: 1.1rem; color: #ef4444;"></i>
+                        <span id="stepAlertMsg1"></span>
+                    </div>
+
                     <!-- Nama Lengkap -->
                     <div class="form-group">
                         <label class="form-label" for="full_name">Nama Lengkap Mahasiswa *</label>
-                        <input type="text" id="full_name" name="full_name" class="form-control @error('full_name') is-invalid @enderror" value="{{ old('full_name') }}" placeholder="Contoh: Bintang Ramadhan" required>
+                        <input type="text" id="full_name" name="full_name" class="form-control @error('full_name') is-invalid @enderror" value="{{ old('full_name') }}" placeholder="Contoh: Bintang Ramadhan" autocomplete="name">
                         @error('full_name') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
                     </div>
 
@@ -410,21 +442,21 @@
                         <div class="form-group">
                             <label class="form-label" for="nim">Nomor Induk Mahasiswa (NIM) *</label>
                             <div class="field-indicator-wrap">
-                                <input type="text" id="nim" name="nim" class="form-control @error('nim') is-invalid @enderror" value="{{ old('nim') }}" placeholder="Contoh: 2301010099" required autocomplete="off" oninput="debounceCheckNim(this)">
+                                <input type="text" id="nim" name="nim" class="form-control @error('nim') is-invalid @enderror" value="{{ old('nim') }}" placeholder="Contoh: 2301010099" autocomplete="off" oninput="debounceCheckNim(this)">
                                 <i class="fas fa-spinner field-status-icon status-loading" id="nimLoadingIcon"></i>
                                 <i class="fas fa-check-circle field-status-icon status-valid" id="nimValidIcon"></i>
                                 <i class="fas fa-circle-xmark field-status-icon status-invalid" id="nimInvalidIcon"></i>
                             </div>
                             <small id="nimFeedbackText" style="display: block; font-size: 0.775rem; margin-top: 0.35rem; color: var(--slate-400);">
-                                NIM akan digunakan untuk verifikasi status mahasiswa aktif dan login akun.
+                                NIM akan digunakan untuk verifikasi status keanggotaan dan KTA Digital.
                             </small>
                             @error('nim') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="semester">Semester Saat Ini *</label>
-                            <select id="semester" name="semester" class="form-control @error('semester') is-invalid @enderror" required>
-                                <option value="">Pilih Semester</option>
+                            <select id="semester" name="semester" class="form-control @error('semester') is-invalid @enderror">
+                                <option value="">-- Pilih Semester --</option>
                                 @for ($s = 1; $s <= 8; $s++)
                                     <option value="{{ $s }}" {{ old('semester') == $s ? 'selected' : '' }}>Semester {{ $s }}</option>
                                 @endfor
@@ -437,8 +469,8 @@
                     <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
                         <div class="form-group">
                             <label class="form-label" for="phone_whatsapp">Nomor WhatsApp Aktif *</label>
-                            <input type="tel" id="phone_whatsapp" name="phone_whatsapp" class="form-control @error('phone_whatsapp') is-invalid @enderror" value="{{ old('phone_whatsapp') }}" placeholder="Contoh: 081298765432" required oninput="formatWhatsapp(this)">
-                            <small style="color: var(--slate-400); font-size: 0.775rem;">Panitia akan menghubungi Anda melalui WhatsApp untuk undangan wawancara.</small>
+                            <input type="tel" id="phone_whatsapp" name="phone_whatsapp" class="form-control @error('phone_whatsapp') is-invalid @enderror" value="{{ old('phone_whatsapp') }}" placeholder="Contoh: 081298765432" oninput="formatWhatsapp(this)">
+                            <small style="color: var(--slate-400); font-size: 0.775rem;">Panitia akan menghubungi Anda melalui WhatsApp untuk konfirmasi seleksi & wawancara.</small>
                             @error('phone_whatsapp') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
                         </div>
 
@@ -453,7 +485,7 @@
                     <!-- Pas Foto Resmi Profil (Clay Drag-and-Drop Dropzone) -->
                     <div class="form-group" style="margin-bottom: 1.75rem;">
                         <label class="form-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
-                            <span><i class="fas fa-image" style="color: #2563eb; margin-right: 0.4rem;"></i> Pas Foto Resmi Mahasiswa</span>
+                            <span><i class="fas fa-image" style="color: #2563eb; margin-right: 0.4rem;"></i> Pas Foto Resmi Mahasiswa (Opsional saat pendaftaran)</span>
                             <span style="font-size: 0.75rem; color: var(--slate-400);">Maksimal 2MB (JPG/PNG/WEBP)</span>
                         </label>
                         <div class="dropzone-clay" id="photoDropzone">
@@ -497,7 +529,7 @@
                         <div class="form-group" style="margin-bottom: 1.25rem;">
                             <label class="form-label" for="email">Alamat Email Aktif (ID Login) *</label>
                             <div class="field-indicator-wrap">
-                                <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', auth()->user()?->email) }}" placeholder="Contoh: nama@student.ac.id" required {{ auth()->check() ? 'readonly' : '' }} autocomplete="email" oninput="debounceCheckEmail(this)">
+                                <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', auth()->user()?->email) }}" placeholder="Contoh: nama@student.ac.id" {{ auth()->check() ? 'readonly' : '' }} autocomplete="email" oninput="debounceCheckEmail(this)">
                                 <i class="fas fa-spinner field-status-icon status-loading" id="emailLoadingIcon"></i>
                                 <i class="fas fa-check-circle field-status-icon status-valid" id="emailValidIcon"></i>
                                 <i class="fas fa-circle-xmark field-status-icon status-invalid" id="emailInvalidIcon"></i>
@@ -509,12 +541,12 @@
                         </div>
 
                         @guest
-                        <!-- Password & Confirmation -->
+                        <!-- Password & Confirmation (Validated via JavaScript, without browser focus lock) -->
                         <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
                             <div class="form-group" style="margin-bottom: 0;">
                                 <label class="form-label" for="password">Kata Sandi Baru *</label>
                                 <div class="password-field-wrap">
-                                    <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Minimal 8 karakter" required autocomplete="new-password" oninput="checkPasswordStrength(this)">
+                                    <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Minimal 8 karakter" autocomplete="new-password" oninput="checkPasswordStrength(this)">
                                     <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('password', this)" title="Lihat/Sembunyikan Kata Sandi">
                                         <i class="fas fa-eye"></i>
                                     </button>
@@ -534,7 +566,7 @@
                             <div class="form-group" style="margin-bottom: 0;">
                                 <label class="form-label" for="password_confirmation">Ulangi Kata Sandi *</label>
                                 <div class="password-field-wrap">
-                                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Konfirmasi kata sandi" required autocomplete="new-password" oninput="checkPasswordMatch()">
+                                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Konfirmasi kata sandi" autocomplete="new-password" oninput="checkPasswordMatch()">
                                     <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('password_confirmation', this)" title="Lihat/Sembunyikan Kata Sandi">
                                         <i class="fas fa-eye"></i>
                                     </button>
@@ -551,7 +583,7 @@
                     <div class="wizard-action-footer" style="margin-top: 2.25rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                         <div style="font-size: 0.8rem; color: var(--slate-500); display: flex; align-items: center; gap: 0.4rem;">
                             <i class="fas fa-shield-halved" style="color: #10b981;"></i>
-                            <span>Autosave aktif: Data formulir tersimpan otomatis di browser Anda.</span>
+                            <span>Autosave aktif: Data tersimpan aman di browser Anda.</span>
                         </div>
                         <button type="button" class="btn btn-primary btn-lg" onclick="nextStep(2)" style="display: inline-flex; align-items: center; gap: 0.6rem; font-weight: 700; padding: 0.85rem 1.75rem;">
                             <span>Lanjut ke Tahap 2: Pilihan Divisi</span>
@@ -564,7 +596,7 @@
                 <!-- TAHAP 2: PILIHAN BIDANG DIVISI & MOTIVASI      -->
                 <!-- ============================================== -->
                 <div class="step-section" id="stepSection2">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--slate-200);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--slate-200);">
                         <div>
                             <span class="badge badge-info" style="font-size: 0.775rem; margin-bottom: 0.4rem;">
                                 Tahap 2 dari 3: Penjurusan Teknologi
@@ -580,6 +612,12 @@
                             <span style="font-size: 1.5rem; font-weight: 800; color: #2563eb; font-family: var(--font-mono);">02</span>
                             <span style="font-size: 0.8rem; color: var(--slate-400); display: block;">/ 03 Tahap</span>
                         </div>
+                    </div>
+
+                    <!-- Inline Step Error Alert -->
+                    <div id="stepAlert2" class="step-error-alert">
+                        <i class="fas fa-circle-exclamation" style="font-size: 1.1rem; color: #ef4444;"></i>
+                        <span id="stepAlertMsg2"></span>
                     </div>
 
                     <!-- Hidden inputs for form submission -->
@@ -659,7 +697,7 @@
                             </button>
                         </div>
                         <p style="font-size: 0.775rem; color: var(--slate-500); margin: 0 0 0.85rem;">
-                            Jika kuota pada divisi utama telah penuh atau Anda memiliki minat sekunder, panitia dapat mempertimbangkan divisi cadangan ini.
+                            Jika kuota pada divisi utama telah penuh, panitia dapat mempertimbangkan divisi cadangan ini. <em>Harus berbeda dengan divisi utama.</em>
                         </p>
                         <div class="secondary-division-pills">
                             @foreach ($divisions as $d)
@@ -685,7 +723,7 @@
                                 <span id="reasonCharCount">0</span> / 20 karakter minimal
                             </span>
                         </div>
-                        <textarea id="reason_to_join" name="reason_to_join" rows="5" class="form-control @error('reason_to_join') is-invalid @enderror" placeholder="Ceritakan ketertarikan Anda pada divisi yang dipilih, pengalaman relevan sebelumnya, dan kontribusi apa yang ingin Anda berikan..." required oninput="countReasonChars(this)">{{ old('reason_to_join') }}</textarea>
+                        <textarea id="reason_to_join" name="reason_to_join" rows="5" class="form-control @error('reason_to_join') is-invalid @enderror" placeholder="Ceritakan ketertarikan Anda pada divisi yang dipilih, pengalaman relevan sebelumnya, dan kontribusi apa yang ingin Anda berikan..." oninput="countReasonChars(this)">{{ old('reason_to_join') }}</textarea>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
                             <small style="color: var(--slate-400); font-size: 0.775rem;">Uraikan minat Anda dengan jelas sebagai bahan pertimbangan penguji saat sesi wawancara.</small>
                             <small id="reasonQualityHint" style="font-size: 0.75rem; color: var(--slate-400); font-weight: 600;"></small>
@@ -710,7 +748,7 @@
                 <!-- TAHAP 3: UNGGAH BERKAS, PORTOFOLIO & REVIEW    -->
                 <!-- ============================================== -->
                 <div class="step-section" id="stepSection3">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--slate-200);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--slate-200);">
                         <div>
                             <span class="badge badge-info" style="font-size: 0.775rem; margin-bottom: 0.4rem;">
                                 Tahap 3 dari 3: Berkas & Konfirmasi
@@ -719,7 +757,7 @@
                                 Unggah Dokumen Berkas & Konfirmasi Pendaftaran
                             </h3>
                             <p style="font-size: 0.85rem; color: var(--slate-500); margin: 0;">
-                                Unggah Kartu Tanda Mahasiswa (KTM) aktif dan portofolio (jika ada), lalu periksa kembali kebenaran data Anda.
+                                Lampirkan kartu tanda mahasiswa aktif dan portofolio (jika ada), lalu periksa kembali kebenaran data Anda sebelum mengirim.
                             </p>
                         </div>
                         <div style="text-align: right;">
@@ -728,12 +766,18 @@
                         </div>
                     </div>
 
+                    <!-- Inline Step Error Alert -->
+                    <div id="stepAlert3" class="step-error-alert">
+                        <i class="fas fa-circle-exclamation" style="font-size: 1.1rem; color: #ef4444;"></i>
+                        <span id="stepAlertMsg3"></span>
+                    </div>
+
                     <!-- Dropzone Berkas KTM & CV -->
                     <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.75rem;">
                         <!-- KTM Upload -->
                         <div class="form-group" style="margin-bottom: 0;">
                             <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
-                                <span><i class="fas fa-id-card" style="color: #2563eb; margin-right: 0.35rem;"></i> Foto / Scan KTM Aktif</span>
+                                <span><i class="fas fa-id-card" style="color: #2563eb; margin-right: 0.35rem;"></i> Foto / Scan KTM Aktif (Opsional)</span>
                                 <span style="font-size: 0.75rem; color: var(--slate-400);">Maks 2MB (JPG/PNG/PDF)</span>
                             </label>
                             <div class="dropzone-clay" id="ktmDropzone">
@@ -852,7 +896,7 @@
                         </div>
 
                         <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--slate-200); font-size: 0.85rem; color: var(--slate-700); display: flex; align-items: flex-start; gap: 0.65rem;">
-                            <input type="checkbox" id="agreementCheck" required style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;">
+                            <input type="checkbox" id="agreementCheck" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;">
                             <label for="agreementCheck" style="margin: 0; cursor: pointer; line-height: 1.5;">
                                 Saya menyatakan dengan sesungguhnya bahwa seluruh informasi dan dokumen yang saya unggah adalah benar dan sah. Saya bersedia mengikuti seluruh tahapan seleksi dan mematuhi kode etik UKM Ilmu Komputer UBBG.
                             </label>
@@ -948,7 +992,36 @@
         return step;
     }
 
-    function validateStep1() {
+    function setStepAlert(stepNum, msg) {
+        const alertEl = document.getElementById('stepAlert' + stepNum);
+        const msgEl = document.getElementById('stepAlertMsg' + stepNum);
+        if (alertEl && msgEl) {
+            if (msg) {
+                msgEl.innerText = msg;
+                alertEl.style.display = 'flex';
+                alertEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                alertEl.style.display = 'none';
+            }
+        }
+    }
+
+    function clearStepAlerts() {
+        for (let i = 1; i <= totalSteps; i++) {
+            setStepAlert(i, null);
+        }
+    }
+
+    function hideServerErrorsAlert() {
+        const el = document.getElementById('serverErrorsAlert');
+        if (el) el.style.display = 'none';
+    }
+
+    /* -------------------------------------------------------------
+       STEP-BY-STEP RIGOROUS VALIDATION
+       ------------------------------------------------------------- */
+    function validateStep1(isFinalCheck = false) {
+        setStepAlert(1, null);
         const fullName = document.getElementById('full_name');
         const nim = document.getElementById('nim');
         const semester = document.getElementById('semester');
@@ -959,73 +1032,50 @@
 
         let isValid = true;
         let firstInvalid = null;
+        let errorMessage = '';
 
-        function mark(el, validCondition) {
+        function mark(el, validCondition, errorMsg) {
             if (!el) return;
             if (!validCondition) {
                 el.classList.add('field-invalid');
                 el.classList.remove('field-valid');
                 el.classList.add('shake-error');
                 setTimeout(() => el.classList.remove('shake-error'), 450);
-                isValid = false;
-                if (!firstInvalid) firstInvalid = el;
+                if (isValid) {
+                    isValid = false;
+                    firstInvalid = el;
+                    errorMessage = errorMsg;
+                }
             } else {
                 el.classList.remove('field-invalid');
                 el.classList.add('field-valid');
             }
         }
 
-        mark(fullName, fullName && fullName.value.trim().length >= 3);
-        mark(nim, nim && nim.value.trim().length >= 4);
-        mark(semester, semester && semester.value !== '');
-        mark(phone, phone && phone.value.replace(/[^0-9]/g, '').length >= 9);
-        mark(email, email && email.checkValidity() && email.value.trim().length > 0);
+        mark(fullName, fullName && fullName.value.trim().length >= 3, 'Nama lengkap wajib diisi minimal 3 karakter.');
+        mark(nim, nim && nim.value.trim().length >= 4, 'Nomor Induk Mahasiswa (NIM) wajib diisi dengan benar.');
+        mark(semester, semester && semester.value !== '', 'Silakan pilih semester Anda saat ini.');
+        mark(phone, phone && phone.value.replace(/[^0-9]/g, '').length >= 9, 'Nomor WhatsApp aktif wajib diisi (minimal 9 digit).');
+        mark(email, email && email.value.trim().length > 0 && email.value.includes('@') && email.value.includes('.'), 'Format alamat email aktif wajib valid.');
 
+        // If guest, password check is required
         if (password) {
-            mark(password, password.value.length >= 8);
-            if (passwordConfirm) {
-                mark(passwordConfirm, passwordConfirm.value === password.value && passwordConfirm.value.length >= 8);
+            if (password.value.length < 8) {
+                mark(password, false, 'Kata sandi akun minimal 8 karakter untuk mengamankan akun mahasiswa Anda.');
+            } else {
+                mark(password, true, '');
+                if (passwordConfirm) {
+                    if (passwordConfirm.value !== password.value) {
+                        mark(passwordConfirm, false, 'Konfirmasi kata sandi tidak cocok.');
+                    } else {
+                        mark(passwordConfirm, true, '');
+                    }
+                }
             }
-        }
-
-        if (!isValid && firstInvalid) {
-            firstInvalid.focus();
-            return false;
-        }
-
-        return true;
-    }
-
-    function validateStep2() {
-        const division = document.getElementById('first_choice_division_id');
-        const reason = document.getElementById('reason_to_join');
-
-        let isValid = true;
-        let firstInvalid = null;
-
-        if (!division || !division.value) {
-            isValid = false;
-            const cardGrid = document.querySelector('.division-cards-grid');
-            if (cardGrid) {
-                cardGrid.classList.add('shake-error');
-                setTimeout(() => cardGrid.classList.remove('shake-error'), 450);
-            }
-        }
-
-        if (!reason || reason.value.trim().length < 20) {
-            if (reason) {
-                reason.classList.add('field-invalid');
-                reason.classList.add('shake-error');
-                setTimeout(() => reason.classList.remove('shake-error'), 450);
-                if (!firstInvalid) firstInvalid = reason;
-            }
-            isValid = false;
-        } else {
-            reason.classList.remove('field-invalid');
-            reason.classList.add('field-valid');
         }
 
         if (!isValid) {
+            setStepAlert(1, errorMessage || 'Mohon lengkapi seluruh kolom bertanda bintang (*) pada Tahap 1.');
             if (firstInvalid) firstInvalid.focus();
             return false;
         }
@@ -1033,40 +1083,132 @@
         return true;
     }
 
+    function validateStep2(isFinalCheck = false) {
+        setStepAlert(2, null);
+        const primId = document.getElementById('first_choice_division_id')?.value;
+        const secId = document.getElementById('second_choice_division_id')?.value;
+        const reason = document.getElementById('reason_to_join');
+
+        let isValid = true;
+        let errorMessage = '';
+
+        if (!primId) {
+            isValid = false;
+            errorMessage = 'Pilihan divisi utama wajib dipilih. Silakan klik salah satu kartu divisi di bawah.';
+            const cardGrid = document.querySelector('.division-cards-grid');
+            if (cardGrid) {
+                cardGrid.classList.add('shake-error');
+                setTimeout(() => cardGrid.classList.remove('shake-error'), 450);
+            }
+        } else if (secId && secId === primId) {
+            isValid = false;
+            errorMessage = 'Divisi pilihan kedua tidak boleh sama dengan divisi pilihan utama. Silakan pilih divisi cadangan lain atau klik Reset.';
+            clearSecondaryDivision();
+        } else if (!reason || reason.value.trim().length < 20) {
+            isValid = false;
+            const currentLen = reason ? reason.value.trim().length : 0;
+            errorMessage = `Alasan/motivasi bergabung minimal 20 karakter (saat ini ${currentLen} karakter). Uraikan minat Anda lebih rinci.`;
+            if (reason) {
+                reason.classList.add('field-invalid');
+                reason.classList.add('shake-error');
+                setTimeout(() => reason.classList.remove('shake-error'), 450);
+                reason.focus();
+            }
+        } else {
+            if (reason) {
+                reason.classList.remove('field-invalid');
+                reason.classList.add('field-valid');
+            }
+        }
+
+        if (!isValid) {
+            setStepAlert(2, errorMessage);
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateStep3(isFinalCheck = false) {
+        setStepAlert(3, null);
+        const agree = document.getElementById('agreementCheck');
+
+        if (!agree || !agree.checked) {
+            setStepAlert(3, 'Mohon centang pernyataan persetujuan dan keabsahan dokumen sebelum mengirim pendaftaran.');
+            if (agree) {
+                agree.focus();
+                agree.parentElement.classList.add('shake-error');
+                setTimeout(() => agree.parentElement.classList.remove('shake-error'), 450);
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateAllSteps() {
+        if (!validateStep1(true)) {
+            currentStep = 1;
+            updateStepUI(1);
+            return false;
+        }
+        if (!validateStep2(true)) {
+            currentStep = 2;
+            updateStepUI(2);
+            return false;
+        }
+        if (!validateStep3(true)) {
+            currentStep = 3;
+            updateStepUI(3);
+            return false;
+        }
+        return true;
+    }
+
     function nextStep(target) {
+        clearStepAlerts();
+        hideServerErrorsAlert();
+
         if (target === 2) {
             if (!validateStep1()) return;
         } else if (target === 3) {
             if (!validateStep2()) return;
         }
+
         currentStep = target;
         updateStepUI(currentStep);
     }
 
     function prevStep(target) {
+        clearStepAlerts();
         currentStep = target;
         updateStepUI(currentStep);
     }
 
     function jumpToStep(target) {
+        clearStepAlerts();
+        hideServerErrorsAlert();
+
         if (target < currentStep) {
             currentStep = target;
             updateStepUI(currentStep);
-        } else if (target === 2 && currentStep === 1) {
-            nextStep(2);
+        } else if (target === 2) {
+            if (validateStep1()) {
+                currentStep = 2;
+                updateStepUI(2);
+            }
         } else if (target === 3) {
-            if (currentStep === 1) {
-                if (validateStep1()) {
-                    currentStep = 2;
-                    if (validateStep2()) {
-                        currentStep = 3;
-                        updateStepUI(3);
-                    } else {
-                        updateStepUI(2);
-                    }
+            if (validateStep1()) {
+                currentStep = 2;
+                if (validateStep2()) {
+                    currentStep = 3;
+                    updateStepUI(3);
+                } else {
+                    updateStepUI(2);
                 }
-            } else if (currentStep === 2) {
-                nextStep(3);
+            } else {
+                currentStep = 1;
+                updateStepUI(1);
             }
         }
     }
@@ -1075,9 +1217,11 @@
        TACTILE DIVISION CARDS SELECTOR
        ------------------------------------------------------------- */
     function selectPrimaryDivision(id, name) {
+        hideServerErrorsAlert();
+        setStepAlert(2, null);
         document.getElementById('first_choice_division_id').value = id;
 
-        // Update active card class
+        // Update active card visual
         document.querySelectorAll('.division-select-card').forEach(card => {
             card.classList.remove('selected');
         });
@@ -1086,12 +1230,14 @@
             activeCard.classList.add('selected');
         }
 
-        // Disable selected primary division in secondary pills
+        // Ensure secondary division is NOT the same
         const secInput = document.getElementById('second_choice_division_id');
         if (secInput && secInput.value === id) {
             clearSecondaryDivision();
+            setStepAlert(2, 'Divisi cadangan otomatis di-reset karena tidak boleh sama dengan divisi utama.');
         }
 
+        // Disable matching pill in secondary division list
         document.querySelectorAll('.secondary-division-pill').forEach(pill => {
             if (pill.getAttribute('data-id') === id) {
                 pill.classList.add('disabled');
@@ -1105,8 +1251,14 @@
     }
 
     function selectSecondaryDivision(id) {
+        hideServerErrorsAlert();
+        setStepAlert(2, null);
         const primId = document.getElementById('first_choice_division_id').value;
-        if (id === primId) return;
+
+        if (id === primId) {
+            setStepAlert(2, 'Divisi cadangan tidak boleh sama dengan divisi pilihan utama.');
+            return;
+        }
 
         const secInput = document.getElementById('second_choice_division_id');
         secInput.value = id;
@@ -1144,6 +1296,7 @@
        REAL-TIME AVAILABILITY CHECKS (NIM & EMAIL)
        ------------------------------------------------------------- */
     function debounceCheckNim(input) {
+        hideServerErrorsAlert();
         clearTimeout(nimDebounceTimer);
         const val = input.value.trim();
         const loadIcon = document.getElementById('nimLoadingIcon');
@@ -1157,7 +1310,7 @@
             if (invalidIcon) invalidIcon.style.display = 'none';
             input.classList.remove('field-valid', 'field-invalid');
             if (textEl) {
-                textEl.innerText = 'NIM akan digunakan untuk verifikasi status mahasiswa aktif dan login akun.';
+                textEl.innerText = 'NIM akan digunakan untuk verifikasi status keanggotaan dan KTA Digital.';
                 textEl.style.color = 'var(--slate-400)';
             }
             triggerAutosave();
@@ -1200,6 +1353,7 @@
     }
 
     function debounceCheckEmail(input) {
+        hideServerErrorsAlert();
         clearTimeout(emailDebounceTimer);
         const val = input.value.trim();
         const loadIcon = document.getElementById('emailLoadingIcon');
@@ -1274,6 +1428,7 @@
     }
 
     function checkPasswordStrength(input) {
+        hideServerErrorsAlert();
         const val = input.value;
         const fill = document.getElementById('passwordMeterFill');
         const label = document.getElementById('passwordStrengthLabel');
@@ -1336,6 +1491,7 @@
     }
 
     function formatWhatsapp(input) {
+        hideServerErrorsAlert();
         let val = input.value.replace(/[^0-9]/g, '');
         if (val.startsWith('62')) {
             val = '0' + val.substring(2);
@@ -1345,6 +1501,8 @@
     }
 
     function countReasonChars(textarea) {
+        hideServerErrorsAlert();
+        setStepAlert(2, null);
         const len = textarea.value.length;
         const countSpan = document.getElementById('reasonCharCount');
         const display = document.getElementById('charCountDisplay');
@@ -1390,7 +1548,6 @@
         if (!input.files || !input.files[0]) return;
         const file = input.files[0];
 
-        // Client-side file size check (2MB)
         if (file.size > 2 * 1024 * 1024) {
             alert('Ukuran file foto profil melebihi batas 2MB. Silakan pilih foto dengan resolusi lebih kecil.');
             input.value = '';
@@ -1426,7 +1583,7 @@
         const file = input.files[0];
 
         if (file.size > 2 * 1024 * 1024) {
-            alert('Ukuran file KTM melebihi batas 2MB. Silakan kompres atau pilih berkas lain.');
+            alert('Ukuran file KTM melebihi batas 2MB. Silakan pilih berkas lain.');
             input.value = '';
             return;
         }
@@ -1521,7 +1678,6 @@
             timestamp: new Date().getTime()
         };
 
-        // Only save if at least NIM or Name has been typed
         if (draft.full_name || draft.nim || draft.reason_to_join) {
             localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
             showAutosaveToast();
@@ -1544,7 +1700,7 @@
             const currentName = document.getElementById('full_name')?.value || '';
             const currentNim = document.getElementById('nim')?.value || '';
 
-            // If form was empty, show banner to restore
+            // If inputs are currently empty, offer draft recovery
             if (!currentName && !currentNim && (draft.full_name || draft.nim)) {
                 const banner = document.getElementById('draftRecoveryBanner');
                 if (banner) banner.style.display = 'flex';
@@ -1632,13 +1788,16 @@
     }
 
     /* -------------------------------------------------------------
-       FORM SUBMISSION & ANTI DOUBLE-SUBMIT
+       FORM SUBMISSION WITH FULL STEP VERIFICATION
        ------------------------------------------------------------- */
     document.addEventListener('DOMContentLoaded', function() {
-        // Attach autosave listeners to all text fields
+        // Attach autosave listeners to all inputs
         ['full_name', 'semester', 'class_group', 'github_url', 'portfolio_url'].forEach(id => {
             const el = document.getElementById(id);
-            if (el) el.addEventListener('input', triggerAutosave);
+            if (el) el.addEventListener('input', () => {
+                hideServerErrorsAlert();
+                triggerAutosave();
+            });
         });
 
         // Initialize draft check
@@ -1658,7 +1817,7 @@
         const reasonEl = document.getElementById('reason_to_join');
         if (reasonEl) countReasonChars(reasonEl);
 
-        // Preselect primary division if loaded from controller query parameter
+        // Preselect primary division if loaded from controller
         const preId = document.getElementById('first_choice_division_id')?.value;
         if (preId) {
             const card = document.getElementById('divCardPrimary_' + preId);
@@ -1667,7 +1826,7 @@
             }
         }
 
-        // Handle Form Submit with Loading State
+        // Form Submit Handler
         const form = document.getElementById('recruitmentMultiStepForm');
         const submitBtn = document.getElementById('submitFormBtn');
         const submitIcon = document.getElementById('submitIcon');
@@ -1680,11 +1839,9 @@
                     return;
                 }
 
-                const agree = document.getElementById('agreementCheck');
-                if (agree && !agree.checked) {
+                // Rigorously validate ALL steps before submitting
+                if (!validateAllSteps()) {
                     e.preventDefault();
-                    agree.focus();
-                    alert('Mohon centang pernyataan persetujuan tata tertib dan keabsahan dokumen sebelum mengirim.');
                     return;
                 }
 
@@ -1695,7 +1852,7 @@
                 if (submitIcon) submitIcon.className = 'fas fa-circle-notch fa-spin';
                 if (submitText) submitText.innerText = 'Mengunggah Berkas & Mendaftarkan Akun...';
 
-                // Clear draft upon successful submission trigger
+                // Clear draft upon valid submission
                 localStorage.removeItem(DRAFT_STORAGE_KEY);
             });
         }
