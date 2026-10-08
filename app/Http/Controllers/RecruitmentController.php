@@ -42,7 +42,7 @@ class RecruitmentController extends Controller
 
     public function checkAvailability(Request $request)
     {
-        $type = $request->query('type');
+        $type = $request->query('type') ?? $request->query('field');
         $value = trim($request->query('value', ''));
 
         if (empty($value)) {

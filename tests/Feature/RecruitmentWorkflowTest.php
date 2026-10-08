@@ -45,4 +45,64 @@ class RecruitmentWorkflowTest extends TestCase
             'selection_stage' => 'administrasi',
         ]);
     }
+
+    public function test_check_availability_endpoint_returns_valid_json()
+    {
+        // 1. Fresh NIM is available
+        $resNim = $this->getJson(route('recruitment.checkAvailability', ['field' => 'nim', 'value' => '99999999']));
+        $resNim->assertOk()->assertJson(['available' => true]);
+
+        // 2. Existing NIM is unavailable
+        \App\Models\Recruitment::create([
+            'user_id' => null,
+            'full_name' => 'Existing Student',
+            'nim' => '88888888',
+            'email' => 'existing@kampus.ac.id',
+            'phone_whatsapp' => '08123456789',
+            'semester' => 3,
+            'first_choice_division_id' => Division::first()->id,
+            'reason_to_join' => 'Motivasi yang cukup panjang untuk recruitment.',
+            'registration_code' => 'REG-88888888',
+            'selection_stage' => 'administrasi',
+        ]);
+        $resNimTaken = $this->getJson(route('recruitment.checkAvailability', ['field' => 'nim', 'value' => '88888888']));
+        $resNimTaken->assertOk()->assertJson(['available' => false]);
+
+        // 3. Existing User Email is unavailable
+        \App\Models\User::factory()->create([
+            'email' => 'terdaftar@kampus.ac.id',
+        ]);
+        $resEmailTaken = $this->getJson(route('recruitment.checkAvailability', ['field' => 'email', 'value' => 'terdaftar@kampus.ac.id']));
+        $resEmailTaken->assertOk()->assertJson(['available' => false]);
+    }
+
+    public function test_can_submit_registration_with_all_files_photo_ktm_cv()
+    {
+        Storage::fake('public');
+        Setting::where('key_name', 'recruitment_status')->update(['value' => 'open']);
+        $division = Division::first();
+
+        $response = $this->post(route('recruitment.store'), [
+            'full_name' => 'Citra Lestari',
+            'nim' => '230109988',
+            'email' => 'citra@kampus.ac.id',
+            'phone_whatsapp' => '085298761111',
+            'semester' => 2,
+            'class_group' => 'IF-2B',
+            'first_choice_division_id' => $division->id,
+            'reason_to_join' => 'Sangat tertarik mengembangkan riset dan kontribusi aktif di divisi.',
+            'profile_photo' => UploadedFile::fake()->image('pasfoto.jpg'),
+            'file_ktm' => UploadedFile::fake()->image('ktm.jpg'),
+            'file_cv' => UploadedFile::fake()->create('curriculum_vitae.pdf', 500, 'application/pdf'),
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('recruitments', [
+            'nim' => '230109988',
+            'email' => 'citra@kampus.ac.id',
+        ]);
+        $this->assertDatabaseHas('users', [
+            'email' => 'citra@kampus.ac.id',
+        ]);
+    }
 }
