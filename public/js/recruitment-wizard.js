@@ -187,11 +187,15 @@ function validateStep2() {
             if (primInput) primInput.value = '';
             primCard.classList.remove('selected');
         }
-    } else if (secId && secId === primId) {
+    }
+
+    if (isValid && secId && secId === primId) {
         isValid = false;
         errorMessage = 'Divisi pilihan kedua tidak boleh sama dengan divisi pilihan utama. Silakan pilih divisi cadangan lain atau klik Reset.';
         clearSecondaryDivision();
-    } else if (!reason || reason.value.trim().length < 20) {
+    }
+
+    if (isValid && (!reason || reason.value.trim().length < 20)) {
         isValid = false;
         const currentLen = reason ? reason.value.trim().length : 0;
         errorMessage = `Alasan/motivasi bergabung minimal 20 karakter (saat ini ${currentLen} karakter). Mohon jelaskan lebih rinci.`;
@@ -201,11 +205,9 @@ function validateStep2() {
             setTimeout(() => reason.classList.remove('shake-error'), 450);
             reason.focus();
         }
-    } else {
-        if (reason) {
-            reason.classList.remove('field-invalid');
-            reason.classList.add('field-valid');
-        }
+    } else if (isValid && reason) {
+        reason.classList.remove('field-invalid');
+        reason.classList.add('field-valid');
     }
 
     if (!isValid) {
