@@ -59,9 +59,9 @@ class DivisionAdminController extends Controller
             'leader_photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        // Convert focus topics lines into JSON array
+        // Convert focus topics lines into array
         $topics = array_filter(array_map('trim', explode("\n", $validated['focus_topics_raw'])));
-        $division->focus_topics = json_encode(array_values($topics));
+        $division->focus_topics = array_values($topics);
 
         // Social links
         $socialLinks = [
@@ -69,7 +69,7 @@ class DivisionAdminController extends Controller
             'github' => $validated['github_link'] ?? '',
             'linkedin' => $validated['linkedin_link'] ?? '',
         ];
-        $division->social_links = json_encode($socialLinks);
+        $division->social_links = $socialLinks;
 
         // Upload photos if provided
         if ($request->hasFile('adviser_photo')) {

@@ -143,13 +143,9 @@
                                 @endif
 
                                 @if ($project->submission_status === 'pending_review')
-                                    <form action="{{ route('admin.projects.moderate', $project->id) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        <input type="hidden" name="status" value="rejected">
-                                        <button type="submit" class="btn btn-sm" style="background: #ef4444; color: #fff; padding: 0.3rem 0.6rem; font-size: 0.75rem; box-shadow: var(--clay-btn);" title="Tolak">
-                                            Tolak
-                                        </button>
-                                    </form>
+                                    <button type="button" onclick="openRejectModal({{ $project->id }}, '{{ addslashes($project->title) }}')" class="btn btn-sm" style="background: #ef4444; color: #fff; padding: 0.3rem 0.6rem; font-size: 0.75rem; box-shadow: var(--clay-btn); cursor: pointer;" title="Tolak dan beri catatan revisi">
+                                        Tolak
+                                    </button>
                                 @endif
 
                                 <a href="{{ route('admin.projects.edit', $project->id) }}" class="btn btn-outline btn-sm" style="background: #ffffff; box-shadow: var(--clay-btn); padding: 0.3rem 0.6rem; font-size: 0.75rem;">
@@ -180,4 +176,51 @@
         </div>
     @endif
 </div>
+
+<!-- Modal Tolak Karya & Catatan Revisi -->
+<div id="rejectModal" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 1.25rem;">
+    <div style="background: #ffffff; border-radius: 20px; max-width: 520px; width: 100%; box-shadow: 0 20px 45px rgba(0,0,0,0.2); overflow: hidden; border: 1.5px solid #e2e8f0;">
+        <form id="rejectForm" method="POST" action="">
+            @csrf
+            <input type="hidden" name="status" value="rejected">
+            <div style="padding: 1.5rem 1.75rem; border-bottom: 1px solid #f1f5f9;">
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0 0 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-triangle-exclamation" style="color: #ef4444;"></i> Tolak Karya Mahasiswa
+                </h3>
+                <p id="rejectModalProjectTitle" style="font-size: 0.825rem; color: #64748b; margin: 0; line-height: 1.5;"></p>
+            </div>
+            <div style="padding: 1.5rem 1.75rem;">
+                <label for="admin_notes" style="font-size: 0.825rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.5rem;">
+                    Alasan Penolakan / Catatan Revisi untuk Mahasiswa:
+                </label>
+                <textarea id="admin_notes" name="admin_notes" rows="4" class="form-control" style="width: 100%; border-radius: 12px; font-size: 0.85rem; padding: 0.75rem; border: 1.5px solid #cbd5e1; box-sizing: border-box;" placeholder="Misal: Mohon tambahkan link demo yang aktif dan lengkapi deskripsi karya sebelum diajukan kembali..."></textarea>
+                <small style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.4rem;">
+                    Catatan ini akan langsung terbaca oleh mahasiswa di portal akun mereka.
+                </small>
+            </div>
+            <div style="padding: 1rem 1.75rem; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button type="button" onclick="closeRejectModal()" class="btn btn-outline btn-sm" style="border-radius: 9999px; padding: 0.5rem 1.25rem; background: #ffffff;">Batal</button>
+                <button type="submit" class="btn btn-sm" style="border-radius: 9999px; padding: 0.5rem 1.25rem; background: #ef4444; color: #ffffff; font-weight: 700; border: none; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">Konfirmasi Tolak</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openRejectModal(projectId, projectTitle) {
+    const form = document.getElementById('rejectForm');
+    form.action = `/admin/projects/${projectId}/moderate`;
+    document.getElementById('rejectModalProjectTitle').innerText = `Karya: "${projectTitle}"`;
+    document.getElementById('rejectModal').style.display = 'flex';
+}
+function closeRejectModal() {
+    document.getElementById('rejectModal').style.display = 'none';
+}
+window.addEventListener('click', function(e) {
+    const modal = document.getElementById('rejectModal');
+    if (e.target === modal) {
+        closeRejectModal();
+    }
+});
+</script>
 @endsection

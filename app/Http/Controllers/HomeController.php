@@ -24,7 +24,7 @@ class HomeController extends Controller
             'projects_count' => \App\Models\Project::count(),
             'posts_count' => Post::published()->count(),
             'applicants_count' => Recruitment::count(),
-            'active_members' => 120,
+            'active_members' => \App\Models\Member::where('status', 'aktif')->count(),
         ];
 
         $recruitmentStatus = Setting::get('recruitment_status', 'open');

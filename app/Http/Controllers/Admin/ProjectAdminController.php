@@ -118,11 +118,18 @@ class ProjectAdminController extends Controller
 
         $validated = $request->validate([
             'status' => 'required|in:published,rejected,pending_review',
+            'admin_notes' => 'nullable|string|max:1000',
         ]);
 
-        $project->update([
+        $updateData = [
             'submission_status' => $validated['status'],
-        ]);
+        ];
+
+        if ($request->has('admin_notes')) {
+            $updateData['admin_notes'] = $validated['admin_notes'];
+        }
+
+        $project->update($updateData);
 
         $statusText = match ($validated['status']) {
             'published' => 'disetujui dan ditayangkan ke publik',

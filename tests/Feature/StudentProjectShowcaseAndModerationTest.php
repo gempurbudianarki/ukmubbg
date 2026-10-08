@@ -183,4 +183,38 @@ class StudentProjectShowcaseAndModerationTest extends TestCase
         $adminCreateResponse->assertSee('Terkunci Divisi Anda');
         $adminCreateResponse->assertSeeText($this->division->name);
     }
+
+    public function test_admin_can_reject_student_project_with_review_notes_and_student_sees_feedback(): void
+    {
+        $project = Project::create([
+            'title' => 'Sistem Rekomendasi AI',
+            'slug' => 'sistem-rekomendasi-ai',
+            'division_id' => $this->division->id,
+            'user_id' => $this->student->id,
+            'description' => 'Sistem rekomendasi berbasis machine learning.',
+            'author_names' => 'Budi Santoso',
+            'tech_stack' => ['Python', 'FastAPI'],
+            'submission_status' => 'pending_review',
+        ]);
+
+        $feedback = 'Mohon lengkapi URL repositori GitHub dan tautan live demo yang valid.';
+
+        $rejectResponse = $this->actingAs($this->admin)->post(route('admin.projects.moderate', $project->id), [
+            'status' => 'rejected',
+            'admin_notes' => $feedback,
+        ]);
+
+        $rejectResponse->assertRedirect();
+        $this->assertDatabaseHas('projects', [
+            'id' => $project->id,
+            'submission_status' => 'rejected',
+            'admin_notes' => $feedback,
+        ]);
+
+        // Mahasiswa melihat catatan review tersebut di halaman proyeknya
+        $studentResponse = $this->actingAs($this->student)->get(route('student.projects.index'));
+        $studentResponse->assertStatus(200);
+        $studentResponse->assertSee('Catatan Review Pengurus:');
+        $studentResponse->assertSee($feedback);
+    }
 }

@@ -495,8 +495,33 @@
     </div>
 
     @if ($attendanceStats['all_logs']->count() > 0)
+        <!-- Filter Tabs & Quick Search -->
+        <div style="padding: 0.85rem 1.75rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;" id="statusFilterGroup">
+                <button type="button" class="btn btn-xs filter-btn active" onclick="filterLogs('all', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #0284c7; color: #ffffff; border: none; cursor: pointer;">
+                    Semua ({{ $attendanceStats['all_logs']->count() }})
+                </button>
+                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('hadir', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #059669; border: 1.5px solid #a7f3d0; cursor: pointer;">
+                    Hadir ({{ $attendanceStats['attended_count'] }})
+                </button>
+                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('izin', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #0284c7; border: 1.5px solid #bae6fd; cursor: pointer;">
+                    Izin ({{ $attendanceStats['permission_count'] }})
+                </button>
+                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('sakit', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #d97706; border: 1.5px solid #fde68a; cursor: pointer;">
+                    Sakit ({{ $attendanceStats['sick_count'] }})
+                </button>
+                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('alpa', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #dc2626; border: 1.5px solid #fecaca; cursor: pointer;">
+                    Alpa ({{ $attendanceStats['absent_count'] }})
+                </button>
+            </div>
+            <div style="position: relative;">
+                <input type="text" id="logSearchInput" onkeyup="filterLogsSearch()" placeholder="Cari sesi atau materi..." style="font-size: 0.775rem; padding: 0.35rem 0.85rem 0.35rem 2rem; border: 1.5px solid #cbd5e1; border-radius: 9999px; width: 220px; max-width: 100%; outline: none; background: #ffffff;">
+                <i class="fas fa-search" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: #94a3b8;"></i>
+            </div>
+        </div>
+
         <div class="table-responsive">
-            <table class="table" style="font-size: 0.85rem; margin-bottom: 0;">
+            <table class="table" id="logsTable" style="font-size: 0.85rem; margin-bottom: 0;">
                 <thead>
                     <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                         <th style="padding: 0.95rem 1.25rem; font-weight: 700; color: #475569;">Topik & Silabus Pertemuan</th>
@@ -509,7 +534,7 @@
                 </thead>
                 <tbody>
                     @foreach ($attendanceStats['all_logs'] as $log)
-                        <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+                        <tr class="log-row" data-status="{{ strtolower($log->status) }}" style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
                             <td style="padding: 0.95rem 1.25rem;">
                                 <strong style="color: #0f172a; font-size: 0.885rem; display: block;">
                                     {{ $log->session?->title }}
@@ -706,6 +731,41 @@ window.addEventListener('click', function(e) {
         closeMateriModal();
     }
 });
+
+let currentStatusFilter = 'all';
+
+function filterLogs(status, btn) {
+    currentStatusFilter = status;
+    document.querySelectorAll('#statusFilterGroup .filter-btn').forEach(b => {
+        b.style.background = '#ffffff';
+        b.style.color = '#475569';
+        b.style.border = '1.5px solid #e2e8f0';
+    });
+    btn.style.background = '#0284c7';
+    btn.style.color = '#ffffff';
+    btn.style.border = 'none';
+    applyLogsFilter();
+}
+
+function filterLogsSearch() {
+    applyLogsFilter();
+}
+
+function applyLogsFilter() {
+    const q = (document.getElementById('logSearchInput')?.value || '').toLowerCase().trim();
+    const rows = document.querySelectorAll('#logsTable tbody tr.log-row');
+    rows.forEach(row => {
+        const rowStatus = row.getAttribute('data-status');
+        const text = row.innerText.toLowerCase();
+        const matchesStatus = (currentStatusFilter === 'all') || (rowStatus === currentStatusFilter);
+        const matchesQuery = !q || text.includes(q);
+        if (matchesStatus && matchesQuery) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
 </script>
 
 @endsection

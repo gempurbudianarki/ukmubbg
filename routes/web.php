@@ -27,6 +27,8 @@ Route::get('/divisi/{slug}', [DivisionController::class, 'show'])->name('divisio
 
 // Ecosystem Public Subsystems
 Route::get('/proyek', [\App\Http\Controllers\ProjectController::class, 'index'])->name('projects.index');
+Route::get('/berita', [PostController::class, 'index'])->name('posts.index');
+Route::get('/berita/{slug}', [PostController::class, 'show'])->name('posts.show');
 Route::get('/events', [\App\Http\Controllers\EventController::class, 'index'])->name('events.index');
 Route::get('/pengurus', [\App\Http\Controllers\OfficerController::class, 'index'])->name('officers.index');
 Route::get('/galeri', [\App\Http\Controllers\GalleryController::class, 'index'])->name('galleries.index');
@@ -41,7 +43,7 @@ Route::get('/pendaftaran/cek-status', [RecruitmentController::class, 'status'])-
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Student Portal Routes (Authenticated)
 Route::middleware('auth')->prefix('student')->name('student.')->group(function () {

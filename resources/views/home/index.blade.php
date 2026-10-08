@@ -321,6 +321,78 @@
     </div>
 </section>
 
+<!-- 5. Latest Publications & Articles Section -->
+@if(isset($latestPosts) && $latestPosts->count() > 0)
+<section style="padding: 4.5rem 0; background: var(--bg-body, #f8fafc);">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-tag">Kanal Riset & Wawasan</div>
+            <h2 class="section-title">Publikasi & Artikel Terbaru</h2>
+            <p class="section-desc">
+                Wawasan teknologi, artikel edukasi, tutorial praktis, dan dokumentasi riset dari anggota 4 divisi UKM Ilmu Komputer.
+            </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            @foreach ($latestPosts->take(3) as $post)
+                <div style="background: #ffffff; border-radius: var(--radius-xl); border: 1.5px solid rgba(226, 232, 240, 0.9); box-shadow: var(--clay-card); overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                    <div>
+                        <div style="height: 180px; width: 100%; position: relative; overflow: hidden; background: #e2e8f0;">
+                            @if ($post->thumbnail)
+                                <img src="{{ asset($post->thumbnail) }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            @else
+                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, {{ $post->division->color_accent ?? '#0284c7' }}22, #ffffff); color: {{ $post->division->color_accent ?? '#0284c7' }}; font-size: 2.5rem;">
+                                    <i class="fas fa-newspaper"></i>
+                                </div>
+                            @endif
+                            <div style="position: absolute; top: 0.75rem; left: 0.75rem;">
+                                <span class="badge" style="background: {{ $post->division->color_accent ?? '#0284c7' }}; color: #ffffff; font-weight: 800; font-size: 0.7rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+                                    {{ $post->division->name ?? 'UKM ILKOM' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div style="padding: 1.25rem 1.5rem;">
+                            <div style="display: flex; gap: 0.75rem; align-items: center; font-size: 0.75rem; color: #64748b; margin-bottom: 0.5rem;">
+                                <span><i class="fas fa-calendar" style="margin-right: 0.25rem;"></i>{{ $post->created_at->format('d M Y') }}</span>
+                                <span>&bull;</span>
+                                <span style="text-transform: capitalize;"><i class="fas fa-tag" style="margin-right: 0.25rem;"></i>{{ $post->category }}</span>
+                            </div>
+
+                            <h3 style="font-size: 1.05rem; font-weight: 800; color: #0c2340; margin: 0 0 0.5rem; line-height: 1.4;">
+                                <a href="{{ route('posts.show', $post->slug) }}" style="text-decoration: none; color: inherit;">
+                                    {{ $post->title }}
+                                </a>
+                            </h3>
+
+                            <p style="font-size: 0.85rem; color: #475569; line-height: 1.6; margin: 0;">
+                                {{ Str::limit($post->excerpt, 110) }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="padding: 0.85rem 1.5rem 1.25rem; border-top: 1px dashed #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.775rem; color: #64748b; font-weight: 600;">
+                            <i class="fas fa-user-pen" style="color: #0284c7; margin-right: 0.25rem;"></i> {{ $post->author->name ?? 'Redaksi' }}
+                        </span>
+                        <a href="{{ route('posts.show', $post->slug) }}" class="btn btn-outline btn-xs" style="font-size: 0.75rem; font-weight: 700; border-radius: 9999px; padding: 0.3rem 0.85rem; color: #0284c7; border: 1.5px solid #bae6fd; background: #ffffff;">
+                            Baca Selengkapnya &rarr;
+                        </a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div style="text-align: center; margin-top: 2.5rem;">
+            <a href="{{ route('posts.index') }}" class="btn btn-glass btn-lg">
+                <span>Eksplorasi Seluruh Publikasi & Tutorial</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+@endif
+
 <!-- 6. Oprec Call to Action Banner (Clay Card) -->
 <section style="padding: 2rem 0 5rem;">
     <div class="container">

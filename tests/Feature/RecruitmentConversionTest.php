@@ -39,7 +39,16 @@ class RecruitmentConversionTest extends TestCase
             'role' => 'super_admin',
         ]);
 
+        $studentUser = User::create([
+            'name' => 'Rian Hidayat',
+            'email' => 'rian@test.com',
+            'password' => bcrypt('password'),
+            'role' => 'member',
+            'nim' => '230103088',
+        ]);
+
         $applicant = Recruitment::create([
+            'user_id' => $studentUser->id,
             'registration_code' => 'REG-CYBER-001',
             'full_name' => 'Rian Hidayat',
             'nim' => '230103088',
@@ -66,6 +75,8 @@ class RecruitmentConversionTest extends TestCase
             'recruitment_id' => $applicant->id,
             'status' => 'aktif',
         ]);
+
+        $this->assertEquals($division->id, $studentUser->fresh()->division_id);
 
         // Attempting to convert again should notify that member already exists without creating duplicate
         $secondResponse = $this->actingAs($admin)

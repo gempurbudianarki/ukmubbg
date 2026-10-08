@@ -91,6 +91,15 @@
                                 </div>
                             @endif
 
+                            @if ($project->submission_status === 'rejected' && $project->admin_notes)
+                                <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 10px; padding: 0.65rem 0.85rem; margin-bottom: 1rem; font-size: 0.8rem; color: #991b1b; line-height: 1.5;">
+                                    <div style="font-weight: 800; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.2rem;">
+                                        <i class="fas fa-triangle-exclamation" style="color: #ef4444;"></i> Catatan Review Pengurus:
+                                    </div>
+                                    <div>{{ $project->admin_notes }}</div>
+                                </div>
+                            @endif
+
                             <div style="font-size: 0.775rem; color: #64748b; margin-bottom: 1.25rem;">
                                 <i class="fas fa-users" style="color: #94a3b8; margin-right: 0.3rem;"></i> Tim: <strong>{{ $project->author_names }}</strong>
                             </div>

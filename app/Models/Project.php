@@ -23,6 +23,7 @@ class Project extends Model
         'thumbnail',
         'is_featured',
         'submission_status',
+        'admin_notes',
     ];
 
     protected $casts = [

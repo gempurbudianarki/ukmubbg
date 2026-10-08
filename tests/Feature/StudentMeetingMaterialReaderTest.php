@@ -126,4 +126,39 @@ class StudentMeetingMaterialReaderTest extends TestCase
         $response->assertSee('silabusMateriModal');
         $response->assertSee('Rangkuman Penuh');
     }
+
+    public function test_syllabus_topics_render_properly_after_admin_updates_division_profile()
+    {
+        $admin = User::create([
+            'name' => 'Admin Pemrograman',
+            'email' => 'admin.prog@test.com',
+            'password' => Hash::make('password123'),
+            'role' => 'division_admin',
+            'division_id' => $this->division->id,
+        ]);
+
+        $updateData = [
+            'tagline' => 'Updated Tagline',
+            'description' => 'Updated Description',
+            'vision' => 'Updated Vision',
+            'mission' => 'Updated Mission',
+            'focus_topics_raw' => "Full-Stack Laravel & Vue\nDomain-Driven Design\nCloud Native Kubernetes",
+            'adviser_name' => 'Dosen Pembina Baru',
+            'adviser_title' => 'M.T.',
+            'leader_name' => 'Ketua Baru',
+            'leader_nim' => '230101999',
+            'leader_bio' => 'Bio Baru',
+        ];
+
+        $updateResponse = $this->actingAs($admin)->put(route('admin.divisions.update', $this->division->id), $updateData);
+        $updateResponse->assertRedirect(route('admin.divisions.index'));
+
+        // Mahasiswa mengakses halaman silabus
+        $response = $this->actingAs($this->studentUser)->get(route('student.silabus'));
+        $response->assertStatus(200);
+        $response->assertSee('Full-Stack Laravel &amp; Vue', false);
+        $response->assertSee('Domain-Driven Design');
+        $response->assertSee('Cloud Native Kubernetes');
+        $response->assertDontSee('Topik pembelajaran belum diperbarui oleh ketua divisi.');
+    }
 }

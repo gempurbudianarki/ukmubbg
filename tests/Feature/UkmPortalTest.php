@@ -40,13 +40,18 @@ class UkmPortalTest extends TestCase
         $response->assertSee('Ketua Divisi');
     }
 
-    public function test_publications_feed_and_detail_page_removed()
+    public function test_publications_feed_and_detail_page_accessible()
     {
-        $response = $this->get('/berita');
-        $response->assertStatus(404);
+        $post = Post::published()->first();
+        $this->assertNotNull($post);
 
-        $detailResponse = $this->get('/berita/test-slug');
-        $detailResponse->assertStatus(404);
+        $response = $this->get('/berita');
+        $response->assertStatus(200);
+        $response->assertSee('Publikasi');
+
+        $detailResponse = $this->get('/berita/' . $post->slug);
+        $detailResponse->assertStatus(200);
+        $detailResponse->assertSee($post->title);
     }
 
     public function test_recruitment_submission_and_status_check()
@@ -118,5 +123,17 @@ class UkmPortalTest extends TestCase
             'division_id' => $divAdmin->division_id,
             'author_id' => $divAdmin->id,
         ]);
+    }
+
+    public function test_admin_can_view_edit_page_for_published_post_without_route_exception()
+    {
+        $divAdmin = User::where('email', 'pemrograman@ukmilkom.id')->first();
+        $post = Post::where('division_id', $divAdmin->division_id)->where('status', 'published')->first();
+        $this->assertNotNull($post);
+
+        $response = $this->actingAs($divAdmin)->get("/admin/posts/{$post->id}/edit");
+        $response->assertStatus(200);
+        $response->assertSee('Edit Artikel Publikasi');
+        $response->assertSee('Lihat di Web');
     }
 }

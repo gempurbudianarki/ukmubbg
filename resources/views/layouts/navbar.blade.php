@@ -10,6 +10,7 @@
             <li><a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a></li>
             <li><a href="{{ route('divisions.index') }}" class="nav-link {{ request()->routeIs('divisions.*') ? 'active' : '' }}">Divisi</a></li>
             <li><a href="{{ route('projects.index') }}" class="nav-link {{ request()->routeIs('projects.*') ? 'active' : '' }}">Karya</a></li>
+            <li><a href="{{ route('posts.index') }}" class="nav-link {{ request()->routeIs('posts.*') ? 'active' : '' }}">Berita</a></li>
             <li><a href="{{ route('events.index') }}" class="nav-link {{ request()->routeIs('events.*') ? 'active' : '' }}">Agenda</a></li>
             <li><a href="{{ route('officers.index') }}" class="nav-link {{ request()->routeIs('officers.*') ? 'active' : '' }}">Pengurus</a></li>
             <li><a href="{{ route('galleries.index') }}" class="nav-link {{ request()->routeIs('galleries.*') ? 'active' : '' }}">Galeri</a></li>
@@ -47,6 +48,7 @@
             <li><a href="{{ route('home') }}">Beranda</a></li>
             <li><a href="{{ route('divisions.index') }}">Divisi Keahlian</a></li>
             <li><a href="{{ route('projects.index') }}">Karya Mahasiswa</a></li>
+            <li><a href="{{ route('posts.index') }}">Berita & Artikel</a></li>
             <li><a href="{{ route('events.index') }}">Agenda & Workshop</a></li>
             <li><a href="{{ route('officers.index') }}">Struktur Pengurus</a></li>
             <li><a href="{{ route('galleries.index') }}">Galeri Momen</a></li>

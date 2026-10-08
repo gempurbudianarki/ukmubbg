@@ -79,7 +79,7 @@ class StudentDashboardController extends Controller
         }
 
         // Division syllabus / academic topics
-        $syllabus = $division?->focus_topics ?? [];
+        $syllabus = $division?->focus_topics_list ?? [];
 
         // Division sessions / meeting archives
         $divisionSessions = collect();

@@ -124,6 +124,12 @@ class RecruitmentAdminController extends Controller
             'notes' => 'Dikonversi otomatis dari jalur Open Recruitment (' . $recruitment->registration_code . ').',
         ]);
 
+        if ($recruitment->user) {
+            $recruitment->user->update([
+                'division_id' => $recruitment->first_choice_division_id,
+            ]);
+        }
+
         return back()->with('success', 'Selamat! Pendaftar ' . $recruitment->full_name . ' resmi diangkat menjadi Anggota UKM.');
     }
 
