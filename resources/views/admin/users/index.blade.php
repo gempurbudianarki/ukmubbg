@@ -105,7 +105,7 @@
 <!-- Users Table Card (Flat Symmetrical Clay) -->
 <div class="admin-clay-card-flat">
     <div class="admin-table-container">
-        <table class="admin-table admin-table-users">
+        <table class="admin-table admin-table-users table-responsive-card">
             <thead>
                 <tr>
                     <th>Pengguna</th>
@@ -119,7 +119,7 @@
             <tbody>
                 @forelse ($users as $u)
                     <tr>
-                        <td>
+                        <td data-label="Pengguna">
                             <div style="display: flex; align-items: center; gap: 0.75rem;">
                                 <img src="{{ $u->avatar_url }}" alt="{{ $u->name }}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--slate-200); box-shadow: var(--clay-pill);">
                                 <div>
@@ -132,13 +132,13 @@
                                 </div>
                             </div>
                         </td>
-                        <td>
+                        <td data-label="Email & NIM">
                             <div style="color: var(--slate-700); font-weight: 600;">{{ $u->email }}</div>
                             <div style="font-size: 0.75rem; color: var(--slate-400); font-family: var(--font-mono);">
                                 NIM: {{ $u->nim ?? '-' }}
                             </div>
                         </td>
-                        <td style="text-align: center;">
+                        <td data-label="Peran (Role)" style="text-align: center;">
                             @if ($u->role === 'super_admin')
                                 <span class="badge" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; font-weight: 800; font-size: 0.725rem; box-shadow: var(--clay-pill);">
                                     Super Admin
@@ -153,7 +153,7 @@
                                 </span>
                             @endif
                         </td>
-                        <td>
+                        <td data-label="Divisi Penugasan">
                             @if ($u->division)
                                 <span class="badge" style="background: {{ $u->division->color_accent }}15; color: {{ $u->division->color_accent }}; font-size: 0.75rem; font-weight: 700; box-shadow: var(--clay-pill);">
                                     {{ $u->division->name }}
@@ -166,12 +166,12 @@
                                 <span style="font-size: 0.75rem; color: var(--slate-400);">-</span>
                             @endif
                         </td>
-                        <td>
+                        <td data-label="Terdaftar">
                             <span style="font-size: 0.8rem; color: var(--slate-500); font-family: var(--font-mono);">
                                 {{ $u->created_at->format('d M Y') }}
                             </span>
                         </td>
-                        <td style="text-align: right; white-space: nowrap;">
+                        <td class="actions-cell" data-label="Aksi & Peran" style="text-align: right; white-space: nowrap;">
                             <div style="display: inline-flex; gap: 0.35rem; align-items: center; justify-content: flex-end;">
                                 <!-- Quick Assign Role Button -->
                                 <button type="button" class="btn btn-sm" onclick='openAssignRoleModal(@json($u))' style="background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 800; box-shadow: var(--clay-btn);" title="Tunjuk Peran Akun Ini">

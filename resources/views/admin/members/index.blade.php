@@ -116,7 +116,7 @@
 <!-- Members Table Card -->
 <div class="admin-clay-card-flat">
     <div class="admin-table-container">
-        <table class="admin-table admin-table-members">
+        <table class="admin-table admin-table-members table-responsive-card">
             <thead>
                 <tr>
                     <th>Mahasiswa</th>
@@ -130,7 +130,7 @@
             <tbody>
                 @forelse ($members as $member)
                     <tr>
-                        <td>
+                        <td data-label="Mahasiswa">
                             <div style="display: flex; align-items: center; gap: 0.75rem;">
                                 <img src="{{ $member->avatar_url }}" alt="{{ $member->name }}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1px solid var(--slate-200); box-shadow: var(--clay-pill); flex-shrink: 0;">
                                 <div>
@@ -142,18 +142,18 @@
                                 </div>
                             </div>
                         </td>
-                        <td style="font-family: var(--font-mono); font-weight: 600; color: var(--slate-700);">
+                        <td data-label="NIM" style="font-family: var(--font-mono); font-weight: 600; color: var(--slate-700);">
                             {{ $member->nim }}
                         </td>
-                        <td>
+                        <td data-label="Divisi">
                             <span class="badge" style="background: {{ $member->division->color_accent ?? '#0f172a' }}15; color: {{ $member->division->color_accent ?? '#0f172a' }}; font-size: 0.75rem; box-shadow: var(--clay-pill);">
                                 {{ $member->division->name ?? '-' }}
                             </span>
                         </td>
-                        <td style="color: var(--slate-600); font-weight: 600;">
+                        <td data-label="Angkatan" style="color: var(--slate-600); font-weight: 600;">
                             {{ $member->batch_year }}
                         </td>
-                        <td style="text-align: center;">
+                        <td data-label="Status" style="text-align: center;">
                             <form action="{{ route('admin.members.updateStatus', $member) }}" method="POST" style="display: inline-block;">
                                 @csrf
                                 @method('PUT')
@@ -164,7 +164,7 @@
                                 </select>
                             </form>
                         </td>
-                        <td style="text-align: right; white-space: nowrap;">
+                        <td class="actions-cell" data-label="Aksi" style="text-align: right; white-space: nowrap;">
                             <div style="display: inline-flex; align-items: center; gap: 0.4rem; justify-content: flex-end;">
                                 <a href="{{ route('admin.members.show', $member) }}" class="btn btn-outline btn-sm" style="background: #ffffff; box-shadow: var(--clay-btn); padding: 0.35rem 0.65rem;" title="Lihat Dossier Mahasiswa">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">

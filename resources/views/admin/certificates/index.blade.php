@@ -98,7 +98,7 @@
 <!-- Certificates Table Card (Full Width with Contained Scroll & Sticky Headers) -->
 <div class="admin-clay-card-flat">
     <div class="admin-table-container">
-        <table class="admin-table admin-table-certs">
+        <table class="admin-table admin-table-certs table-responsive-card">
             <thead>
                 <tr>
                     <th>Kode Sertifikat</th>
@@ -111,12 +111,12 @@
             <tbody>
                 @forelse ($certificates as $cert)
                     <tr>
-                        <td>
+                        <td data-label="Kode Sertifikat">
                             <span class="badge badge-info" style="font-family: var(--font-mono); font-size: 0.775rem; box-shadow: var(--clay-pill);">
                                 {{ $cert->certificate_code }}
                             </span>
                         </td>
-                        <td>
+                        <td data-label="Nama Penerima">
                             <div style="font-weight: 700; color: var(--slate-900);">
                                 {{ $cert->recipient_name }}
                             </div>
@@ -126,7 +126,7 @@
                                 </div>
                             @endif
                         </td>
-                        <td>
+                        <td data-label="Kegiatan">
                             <div style="font-size: 0.875rem; font-weight: 600; color: var(--slate-800);">
                                 {{ $cert->event_name }}
                             </div>
@@ -134,12 +134,12 @@
                                 Diterbitkan: {{ $cert->issue_date->format('d M Y') }}
                             </div>
                         </td>
-                        <td>
+                        <td data-label="Peran">
                             <span class="badge badge-neutral" style="font-size: 0.75rem; box-shadow: var(--clay-pill);">
                                 {{ $cert->role_as }}
                             </span>
                         </td>
-                        <td style="text-align: right; white-space: nowrap;">
+                        <td class="actions-cell" data-label="Aksi" style="text-align: right; white-space: nowrap;">
                             <div style="display: inline-flex; gap: 0.4rem; align-items: center; justify-content: flex-end;">
                                 <a href="{{ route('certificates.verify', ['code' => $cert->certificate_code]) }}" target="_blank" class="btn btn-outline btn-sm" style="background: #ffffff; box-shadow: var(--clay-btn); font-size: 0.75rem; padding: 0.35rem 0.65rem;" title="Verifikasi Publik">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor">

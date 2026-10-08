@@ -189,7 +189,7 @@
 
         <div style="background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 16px; overflow: hidden; box-shadow: var(--clay-card);">
             <div style="overflow-x: auto;">
-                <table id="attendanceTable" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                <table id="attendanceTable" class="table-responsive-card" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
                     <thead>
                         <tr style="background: #0f172a; color: #f8fafc;">
                             <th style="padding: 0.85rem 1rem; width: 45px; text-align: center;">No</th>
@@ -203,10 +203,10 @@
                     <tbody>
                         @forelse ($logs as $index => $log)
                             <tr class="member-row" data-name="{{ strtolower($log->member->name ?? '') }}" data-nim="{{ strtolower($log->member->nim ?? '') }}" style="border-bottom: 1px solid #f1f5f9; transition: background-color 0.15s ease;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
-                                <td style="padding: 0.85rem 1rem; text-align: center; font-weight: 600; color: #94a3b8;">
+                                <td data-label="No" style="padding: 0.85rem 1rem; text-align: center; font-weight: 600; color: #94a3b8;">
                                     {{ $index + 1 }}
                                 </td>
-                                <td style="padding: 0.85rem 1rem;">
+                                <td data-label="Anggota" style="padding: 0.85rem 1rem;">
                                     <div style="display: flex; align-items: center; gap: 0.65rem;">
                                         <img src="{{ $log->member->avatar_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($log->member->name) . '&background=0284c7&color=ffffff' }}" alt="" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
                                         <div>
@@ -219,13 +219,13 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td style="padding: 0.85rem 1rem;">
+                                <td data-label="Divisi" style="padding: 0.85rem 1rem;">
                                     <span class="badge" style="background: {{ $log->member->division->color_accent ?? '#0f172a' }}15; color: {{ $log->member->division->color_accent ?? '#0f172a' }}; font-size: 0.725rem;">
                                         {{ $log->member->division->name ?? '-' }}
                                     </span>
                                 </td>
-                                <td style="padding: 0.85rem 1rem; text-align: center;">
-                                    <div style="display: inline-flex; background: #f1f5f9; padding: 0.2rem; border-radius: 9999px; gap: 0.2rem;">
+                                <td data-label="Status Presensi" style="padding: 0.85rem 1rem; text-align: center;">
+                                    <div style="display: inline-flex; background: #f1f5f9; padding: 0.2rem; border-radius: 9999px; gap: 0.2rem; flex-wrap: wrap; justify-content: center;">
                                         <label style="cursor: pointer; margin: 0;">
                                             <input type="radio" name="logs[{{ $log->id }}][status]" value="hadir" {{ $log->status === 'hadir' ? 'checked' : '' }} onchange="recalculateStats()" style="display: none;" class="status-radio radio-hadir" id="radio_{{ $log->id }}_hadir">
                                             <span class="pill-btn pill-hadir">Hadir</span>
@@ -244,7 +244,7 @@
                                         </label>
                                     </div>
                                 </td>
-                                <td style="padding: 0.85rem 1rem; text-align: center;">
+                                <td data-label="Aksi Cepat" style="padding: 0.85rem 1rem; text-align: center;">
                                     <!-- 1-Click Quick Mark Action directly by Ketua Divisi -->
                                     <div style="display: flex; gap: 0.25rem; justify-content: center;">
                                         <button type="button" onclick="quickMarkDirect({{ $log->id }}, 'hadir')" class="btn btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.72rem; background: #ecfdf5; color: #059669; border: 1px solid rgba(16, 185, 129, 0.3);" title="Hadirkan Langsung">
@@ -255,7 +255,7 @@
                                         </button>
                                     </div>
                                 </td>
-                                <td style="padding: 0.85rem 1rem;">
+                                <td data-label="Catatan" style="padding: 0.85rem 1rem;">
                                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                                         <input type="text" name="logs[{{ $log->id }}][notes]" value="{{ $log->notes }}" placeholder="Keterangan..." class="form-control" style="font-size: 0.785rem; padding: 0.3rem 0.6rem; flex: 1;">
                                         @if ($log->attachment)

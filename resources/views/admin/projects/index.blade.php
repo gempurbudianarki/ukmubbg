@@ -58,7 +58,7 @@
 <!-- Symmetrical Projects Table Card -->
 <div class="admin-clay-card-flat">
     <div class="admin-table-container">
-        <table class="admin-table admin-table-projects">
+        <table class="admin-table admin-table-projects table-responsive-card">
             <thead>
                 <tr>
                     <th>Judul Karya & Deskripsi</th>
@@ -72,7 +72,7 @@
             <tbody>
                 @forelse ($projects as $project)
                     <tr>
-                        <td>
+                        <td data-label="Karya & Deskripsi">
                             <div style="font-weight: 700; color: var(--slate-900); font-size: 0.95rem;">
                                 <a href="{{ route('admin.projects.edit', $project->id) }}" style="color: var(--slate-900);">
                                     {{ $project->title }}
@@ -82,7 +82,7 @@
                                 {{ Str::limit($project->description, 65) }}
                             </div>
                         </td>
-                        <td>
+                        <td data-label="Divisi">
                             @if ($project->division)
                                 <span class="badge" style="background: {{ $project->division->color_accent }}15; color: {{ $project->division->color_accent }}; font-size: 0.75rem; box-shadow: var(--clay-pill);">
                                     {{ $project->division->name }}
@@ -91,7 +91,7 @@
                                 <span class="badge badge-neutral" style="font-size: 0.75rem; box-shadow: var(--clay-pill);">Umum</span>
                             @endif
                         </td>
-                        <td>
+                        <td data-label="Inovator">
                             <div style="font-size: 0.85rem; font-weight: 700; color: var(--slate-800);">
                                 {{ $project->author_names }}
                             </div>
@@ -105,7 +105,7 @@
                                 </div>
                             @endif
                         </td>
-                        <td style="text-align: center;">
+                        <td data-label="Status" style="text-align: center;">
                             @if ($project->submission_status === 'published')
                                 <span class="badge badge-success" style="font-size: 0.725rem; box-shadow: var(--clay-pill);">
                                     Tayang
@@ -122,7 +122,7 @@
                                 <span class="badge badge-neutral" style="font-size: 0.725rem; box-shadow: var(--clay-pill);">-</span>
                             @endif
                         </td>
-                        <td style="text-align: center;">
+                        <td data-label="Unggulan" style="text-align: center;">
                             <form action="{{ route('admin.projects.toggleFeatured', $project->id) }}" method="POST" style="margin: 0; display: inline-block;">
                                 @csrf
                                 <button type="submit" class="btn btn-sm" style="background: #ffffff; border: 1px solid {{ $project->is_featured ? '#eab308' : 'var(--slate-200)' }}; border-radius: var(--radius-sm); padding: 0.25rem 0.6rem; font-size: 0.75rem; color: {{ $project->is_featured ? '#ca8a04' : 'var(--slate-400)' }}; cursor: pointer; box-shadow: var(--clay-pill);" title="Ubah status unggulan">
@@ -130,7 +130,7 @@
                                 </button>
                             </form>
                         </td>
-                        <td style="text-align: right; white-space: nowrap;">
+                        <td class="actions-cell" data-label="Aksi" style="text-align: right; white-space: nowrap;">
                             <div style="display: inline-flex; gap: 0.35rem; align-items: center; justify-content: flex-end;">
                                 @if ($project->submission_status === 'pending_review' || $project->submission_status === 'rejected')
                                     <form action="{{ route('admin.projects.moderate', $project->id) }}" method="POST" style="display: inline;">

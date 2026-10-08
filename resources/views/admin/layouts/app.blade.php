@@ -209,6 +209,21 @@
                 padding: 1.25rem;
             }
         }
+        @media (max-width: 576px) {
+            .admin-header {
+                padding: 0 0.85rem;
+                height: 60px;
+            }
+            .admin-content-body {
+                padding: 1rem 0.75rem 3rem;
+            }
+            .admin-header-user-info {
+                display: none !important;
+            }
+            .admin-breadcrumb {
+                font-size: 0.75rem;
+            }
+        }
     </style>
     @yield('styles')
 </head>
@@ -396,7 +411,7 @@
 
                 <div style="display: flex; align-items: center; gap: 1.25rem;">
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div style="text-align: right;">
+                        <div style="text-align: right;" class="admin-header-user-info">
                             <div style="font-size: 0.875rem; font-weight: 800; color: var(--slate-900);">
                                 {{ auth()->user()->name }}
                             </div>

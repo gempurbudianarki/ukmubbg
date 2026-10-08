@@ -46,7 +46,7 @@
 </div>
 
 <!-- Quick Action Command Bar -->
-<div class="admin-quick-actions">
+<div class="admin-quick-actions scroll-touch-x">
     <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--slate-400); margin-right: 0.25rem;">
         <i class="fas fa-bolt" style="color: #f59e0b;"></i> Aksi Cepat:
     </span>

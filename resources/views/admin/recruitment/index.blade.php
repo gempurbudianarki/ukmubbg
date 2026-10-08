@@ -70,7 +70,7 @@
 <!-- Applicants Table Card (Flat Symmetrical Clay) -->
 <div class="admin-clay-card-flat">
     <div class="admin-table-container">
-        <table class="admin-table admin-table-recruitment">
+        <table class="admin-table admin-table-recruitment table-responsive-card">
             <thead>
                 <tr>
                     <th>Kode / Tanggal</th>
@@ -91,13 +91,13 @@
                         }
                     @endphp
                     <tr>
-                        <td>
+                        <td data-label="Kode / Tanggal">
                             <div style="font-family: var(--font-mono); font-weight: 700; color: #2563eb; font-size: 0.85rem;">
                                 {{ $app->registration_code }}
                             </div>
                             <small style="color: var(--slate-400);">{{ $app->created_at->format('d/m/Y H:i') }}</small>
                         </td>
-                        <td>
+                        <td data-label="Nama & NIM">
                             <div style="display: flex; align-items: center; gap: 0.75rem;">
                                 <img src="{{ $app->avatar_url }}" alt="{{ $app->full_name }}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1px solid var(--slate-200); box-shadow: var(--clay-pill); flex-shrink: 0;">
                                 <div>
@@ -110,7 +110,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td>
+                        <td data-label="Kontak / WhatsApp">
                             <div style="font-size: 0.825rem; color: var(--slate-700);">{{ $app->email }}</div>
                             <a href="https://wa.me/{{ $cleanPhone }}?text=Halo%20{{ urlencode($app->full_name) }},%20kami%20dari%20Pengurus%20UKM%20Ilmu%20Komputer..." target="_blank" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.775rem; color: #10b981; font-weight: 600;">
                                 <span>WA: {{ $app->phone_whatsapp }}</span>
@@ -119,12 +119,12 @@
                                 </svg>
                             </a>
                         </td>
-                        <td>
+                        <td data-label="Semester">
                             <span class="badge badge-neutral" style="box-shadow: var(--clay-pill);">
                                 Smtr {{ $app->semester }} ({{ $app->class_group }})
                             </span>
                         </td>
-                        <td>
+                        <td data-label="Pilihan Divisi">
                             <div style="font-weight: 700; color: {{ $app->firstChoiceDivision->color_accent }}; font-size: 0.85rem;">
                                 1. {{ $app->firstChoiceDivision->name }}
                             </div>
@@ -132,12 +132,12 @@
                                 <small style="color: var(--slate-400);">2. {{ $app->secondChoiceDivision->name }}</small>
                             @endif
                         </td>
-                        <td style="text-align: center;">
+                        <td data-label="Status Seleksi" style="text-align: center;">
                             <span class="badge {{ $app->status_badge_class }}" style="box-shadow: var(--clay-pill); font-size: 0.75rem;">
                                 {{ $app->status_label }}
                             </span>
                         </td>
-                        <td style="text-align: right;">
+                        <td class="actions-cell" data-label="Aksi" style="text-align: right;">
                             <a href="{{ route('admin.recruitment.show', $app->id) }}" class="btn btn-outline btn-sm" style="box-shadow: var(--clay-btn); background: #ffffff;">
                                 Review &rarr;
                             </a>
