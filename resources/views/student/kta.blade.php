@@ -239,25 +239,94 @@
     }
 
     @media screen and (max-width: 768px) {
+        .kta-showcase-wrap {
+            max-width: 100% !important;
+            padding: 0 !important;
+        }
         .kta-card-view {
-            padding: 1.5rem 1.25rem;
+            padding: 1.5rem 1.15rem !important;
+            border-radius: 18px !important;
+        }
+        .kta-header {
+            flex-direction: column !important;
+            gap: 1rem !important;
+            text-align: center !important;
+            padding-bottom: 0.85rem !important;
+            margin-bottom: 1.25rem !important;
+        }
+        .kta-header > div {
+            justify-content: center !important;
         }
         .kta-body-wrap {
             flex-direction: column !important;
             align-items: center !important;
+            text-align: center !important;
+            gap: 1.25rem !important;
+        }
+        .kta-member-photo-box {
+            width: 160px !important;
+            height: 215px !important;
+            margin: 0 auto 0.5rem !important;
         }
         .kta-grid-fields {
             grid-template-columns: 1fr !important;
-        }
-        .kta-header {
-            flex-direction: column;
-            gap: 1rem;
-            text-align: center;
+            text-align: left !important;
+            width: 100% !important;
         }
         .kta-footer {
-            flex-direction: column;
-            gap: 1.25rem;
-            text-align: center;
+            flex-direction: column !important;
+            gap: 1.25rem !important;
+            text-align: center !important;
+        }
+        .kta-footer > div:last-child {
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+        }
+        .kta-footer > div:last-child > div:first-child {
+            text-align: center !important;
+            margin-bottom: 0.35rem !important;
+        }
+        .kta-actions-card {
+            padding: 1.25rem 1rem !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 1rem !important;
+        }
+        .kta-actions-card > div:last-child {
+            flex-direction: column !important;
+            width: 100% !important;
+        }
+        .kta-actions-card .btn {
+            width: 100% !important;
+            justify-content: center !important;
+            min-height: 44px !important;
+        }
+        .kta-info-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+        }
+        .kta-back-magstripe {
+            margin: -0.5rem -0.5rem 1rem !important;
+            height: 32px !important;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .kta-card-view {
+            padding: 1.25rem 0.95rem 1.5rem !important;
+        }
+        .kta-header img {
+            max-height: 44px !important;
+        }
+        .kta-view-switcher button.btn-side-tab {
+            padding: 0.45rem 0.85rem !important;
+            font-size: 0.775rem !important;
+        }
+        .kta-page-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0.75rem !important;
         }
     }
 
