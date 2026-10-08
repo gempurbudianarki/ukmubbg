@@ -210,9 +210,14 @@ function validateStep2() {
 function validateStep3() {
     setStepAlert(3, null);
 
-    // Validate uploaded file sizes client-side before submission
+    // Validate uploaded file sizes and extensions client-side before submission
     const photoInput = document.getElementById('profile_photo');
     if (photoInput && photoInput.files && photoInput.files[0]) {
+        if (!isAllowedExtension(photoInput.files[0].name, ['jpg', 'jpeg', 'png', 'webp'])) {
+            setStepAlert(3, 'Format pas foto profil harus JPG, PNG, atau WEBP.');
+            highlightDropzoneError('photoDropzone');
+            return false;
+        }
         if (photoInput.files[0].size > MAX_PHOTO_BYTES) {
             const sizeMB = (photoInput.files[0].size / (1024 * 1024)).toFixed(2);
             setStepAlert(3, `Ukuran pas foto profil (${sizeMB} MB) melebihi batas 2MB. Silakan pilih file yang lebih kecil.`);
@@ -223,6 +228,11 @@ function validateStep3() {
 
     const ktmInput = document.getElementById('file_ktm');
     if (ktmInput && ktmInput.files && ktmInput.files[0]) {
+        if (!isAllowedExtension(ktmInput.files[0].name, ['jpg', 'jpeg', 'png', 'pdf'])) {
+            setStepAlert(3, 'Format file KTM harus JPG, PNG, atau PDF.');
+            highlightDropzoneError('ktmDropzone');
+            return false;
+        }
         if (ktmInput.files[0].size > MAX_KTM_BYTES) {
             const sizeMB = (ktmInput.files[0].size / (1024 * 1024)).toFixed(2);
             setStepAlert(3, `Ukuran file KTM (${sizeMB} MB) melebihi batas 2MB. Silakan kompres foto/PDF KTM Anda.`);
@@ -233,6 +243,11 @@ function validateStep3() {
 
     const cvInput = document.getElementById('file_cv');
     if (cvInput && cvInput.files && cvInput.files[0]) {
+        if (!isAllowedExtension(cvInput.files[0].name, ['pdf'])) {
+            setStepAlert(3, 'Format dokumen CV harus PDF.');
+            highlightDropzoneError('cvDropzone');
+            return false;
+        }
         if (cvInput.files[0].size > MAX_CV_BYTES) {
             const sizeMB = (cvInput.files[0].size / (1024 * 1024)).toFixed(2);
             setStepAlert(3, `Ukuran dokumen CV (${sizeMB} MB) melebihi batas 3MB.`);
@@ -660,13 +675,24 @@ function autoFormatUrl(input) {
     triggerAutosave();
 }
 
-/* -------------------------------------------------------------
-   SMART CLAY DROPZONE FILE UPLOADERS & LIVE SIZE PRE-CHECK
-   ------------------------------------------------------------- */
+function isAllowedExtension(filename, allowedExts) {
+    if (!filename || !filename.includes('.')) return false;
+    const ext = filename.split('.').pop().toLowerCase();
+    return allowedExts.includes(ext);
+}
+
 function handlePhotoSelect(input) {
     setFileDropzoneFeedback('photoDropzone', null);
     if (!input.files || !input.files[0]) return;
     const file = input.files[0];
+
+    // INSTANT CLIENT-SIDE EXTENSION CHECK
+    if (!isAllowedExtension(file.name, ['jpg', 'jpeg', 'png', 'webp'])) {
+        input.value = '';
+        removePhotoUpload();
+        setFileDropzoneFeedback('photoDropzone', '❌ Format pas foto harus JPG, PNG, atau WEBP.');
+        return;
+    }
 
     // INSTANT CLIENT-SIDE FILE SIZE CHECK
     if (file.size > MAX_PHOTO_BYTES) {
@@ -707,6 +733,14 @@ function handleFileKtmSelect(input) {
     if (!input.files || !input.files[0]) return;
     const file = input.files[0];
 
+    // INSTANT CLIENT-SIDE EXTENSION CHECK
+    if (!isAllowedExtension(file.name, ['jpg', 'jpeg', 'png', 'pdf'])) {
+        input.value = '';
+        removeKtmUpload();
+        setFileDropzoneFeedback('ktmDropzone', '❌ Format KTM harus berupa JPG, PNG, atau PDF.');
+        return;
+    }
+
     // INSTANT CLIENT-SIDE FILE SIZE CHECK
     if (file.size > MAX_KTM_BYTES) {
         const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
@@ -738,6 +772,14 @@ function handleFileCvSelect(input) {
     setFileDropzoneFeedback('cvDropzone', null);
     if (!input.files || !input.files[0]) return;
     const file = input.files[0];
+
+    // INSTANT CLIENT-SIDE EXTENSION CHECK
+    if (!isAllowedExtension(file.name, ['pdf'])) {
+        input.value = '';
+        removeCvUpload();
+        setFileDropzoneFeedback('cvDropzone', '❌ Format CV / Resume harus dokumen PDF.');
+        return;
+    }
 
     // INSTANT CLIENT-SIDE FILE SIZE CHECK
     if (file.size > MAX_CV_BYTES) {
