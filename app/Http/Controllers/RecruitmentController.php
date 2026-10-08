@@ -40,6 +40,44 @@ class RecruitmentController extends Controller
         return view('recruitment.index', compact('status', 'isOpen', 'batch', 'deadline', 'startDate', 'endDate', 'closedMessage', 'divisions', 'preselectedDivision'));
     }
 
+    public function checkAvailability(Request $request)
+    {
+        $type = $request->query('type');
+        $value = trim($request->query('value', ''));
+
+        if (empty($value)) {
+            return response()->json(['available' => true, 'message' => '']);
+        }
+
+        if ($type === 'nim') {
+            $existsInRecruitment = Recruitment::where('nim', $value)->exists();
+            if ($existsInRecruitment) {
+                return response()->json([
+                    'available' => false,
+                    'message' => 'NIM ' . $value . ' sudah terdaftar pada seleksi periode ini. Silakan periksa status seleksi Anda.'
+                ]);
+            }
+            return response()->json(['available' => true, 'message' => 'NIM valid & siap didaftarkan.']);
+        }
+
+        if ($type === 'email') {
+            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                return response()->json(['available' => false, 'message' => 'Format email belum valid.']);
+            }
+            $existsInUser = \App\Models\User::where('email', $value)->exists();
+            if ($existsInUser && !\Illuminate\Support\Facades\Auth::check()) {
+                return response()->json([
+                    'available' => false,
+                    'is_existing_account' => true,
+                    'message' => 'Email ini sudah memiliki akun di portal. Anda dapat login terlebih dahulu atau gunakan email lain.'
+                ]);
+            }
+            return response()->json(['available' => true, 'message' => 'Email siap digunakan sebagai ID akun.']);
+        }
+
+        return response()->json(['available' => true]);
+    }
+
     public function store(Request $request)
     {
         $status = Setting::get('recruitment_status', 'open');
@@ -111,8 +149,9 @@ class RecruitmentController extends Controller
         // Check if NIM has already registered in this batch
         $existing = Recruitment::where('nim', $validated['nim'])->first();
         if ($existing) {
-            return redirect()->route('recruitment.status', ['search' => $validated['nim']])
-                ->with('info', 'NIM ini sudah terdaftar sebelumnya. Anda dapat memantau status seleksi di sini.');
+            return back()->withErrors([
+                'nim' => 'NIM ' . $validated['nim'] . ' sudah terdaftar sebelumnya dalam periode pendaftaran ini. Anda dapat memantau status seleksi di halaman Cek Status.'
+            ])->withInput();
         }
 
         // Handle profile photo upload
@@ -124,8 +163,22 @@ class RecruitmentController extends Controller
         // Handle or create user account securely
         $user = \Illuminate\Support\Facades\Auth::user();
         if (!$user) {
-            $user = \App\Models\User::where('email', $validated['email'])->first();
-            if (!$user) {
+            $existingUser = \App\Models\User::where('email', $validated['email'])->first();
+            if ($existingUser) {
+                if (!empty($validated['password'])) {
+                    if (\Illuminate\Support\Facades\Hash::check($validated['password'], $existingUser->password)) {
+                        $user = $existingUser;
+                        \Illuminate\Support\Facades\Auth::login($user);
+                    } else {
+                        return back()->withErrors([
+                            'email' => 'Email ini sudah terdaftar. Kata sandi yang Anda masukkan tidak cocok dengan akun terdaftar.',
+                        ])->withInput();
+                    }
+                } else {
+                    $user = $existingUser;
+                    \Illuminate\Support\Facades\Auth::login($user);
+                }
+            } else {
                 $rawPassword = !empty($validated['password']) ? $validated['password'] : ($validated['nim'] . '@Ukm' . date('Y'));
                 $user = \App\Models\User::create([
                     'name' => $validated['full_name'],
@@ -137,8 +190,8 @@ class RecruitmentController extends Controller
                     'github_url' => $validated['github_url'] ?? null,
                     'avatar' => $avatarPath,
                 ]);
+                \Illuminate\Support\Facades\Auth::login($user);
             }
-            \Illuminate\Support\Facades\Auth::login($user);
         } else {
             $updates = [];
             if ($avatarPath && !$user->avatar) {

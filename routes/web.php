@@ -36,6 +36,7 @@ Route::get('/verifikasi', [\App\Http\Controllers\CertificateController::class, '
 
 // Recruitment Flow
 Route::get('/pendaftaran', [RecruitmentController::class, 'index'])->name('recruitment.index');
+Route::get('/pendaftaran/check-availability', [RecruitmentController::class, 'checkAvailability'])->name('recruitment.checkAvailability');
 Route::post('/pendaftaran', [RecruitmentController::class, 'store'])->name('recruitment.store');
 Route::get('/pendaftaran/sukses/{code}', [RecruitmentController::class, 'success'])->name('recruitment.success');
 Route::get('/pendaftaran/cek-status', [RecruitmentController::class, 'status'])->name('recruitment.status');
