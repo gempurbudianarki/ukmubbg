@@ -58,6 +58,38 @@
         70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
         100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
+    .presensi-form-grid-hadir {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr auto;
+        gap: 1rem;
+        align-items: flex-end;
+    }
+    .presensi-form-grid-izin {
+        display: grid;
+        grid-template-columns: 180px 1.5fr 1fr auto;
+        gap: 1rem;
+        align-items: flex-end;
+    }
+    @media screen and (max-width: 768px) {
+        .presensi-hero-card {
+            padding: 1.25rem 1rem;
+        }
+        .presensi-form-grid-hadir,
+        .presensi-form-grid-izin {
+            grid-template-columns: 1fr !important;
+            gap: 0.85rem !important;
+        }
+        .presensi-form-grid-hadir button[type="submit"],
+        .presensi-form-grid-izin button[type="submit"] {
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+        #logSearchInput {
+            width: 100% !important;
+        }
+    }
 </style>
 @endsection
 
@@ -283,7 +315,7 @@
                     <input type="hidden" name="session_id" value="{{ $activeSession->id }}">
 
                     <div style="background: #f0f9ff; border: 1.5px solid rgba(2, 132, 199, 0.3); border-radius: 16px; padding: 1.25rem 1.5rem;">
-                        <div style="display: grid; grid-template-columns: 1fr 1.2fr auto; gap: 1rem; align-items: flex-end;">
+                        <div class="presensi-form-grid-hadir">
                             <div>
                                 <label style="font-size: 0.775rem; font-weight: 800; color: #0369a1; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.35rem;">
                                     <i class="fas fa-key"></i>
@@ -326,7 +358,7 @@
                     <input type="hidden" name="session_id" value="{{ $activeSession->id }}">
 
                     <div style="background: #fefce8; border: 1.5px solid rgba(234, 179, 8, 0.4); border-radius: 16px; padding: 1.25rem 1.5rem;">
-                        <div style="display: grid; grid-template-columns: 180px 1.5fr 1fr auto; gap: 1rem; align-items: flex-end;">
+                        <div class="presensi-form-grid-izin">
                             <div>
                                 <label style="font-size: 0.775rem; font-weight: 800; color: #854d0e; text-transform: uppercase; margin-bottom: 0.35rem; display: block;">
                                     Jenis Pengajuan *
@@ -496,32 +528,32 @@
 
     @if ($attendanceStats['all_logs']->count() > 0)
         <!-- Filter Tabs & Quick Search -->
-        <div style="padding: 0.85rem 1.75rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
-            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;" id="statusFilterGroup">
-                <button type="button" class="btn btn-xs filter-btn active" onclick="filterLogs('all', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #0284c7; color: #ffffff; border: none; cursor: pointer;">
+        <div style="padding: 0.85rem 1.25rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+            <div style="display: flex; gap: 0.4rem; padding-bottom: 2px;" class="scroll-touch-x" id="statusFilterGroup">
+                <button type="button" class="btn btn-xs filter-btn active" onclick="filterLogs('all', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #0284c7; color: #ffffff; border: none; cursor: pointer; white-space: nowrap;">
                     Semua ({{ $attendanceStats['all_logs']->count() }})
                 </button>
-                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('hadir', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #059669; border: 1.5px solid #a7f3d0; cursor: pointer;">
+                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('hadir', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #059669; border: 1.5px solid #a7f3d0; cursor: pointer; white-space: nowrap;">
                     Hadir ({{ $attendanceStats['attended_count'] }})
                 </button>
-                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('izin', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #0284c7; border: 1.5px solid #bae6fd; cursor: pointer;">
+                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('izin', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #0284c7; border: 1.5px solid #bae6fd; cursor: pointer; white-space: nowrap;">
                     Izin ({{ $attendanceStats['permission_count'] }})
                 </button>
-                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('sakit', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #d97706; border: 1.5px solid #fde68a; cursor: pointer;">
+                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('sakit', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #d97706; border: 1.5px solid #fde68a; cursor: pointer; white-space: nowrap;">
                     Sakit ({{ $attendanceStats['sick_count'] }})
                 </button>
-                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('alpa', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #dc2626; border: 1.5px solid #fecaca; cursor: pointer;">
+                <button type="button" class="btn btn-xs filter-btn" onclick="filterLogs('alpa', this)" style="border-radius: 9999px; padding: 0.35rem 0.85rem; font-weight: 700; background: #ffffff; color: #dc2626; border: 1.5px solid #fecaca; cursor: pointer; white-space: nowrap;">
                     Alpa ({{ $attendanceStats['absent_count'] }})
                 </button>
             </div>
-            <div style="position: relative;">
-                <input type="text" id="logSearchInput" onkeyup="filterLogsSearch()" placeholder="Cari sesi atau materi..." style="font-size: 0.775rem; padding: 0.35rem 0.85rem 0.35rem 2rem; border: 1.5px solid #cbd5e1; border-radius: 9999px; width: 220px; max-width: 100%; outline: none; background: #ffffff;">
+            <div style="position: relative; flex: 1 1 200px; min-width: 180px;">
+                <input type="text" id="logSearchInput" onkeyup="filterLogsSearch()" placeholder="Cari sesi atau materi..." style="font-size: 0.775rem; padding: 0.35rem 0.85rem 0.35rem 2rem; border: 1.5px solid #cbd5e1; border-radius: 9999px; width: 100%; outline: none; background: #ffffff;">
                 <i class="fas fa-search" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: #94a3b8;"></i>
             </div>
         </div>
 
         <div class="table-responsive">
-            <table class="table" id="logsTable" style="font-size: 0.85rem; margin-bottom: 0;">
+            <table class="table table-responsive-card" id="logsTable" style="font-size: 0.85rem; margin-bottom: 0;">
                 <thead>
                     <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                         <th style="padding: 0.95rem 1.25rem; font-weight: 700; color: #475569;">Topik & Silabus Pertemuan</th>
@@ -535,7 +567,7 @@
                 <tbody>
                     @foreach ($attendanceStats['all_logs'] as $log)
                         <tr class="log-row" data-status="{{ strtolower($log->status) }}" style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
-                            <td style="padding: 0.95rem 1.25rem;">
+                            <td style="padding: 0.95rem 1.25rem;" data-label="Topik & Silabus">
                                 <strong style="color: #0f172a; font-size: 0.885rem; display: block;">
                                     {{ $log->session?->title }}
                                 </strong>
@@ -550,7 +582,7 @@
                                     </span>
                                 @endif
                             </td>
-                            <td style="padding: 0.95rem 1.25rem; color: #334155;">
+                            <td style="padding: 0.95rem 1.25rem; color: #334155;" data-label="Tanggal & Waktu">
                                 <div style="font-weight: 700;">
                                     {{ \Carbon\Carbon::parse($log->session?->session_date)->translatedFormat('l, d F Y') }}
                                 </div>
@@ -558,16 +590,16 @@
                                     {{ substr($log->session?->time_start, 0, 5) }} - {{ substr($log->session?->time_end, 0, 5) }} WIB
                                 </small>
                             </td>
-                            <td style="padding: 0.95rem 1.25rem; color: #475569;">
+                            <td style="padding: 0.95rem 1.25rem; color: #475569;" data-label="Lokasi Ruang">
                                 <i class="fas fa-location-dot" style="color: #94a3b8; margin-right: 0.3rem;"></i>
                                 {{ $log->session?->location }}
                             </td>
-                            <td style="padding: 0.95rem 1.25rem; text-align: center;">
+                            <td style="padding: 0.95rem 1.25rem; text-align: center;" data-label="Status Anda">
                                 <span class="badge {{ $log->status_badge }}" style="font-size: 0.775rem; padding: 0.3rem 0.75rem; font-weight: 700;">
                                     {{ ucfirst($log->status) }}
                                 </span>
                             </td>
-                            <td style="padding: 0.95rem 1.25rem; color: #64748b; font-size: 0.8rem;">
+                            <td style="padding: 0.95rem 1.25rem; color: #64748b; font-size: 0.8rem;" data-label="Metode & Catatan">
                                 <div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.2rem;">
                                     @if ($log->checkin_type === 'self')
                                         <span class="badge" style="background: #ecfdf5; color: #059669; font-size: 0.675rem;">
@@ -587,7 +619,7 @@
                                 </div>
                                 <div>{{ $log->notes ?? '-' }}</div>
                             </td>
-                            <td style="padding: 0.95rem 1.25rem; text-align: center;">
+                            <td class="actions-cell" style="padding: 0.95rem 1.25rem; text-align: center;" data-label="Materi Sesi">
                                 @if ($log->session)
                                     <button type="button" 
                                             onclick="openMateriModal({{ json_encode([
