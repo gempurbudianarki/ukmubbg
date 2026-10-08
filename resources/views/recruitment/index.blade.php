@@ -94,9 +94,15 @@
         color: var(--slate-400);
     }
 
+    /* Permanently hide spinning loading icons */
+    .field-status-icon.status-loading {
+        display: none !important;
+    }
+
     @media (max-width: 768px) {
         .wizard-stepper-container {
-            padding: 1.25rem 1rem;
+            padding: 1.15rem 0.85rem;
+            margin-bottom: 1.25rem;
         }
         .wizard-step-meta {
             display: none;
@@ -105,24 +111,68 @@
             justify-content: center;
         }
         .wizard-step-circle {
-            width: 38px;
-            height: 38px;
-            font-size: 0.85rem;
+            width: 36px;
+            height: 36px;
+            font-size: 0.825rem;
         }
         .card {
             padding: 1.5rem 1.15rem !important;
+            border-radius: var(--radius-lg) !important;
         }
         .grid-2col {
             grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+        }
+        .division-cards-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+        }
+        .dropzone-clay {
+            padding: 1.25rem 1rem !important;
+        }
+        .dropzone-clay .dropzone-icon {
+            width: 44px !important;
+            height: 44px !important;
+            font-size: 1.25rem !important;
+        }
+        .form-control {
+            font-size: 16px !important; /* Prevents auto zoom in mobile browser */
+        }
+        .summary-card {
+            padding: 1.25rem 1rem !important;
+        }
+        .summary-grid {
+            grid-template-columns: 1fr !important;
+            gap: 0.85rem !important;
         }
         .wizard-action-footer {
             flex-direction: column-reverse !important;
             gap: 0.75rem !important;
+            margin-top: 1.75rem !important;
+            padding-top: 1.25rem !important;
         }
         .wizard-action-footer button,
         .wizard-action-footer a {
             width: 100% !important;
             justify-content: center !important;
+            padding: 0.85rem 1.25rem !important;
+            font-size: 0.925rem !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .card {
+            padding: 1.25rem 0.95rem !important;
+        }
+        .wizard-steps {
+            gap: 0.5rem;
+        }
+        .secondary-division-pills {
+            gap: 0.45rem;
+        }
+        .secondary-division-pill {
+            font-size: 0.775rem;
+            padding: 0.5rem 0.85rem;
         }
     }
 
@@ -748,13 +798,13 @@
                         <span id="stepAlertMsg3"></span>
                     </div>
 
-                    <!-- Dropzone Berkas Dokumen: Pas Foto, KTM, dan CV -->
+                    <!-- Dropzone Berkas Dokumen: Pas Foto, KTM, dan CV (Semua Wajib) -->
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 1.75rem;">
-                        <!-- 1. Pas Foto Resmi Upload -->
+                        <!-- 1. Pas Foto Resmi Upload (Wajib) -->
                         <div class="form-group" style="margin-bottom: 0;">
                             <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
-                                <span><i class="fas fa-camera" style="color: #2563eb; margin-right: 0.35rem;"></i> Pas Foto Resmi (Opsional)</span>
-                                <span style="font-size: 0.75rem; color: var(--slate-400);">Maks 2MB</span>
+                                <span><i class="fas fa-camera" style="color: #2563eb; margin-right: 0.35rem;"></i> Pas Foto Resmi Mahasiswa *</span>
+                                <span style="font-size: 0.75rem; color: #ef4444; font-weight: 700;">Wajib &bull; Maks 2MB</span>
                             </label>
                             <div class="dropzone-clay" id="photoDropzone">
                                 <input type="file" id="profile_photo" name="profile_photo" accept="image/jpeg,image/png,image/webp" onchange="handlePhotoSelect(this)">
@@ -762,7 +812,7 @@
                                     <i class="fas fa-camera"></i>
                                 </div>
                                 <div style="font-weight: 700; color: var(--slate-800); font-size: 0.9rem;">
-                                    Upload Pas Foto
+                                    Upload Pas Foto Mahasiswa
                                 </div>
                                 <p style="font-size: 0.75rem; color: var(--slate-500); margin: 0.25rem 0 0;">
                                     JPG, PNG, WEBP. Dicetak pada KTA Digital.
@@ -782,11 +832,11 @@
                             @error('profile_photo') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
                         </div>
 
-                        <!-- 2. KTM Upload -->
+                        <!-- 2. KTM Upload (Wajib) -->
                         <div class="form-group" style="margin-bottom: 0;">
                             <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
-                                <span><i class="fas fa-id-card" style="color: #0284c7; margin-right: 0.35rem;"></i> Foto / Scan KTM (Opsional)</span>
-                                <span style="font-size: 0.75rem; color: var(--slate-400);">Maks 2MB</span>
+                                <span><i class="fas fa-id-card" style="color: #0284c7; margin-right: 0.35rem;"></i> Foto / Scan KTM Aktif *</span>
+                                <span style="font-size: 0.75rem; color: #ef4444; font-weight: 700;">Wajib &bull; Maks 2MB</span>
                             </label>
                             <div class="dropzone-clay" id="ktmDropzone">
                                 <input type="file" id="file_ktm" name="file_ktm" accept=".jpg,.jpeg,.png,.pdf" onchange="handleFileKtmSelect(this)">
@@ -797,7 +847,7 @@
                                     Upload Foto / PDF KTM
                                 </div>
                                 <p style="font-size: 0.75rem; color: var(--slate-500); margin: 0.25rem 0 0;">
-                                    JPG, PNG, atau PDF untuk verifikasi.
+                                    JPG, PNG, atau PDF untuk verifikasi mahasiswa aktif.
                                 </p>
                                 <div class="dropzone-preview" id="ktmDropzonePreview">
                                     <div class="dropzone-preview-thumb" id="ktmThumbWrap" style="display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #0284c7; background: #eff6ff;">
@@ -816,11 +866,11 @@
                             @error('file_ktm') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
                         </div>
 
-                        <!-- 3. CV Upload -->
+                        <!-- 3. CV Upload (Wajib) -->
                         <div class="form-group" style="margin-bottom: 0;">
                             <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
-                                <span><i class="fas fa-file-pdf" style="color: #ef4444; margin-right: 0.35rem;"></i> CV / Resume (Opsional)</span>
-                                <span style="font-size: 0.75rem; color: var(--slate-400);">Maks 3MB</span>
+                                <span><i class="fas fa-file-pdf" style="color: #ef4444; margin-right: 0.35rem;"></i> Dokumen CV / Resume (PDF) *</span>
+                                <span style="font-size: 0.75rem; color: #ef4444; font-weight: 700;">Wajib &bull; Maks 3MB</span>
                             </label>
                             <div class="dropzone-clay" id="cvDropzone">
                                 <input type="file" id="file_cv" name="file_cv" accept=".pdf" onchange="handleFileCvSelect(this)">
@@ -828,10 +878,10 @@
                                     <i class="fas fa-file-lines"></i>
                                 </div>
                                 <div style="font-weight: 700; color: var(--slate-800); font-size: 0.9rem;">
-                                    Upload Dokumen CV
+                                    Upload Dokumen CV (PDF)
                                 </div>
                                 <p style="font-size: 0.75rem; color: var(--slate-500); margin: 0.25rem 0 0;">
-                                    Format PDF portofolio / riwayat.
+                                    Format PDF portofolio / biodata riwayat diri.
                                 </p>
                                 <div class="dropzone-preview" id="cvDropzonePreview">
                                     <div class="dropzone-preview-thumb" style="display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ef4444; background: #fef2f2;">
@@ -851,20 +901,20 @@
                         </div>
                     </div>
 
-                    <!-- Tautan GitHub & Portofolio Online -->
+                    <!-- Tautan GitHub (Wajib) & Portofolio Online (Opsional) -->
                     <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
                         <div class="form-group">
                             <label class="form-label" for="github_url">
-                                <i class="fab fa-github" style="margin-right: 0.35rem;"></i> Tautan Profil GitHub (Opsional)
+                                <i class="fab fa-github" style="margin-right: 0.35rem;"></i> Tautan Profil GitHub *
                             </label>
                             <input type="url" id="github_url" name="github_url" class="form-control @error('github_url') is-invalid @enderror" value="{{ old('github_url', auth()->user()?->github_url) }}" placeholder="https://github.com/username" onblur="autoFormatUrl(this)">
-                            <small style="color: var(--slate-400); font-size: 0.75rem;">Sangat disukai untuk calon divisi Pemrograman & Cyber Security.</small>
+                            <small style="color: var(--slate-400); font-size: 0.75rem;">Wajib dicantumkan untuk verifikasi akun programmer / developer.</small>
                             @error('github_url') <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="portfolio_url">
-                                <i class="fas fa-globe" style="margin-right: 0.35rem;"></i> Link Portofolio / Karya Lainnya (Opsional)
+                                <i class="fas fa-globe" style="margin-right: 0.35rem;"></i> Link Portofolio Lainnya (Opsional)
                             </label>
                             <input type="url" id="portfolio_url" name="portfolio_url" class="form-control @error('portfolio_url') is-invalid @enderror" value="{{ old('portfolio_url') }}" placeholder="https://dribbble.com/..., Figma, Drive" onblur="autoFormatUrl(this)">
                             <small style="color: var(--slate-400); font-size: 0.75rem;">Tautan karya desain, aplikasi demo, atau drive sertifikat.</small>

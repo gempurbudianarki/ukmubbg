@@ -210,49 +210,86 @@ function validateStep2() {
 function validateStep3() {
     setStepAlert(3, null);
 
-    // Validate uploaded file sizes and extensions client-side before submission
+    // 1. Mandatory Profile Photo Check
     const photoInput = document.getElementById('profile_photo');
-    if (photoInput && photoInput.files && photoInput.files[0]) {
-        if (!isAllowedExtension(photoInput.files[0].name, ['jpg', 'jpeg', 'png', 'webp'])) {
-            setStepAlert(3, 'Format pas foto profil harus JPG, PNG, atau WEBP.');
-            highlightDropzoneError('photoDropzone');
-            return false;
-        }
-        if (photoInput.files[0].size > MAX_PHOTO_BYTES) {
-            const sizeMB = (photoInput.files[0].size / (1024 * 1024)).toFixed(2);
-            setStepAlert(3, `Ukuran pas foto profil (${sizeMB} MB) melebihi batas 2MB. Silakan pilih file yang lebih kecil.`);
-            highlightDropzoneError('photoDropzone');
-            return false;
-        }
+    if (!photoInput || !photoInput.files || !photoInput.files[0]) {
+        setStepAlert(3, 'Pas foto resmi mahasiswa wajib diunggah.');
+        highlightDropzoneError('photoDropzone');
+        return false;
+    }
+    if (!isAllowedExtension(photoInput.files[0].name, ['jpg', 'jpeg', 'png', 'webp'])) {
+        setStepAlert(3, 'Format pas foto profil harus JPG, PNG, atau WEBP.');
+        highlightDropzoneError('photoDropzone');
+        return false;
+    }
+    if (photoInput.files[0].size > MAX_PHOTO_BYTES) {
+        const sizeMB = (photoInput.files[0].size / (1024 * 1024)).toFixed(2);
+        setStepAlert(3, `Ukuran pas foto profil (${sizeMB} MB) melebihi batas 2MB. Silakan pilih file yang lebih kecil.`);
+        highlightDropzoneError('photoDropzone');
+        return false;
     }
 
+    // 2. Mandatory KTM Check
     const ktmInput = document.getElementById('file_ktm');
-    if (ktmInput && ktmInput.files && ktmInput.files[0]) {
-        if (!isAllowedExtension(ktmInput.files[0].name, ['jpg', 'jpeg', 'png', 'pdf'])) {
-            setStepAlert(3, 'Format file KTM harus JPG, PNG, atau PDF.');
-            highlightDropzoneError('ktmDropzone');
-            return false;
-        }
-        if (ktmInput.files[0].size > MAX_KTM_BYTES) {
-            const sizeMB = (ktmInput.files[0].size / (1024 * 1024)).toFixed(2);
-            setStepAlert(3, `Ukuran file KTM (${sizeMB} MB) melebihi batas 2MB. Silakan kompres foto/PDF KTM Anda.`);
-            highlightDropzoneError('ktmDropzone');
-            return false;
-        }
+    if (!ktmInput || !ktmInput.files || !ktmInput.files[0]) {
+        setStepAlert(3, 'Foto atau scan KTM aktif mahasiswa wajib diunggah.');
+        highlightDropzoneError('ktmDropzone');
+        return false;
+    }
+    if (!isAllowedExtension(ktmInput.files[0].name, ['jpg', 'jpeg', 'png', 'pdf'])) {
+        setStepAlert(3, 'Format file KTM harus JPG, PNG, atau PDF.');
+        highlightDropzoneError('ktmDropzone');
+        return false;
+    }
+    if (ktmInput.files[0].size > MAX_KTM_BYTES) {
+        const sizeMB = (ktmInput.files[0].size / (1024 * 1024)).toFixed(2);
+        setStepAlert(3, `Ukuran file KTM (${sizeMB} MB) melebihi batas 2MB. Silakan kompres foto/PDF KTM Anda.`);
+        highlightDropzoneError('ktmDropzone');
+        return false;
     }
 
+    // 3. Mandatory CV Check
     const cvInput = document.getElementById('file_cv');
-    if (cvInput && cvInput.files && cvInput.files[0]) {
-        if (!isAllowedExtension(cvInput.files[0].name, ['pdf'])) {
-            setStepAlert(3, 'Format dokumen CV harus PDF.');
-            highlightDropzoneError('cvDropzone');
-            return false;
+    if (!cvInput || !cvInput.files || !cvInput.files[0]) {
+        setStepAlert(3, 'Dokumen CV / resume wajib diunggah dalam format PDF.');
+        highlightDropzoneError('cvDropzone');
+        return false;
+    }
+    if (!isAllowedExtension(cvInput.files[0].name, ['pdf'])) {
+        setStepAlert(3, 'Format dokumen CV harus PDF.');
+        highlightDropzoneError('cvDropzone');
+        return false;
+    }
+    if (cvInput.files[0].size > MAX_CV_BYTES) {
+        const sizeMB = (cvInput.files[0].size / (1024 * 1024)).toFixed(2);
+        setStepAlert(3, `Ukuran dokumen CV (${sizeMB} MB) melebihi batas 3MB.`);
+        highlightDropzoneError('cvDropzone');
+        return false;
+    }
+
+    // 4. Mandatory GitHub URL Check
+    const githubInput = document.getElementById('github_url');
+    if (!githubInput || !githubInput.value.trim()) {
+        setStepAlert(3, 'Tautan profil GitHub wajib diisi.');
+        if (githubInput) {
+            githubInput.classList.add('field-invalid');
+            githubInput.classList.add('shake-error');
+            setTimeout(() => githubInput.classList.remove('shake-error'), 450);
+            githubInput.focus();
         }
-        if (cvInput.files[0].size > MAX_CV_BYTES) {
-            const sizeMB = (cvInput.files[0].size / (1024 * 1024)).toFixed(2);
-            setStepAlert(3, `Ukuran dokumen CV (${sizeMB} MB) melebihi batas 3MB.`);
-            highlightDropzoneError('cvDropzone');
-            return false;
+        return false;
+    }
+    if (!githubInput.value.startsWith('http://') && !githubInput.value.startsWith('https://')) {
+        setStepAlert(3, 'Tautan profil GitHub harus diawali dengan http:// atau https://');
+        if (githubInput) {
+            githubInput.classList.add('field-invalid');
+            githubInput.focus();
+        }
+        return false;
+    } else {
+        if (githubInput) {
+            githubInput.classList.remove('field-invalid');
+            githubInput.classList.add('field-valid');
         }
     }
 
@@ -451,7 +488,7 @@ function debounceCheckNim(input) {
         return;
     }
 
-    if (loadIcon) loadIcon.style.display = 'block';
+    if (loadIcon) loadIcon.style.display = 'none';
     if (validIcon) validIcon.style.display = 'none';
     if (invalidIcon) invalidIcon.style.display = 'none';
 
@@ -504,7 +541,7 @@ function debounceCheckEmail(input) {
         return;
     }
 
-    if (loadIcon) loadIcon.style.display = 'block';
+    if (loadIcon) loadIcon.style.display = 'none';
     if (validIcon) validIcon.style.display = 'none';
     if (invalidIcon) invalidIcon.style.display = 'none';
 

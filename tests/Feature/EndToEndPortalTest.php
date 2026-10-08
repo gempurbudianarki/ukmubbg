@@ -72,7 +72,10 @@ class EndToEndPortalTest extends TestCase
             'first_choice_division_id' => $div->id,
             'reason_to_join' => 'Sangat bersemangat memperdalam web development dan berkontribusi aktif.',
             'portfolio_url' => 'https://github.com/calonhebat',
+            'github_url' => 'https://github.com/calonhebat',
+            'profile_photo' => UploadedFile::fake()->image('pasfoto_calon.jpg'),
             'file_ktm' => UploadedFile::fake()->image('ktm_calon.jpg'),
+            'file_cv' => UploadedFile::fake()->create('cv_calon.pdf', 100, 'application/pdf'),
         ]);
 
         $submit->assertRedirect();

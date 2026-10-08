@@ -35,8 +35,11 @@ class RecruitmentWorkflowTest extends TestCase
             'class_group' => 'TI-3A',
             'first_choice_division_id' => $division->id,
             'reason_to_join' => 'Ingin memperdalam keahlian rekayasa sistem dan riset kolaboratif.',
+            'github_url' => 'https://github.com/bintangramadhan',
             'portfolio_url' => 'https://github.com/bintangramadhan',
+            'profile_photo' => UploadedFile::fake()->image('pasfoto.jpg'),
             'file_ktm' => UploadedFile::fake()->image('ktm.jpg'),
+            'file_cv' => UploadedFile::fake()->create('cv.pdf', 100, 'application/pdf'),
         ]);
 
         $response->assertRedirect();
@@ -91,6 +94,7 @@ class RecruitmentWorkflowTest extends TestCase
             'class_group' => 'IF-2B',
             'first_choice_division_id' => $division->id,
             'reason_to_join' => 'Sangat tertarik mengembangkan riset dan kontribusi aktif di divisi.',
+            'github_url' => 'https://github.com/citralestari',
             'profile_photo' => UploadedFile::fake()->image('pasfoto.jpg'),
             'file_ktm' => UploadedFile::fake()->image('ktm.jpg'),
             'file_cv' => UploadedFile::fake()->create('curriculum_vitae.pdf', 500, 'application/pdf'),

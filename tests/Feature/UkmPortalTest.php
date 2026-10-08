@@ -68,6 +68,10 @@ class UkmPortalTest extends TestCase
             'first_choice_division_id' => $division->id,
             'reason_to_join' => 'Saya sangat bersemangat mempelajari arsitektur web modern dan berkontribusi di divisi.',
             'portfolio_url' => 'https://github.com/ahmadfakhri',
+            'github_url' => 'https://github.com/ahmadfakhri',
+            'profile_photo' => \Illuminate\Http\UploadedFile::fake()->image('pasfoto_ahmad.jpg'),
+            'file_ktm' => \Illuminate\Http\UploadedFile::fake()->image('ktm_ahmad.jpg'),
+            'file_cv' => \Illuminate\Http\UploadedFile::fake()->create('cv_ahmad.pdf', 100, 'application/pdf'),
         ];
 
         $response = $this->post('/pendaftaran', $formData);

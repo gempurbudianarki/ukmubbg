@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Division;
 use App\Models\Setting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class RecruitmentWindowGuardTest extends TestCase
@@ -85,6 +86,10 @@ class RecruitmentWindowGuardTest extends TestCase
             'class_group' => 'IF-1A',
             'first_choice_division_id' => $this->divClosed->id,
             'reason_to_join' => 'Saya ingin belajar desain komunikasi visual secara mendalam.',
+            'github_url' => 'https://github.com/calonpeserta',
+            'profile_photo' => UploadedFile::fake()->image('photo.jpg'),
+            'file_ktm' => UploadedFile::fake()->image('ktm.jpg'),
+            'file_cv' => UploadedFile::fake()->create('cv.pdf', 100, 'application/pdf'),
         ]);
 
         $response->assertSessionHasErrors('first_choice_division_id');

@@ -63,6 +63,8 @@ class StudentRegistrationAndAuthTest extends TestCase
             'reason_to_join' => 'Ingin memperdalam Laravel framework dan fullstack web.',
             'github_url' => 'https://github.com/aliefdev',
             'profile_photo' => $avatarFile,
+            'file_ktm' => UploadedFile::fake()->image('ktm_alief.jpg'),
+            'file_cv' => UploadedFile::fake()->create('cv_alief.pdf', 200, 'application/pdf'),
         ];
 
         $response = $this->post(route('recruitment.store'), $payload);
