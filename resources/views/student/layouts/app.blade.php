@@ -302,10 +302,30 @@
                 width: 100% !important;
             }
             .student-topbar {
-                padding: 0 1.25rem;
+                padding: 0 1rem;
+                height: 62px;
             }
             .student-content-area {
-                padding: 1.25rem;
+                padding: 1rem 0.85rem 3rem;
+            }
+        }
+
+        .student-topbar-period {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .student-topbar-period {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .student-topbar-username {
+                display: none !important;
+            }
+            .student-topbar h2 {
+                font-size: 0.95rem !important;
             }
         }
 
@@ -443,15 +463,15 @@
                     </div>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div style="display: none; @media(min-width: 768px){display: flex;} align-items: center; gap: 0.5rem; background: #ffffff; box-shadow: var(--clay-pill); padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.8rem; color: #475569; font-weight: 700;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div class="student-topbar-period" style="align-items: center; gap: 0.5rem; background: #ffffff; box-shadow: var(--clay-pill); padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.8rem; color: #475569; font-weight: 700;">
                         <i class="fas fa-calendar-day" style="color: #0284c7;"></i>
                         <span>Periode Ganjil 2026/2027</span>
                     </div>
 
-                    <a href="{{ route('student.profile.edit') }}" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; padding: 0.35rem 0.75rem 0.35rem 0.35rem; border-radius: 9999px; box-shadow: var(--clay-pill); background: #ffffff;">
+                    <a href="{{ route('student.profile.edit') }}" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; padding: 0.35rem 0.65rem 0.35rem 0.35rem; border-radius: 9999px; box-shadow: var(--clay-pill); background: #ffffff;">
                         <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&size=100&background=0284c7&color=ffffff&bold=true';">
-                        <div style="font-size: 0.825rem; font-weight: 700; color: #1e293b; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 0.35rem;">
+                        <div class="student-topbar-username" style="font-size: 0.825rem; font-weight: 700; color: #1e293b; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 0.25rem;">
                             {{ auth()->user()->name }}
                         </div>
                     </a>

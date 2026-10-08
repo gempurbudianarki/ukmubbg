@@ -39,6 +39,21 @@
         border: none;
         box-shadow: var(--clay-card);
     }
+    @media (max-width: 640px) {
+        .syllabus-hero {
+            padding: 1.5rem 1.15rem !important;
+        }
+        .syllabus-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+        }
+        .topic-card {
+            padding: 1.25rem !important;
+        }
+        .leader-box {
+            padding: 1.25rem !important;
+        }
+    }
 </style>
 @endsection
 

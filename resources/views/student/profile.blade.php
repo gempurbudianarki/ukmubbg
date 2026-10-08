@@ -91,6 +91,21 @@
         box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
         outline: none;
     }
+
+    @media (max-width: 640px) {
+        .profile-card {
+            padding: 1.5rem 1.15rem !important;
+        }
+        .profile-form-actions {
+            flex-direction: column-reverse !important;
+            gap: 0.75rem !important;
+        }
+        .profile-form-actions a,
+        .profile-form-actions button {
+            width: 100% !important;
+            justify-content: center !important;
+        }
+    }
 </style>
 @endsection
 
@@ -221,7 +236,7 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                <div class="profile-form-actions" style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem; flex-wrap: wrap;">
                     <a href="{{ route('student.dashboard') }}" class="btn btn-outline" style="border-radius: 9999px; font-weight: 700; background: #ffffff; border: 1.5px solid #cbd5e1; box-shadow: var(--clay-pill); padding: 0.65rem 1.5rem;">Batal</a>
                     <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0369a1); border: none; font-weight: 800; padding: 0.65rem 2rem; border-radius: 9999px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);">
                         <i class="fas fa-check" style="margin-right: 0.4rem;"></i> Simpan Perubahan Profil
