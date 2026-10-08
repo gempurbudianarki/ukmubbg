@@ -54,16 +54,16 @@
             <li><a href="{{ route('galleries.index') }}">Galeri Momen</a></li>
             <li><a href="{{ route('certificates.verify') }}">Verifikasi Sertifikat</a></li>
             <li><a href="{{ route('recruitment.status') }}">Cek Status Oprec</a></li>
-            <li style="padding-top: 0.5rem; border-top: 1px solid var(--slate-100); display: flex; gap: 0.5rem;">
-                <a href="{{ route('recruitment.index') }}" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">Daftar Anggota</a>
+            <li style="padding-top: 0.75rem; border-top: 1px solid var(--slate-100); display: flex; flex-direction: column; gap: 0.5rem;">
+                <a href="{{ route('recruitment.index') }}" class="btn btn-primary btn-sm" style="width: 100%; text-align: center; justify-content: center;">Daftar Anggota (Oprec)</a>
                 @auth
                     @if(auth()->user()->isMember())
-                        <a href="{{ route('student.dashboard') }}" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">Portal</a>
+                        <a href="{{ route('student.dashboard') }}" class="btn btn-outline btn-sm" style="width: 100%; text-align: center; justify-content: center;">Buka Portal Mahasiswa</a>
                     @else
-                        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">Dashboard</a>
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline btn-sm" style="width: 100%; text-align: center; justify-content: center;">Buka Dashboard Admin</a>
                     @endif
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">Masuk</a>
+                    <a href="{{ route('login') }}" class="btn btn-outline btn-sm" style="width: 100%; text-align: center; justify-content: center;">Masuk Akun</a>
                 @endauth
             </li>
         </ul>

@@ -110,6 +110,21 @@
             height: 38px;
             font-size: 0.875rem;
         }
+        .card {
+            padding: 1.5rem 1.15rem !important;
+        }
+        div[style*="grid-template-columns: 1fr 1fr"] {
+            grid-template-columns: 1fr !important;
+        }
+        .wizard-action-footer {
+            flex-direction: column-reverse !important;
+            gap: 0.75rem !important;
+        }
+        .wizard-action-footer button,
+        .wizard-action-footer a {
+            width: 100% !important;
+            justify-content: center !important;
+        }
     }
 
     /* Step content transitions */
@@ -406,7 +421,7 @@
                     </div>
 
                     <!-- Action Step 1 Footer -->
-                    <div style="margin-top: 2.25rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div class="wizard-action-footer" style="margin-top: 2.25rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                         <div style="font-size: 0.8rem; color: var(--slate-500);">
                             <i class="fas fa-shield-halved" style="color: #10b981; margin-right: 0.35rem;"></i>
                             Data pendaftaran Anda terlindungi dan terenkripsi.
@@ -485,7 +500,7 @@
                     </div>
 
                     <!-- Action Step 2 Footer -->
-                    <div style="margin-top: 2.25rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div class="wizard-action-footer" style="margin-top: 2.25rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                         <button type="button" class="btn btn-outline btn-lg" onclick="prevStep(1)" style="display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 1.5rem;">
                             <i class="fas fa-arrow-left"></i>
                             <span>Kembali ke Tahap 1: Biodata</span>
@@ -591,7 +606,7 @@
                     </div>
 
                     <!-- Action Step 3 Footer -->
-                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div class="wizard-action-footer" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                         <button type="button" class="btn btn-outline btn-lg" onclick="prevStep(2)" style="display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 1.5rem;">
                             <i class="fas fa-arrow-left"></i>
                             <span>Kembali ke Tahap 2: Pilihan Divisi</span>

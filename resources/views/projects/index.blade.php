@@ -91,13 +91,13 @@
     <div class="container">
         <!-- Filter & Search Toolbar (White Claymorphism Card) -->
         <div style="background: #ffffff; border-radius: 20px; border: 1.5px solid rgba(226, 232, 240, 0.95); box-shadow: var(--clay-card); padding: 1.25rem 1.75rem; margin-bottom: 2.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-            <!-- Division Pill Filters -->
-            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
-                <a href="{{ route('projects.index') }}" class="btn {{ !request('division') ? 'btn-primary' : 'btn-outline' }} btn-sm" style="border-radius: 9999px; font-weight: 700; font-size: 0.8rem; padding: 0.45rem 1rem;">
+            <!-- Division Pill Filters (Smooth Touch-Scroll on Mobile) -->
+            <div class="scroll-touch-x" style="align-items: center; max-width: 100%;">
+                <a href="{{ route('projects.index') }}" class="btn {{ !request('division') ? 'btn-primary' : 'btn-outline' }} btn-sm" style="border-radius: 9999px; font-weight: 700; font-size: 0.8rem; padding: 0.45rem 1rem; flex-shrink: 0;">
                     Semua Bidang
                 </a>
                 @foreach ($divisions as $div)
-                    <a href="{{ route('projects.index', ['division' => $div->slug, 'search' => request('search')]) }}" class="btn {{ request('division') === $div->slug ? 'btn-primary' : 'btn-outline' }} btn-sm" style="border-radius: 9999px; font-weight: 700; font-size: 0.8rem; padding: 0.45rem 1rem;">
+                    <a href="{{ route('projects.index', ['division' => $div->slug, 'search' => request('search')]) }}" class="btn {{ request('division') === $div->slug ? 'btn-primary' : 'btn-outline' }} btn-sm" style="border-radius: 9999px; font-weight: 700; font-size: 0.8rem; padding: 0.45rem 1rem; flex-shrink: 0;">
                         {{ $div->name }}
                     </a>
                 @endforeach
@@ -108,13 +108,13 @@
                 @if (request('division'))
                     <input type="hidden" name="division" value="{{ request('division') }}">
                 @endif
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari karya / tech stack..." class="form-control" style="padding: 0.55rem 1rem; font-size: 0.85rem; border-radius: 9999px; background: #ffffff; box-shadow: var(--clay-debossed);">
-                <button type="submit" class="btn btn-primary btn-sm" style="border-radius: 9999px; font-weight: 700; padding: 0.55rem 1.15rem;">Cari</button>
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari karya / tech stack..." class="form-control" style="padding: 0.55rem 1rem; font-size: 0.85rem; border-radius: 9999px; background: #ffffff; box-shadow: var(--clay-debossed); flex: 1;">
+                <button type="submit" class="btn btn-primary btn-sm" style="border-radius: 9999px; font-weight: 700; padding: 0.55rem 1.15rem; flex-shrink: 0;">Cari</button>
             </form>
         </div>
 
-        <!-- Projects Grid -->
-        <div class="projects-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.75rem;">
+        <!-- Projects Grid (Fluid on 360px+ screens) -->
+        <div class="projects-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.75rem;">
             @forelse ($projects as $project)
                 @php
                     $divAccent = $project->division?->color_accent ?? '#0284c7';

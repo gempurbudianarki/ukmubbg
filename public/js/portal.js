@@ -50,15 +50,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Smooth Anchor Scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                e.preventDefault();
-                target.scrollIntoView({ behavior: 'smooth' });
-                if (mobileNav && mobileNav.classList.contains('open')) {
-                    mobileNav.classList.remove('open');
+            const href = this.getAttribute('href');
+            if (href && href.length > 1) {
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    if (mobileNav && mobileNav.classList.contains('open')) {
+                        mobileNav.classList.remove('open');
+                        if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+                    }
                 }
             }
         });
+    });
+
+    // Close mobile nav when clicking outside
+    document.addEventListener('click', (e) => {
+        if (mobileNav && mobileNav.classList.contains('open')) {
+            if (!mobileNav.contains(e.target) && !toggleBtn.contains(e.target)) {
+                mobileNav.classList.remove('open');
+                toggleBtn.setAttribute('aria-expanded', 'false');
+            }
+        }
+    });
+
     // 5. Terminal Tabs Switcher
     window.switchTermTab = function(btn, tabId) {
         document.querySelectorAll('.terminal-tab-btn').forEach(b => b.classList.remove('active'));
