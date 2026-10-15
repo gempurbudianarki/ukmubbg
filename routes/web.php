@@ -75,10 +75,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/posts/{post}/toggle-status', [PostAdminController::class, 'toggleStatus'])->name('posts.toggleStatus');
     Route::resource('posts', PostAdminController::class)->except(['show']);
 
-    // Divisions Profile & Bio Management
+    // Divisions Profile & Dynamic Lifecycle Management
     Route::get('/divisions', [DivisionAdminController::class, 'index'])->name('divisions.index');
+    Route::get('/divisions/create', [DivisionAdminController::class, 'create'])->name('divisions.create');
+    Route::post('/divisions', [DivisionAdminController::class, 'store'])->name('divisions.store');
     Route::get('/divisions/{division}/edit', [DivisionAdminController::class, 'edit'])->name('divisions.edit');
     Route::put('/divisions/{division}', [DivisionAdminController::class, 'update'])->name('divisions.update');
+    Route::post('/divisions/{division}/toggle-status', [DivisionAdminController::class, 'toggleStatus'])->name('divisions.toggleStatus');
+    Route::post('/divisions/{division}/toggle-recruitment', [DivisionAdminController::class, 'toggleRecruitment'])->name('divisions.toggleRecruitment');
+    Route::post('/divisions/{division}/assign-admin', [DivisionAdminController::class, 'assignAdmin'])->name('divisions.assignAdmin');
+    Route::post('/divisions/{division}/remove-admin/{user}', [DivisionAdminController::class, 'removeAdmin'])->name('divisions.removeAdmin');
+    Route::delete('/divisions/{division}', [DivisionAdminController::class, 'destroy'])->name('divisions.destroy');
+    Route::post('/divisions/{id}/restore', [DivisionAdminController::class, 'restore'])->name('divisions.restore');
 
     // Recruitment Hub & CSV Export
     Route::get('/recruitment/export', [RecruitmentAdminController::class, 'export'])->name('recruitment.export');
