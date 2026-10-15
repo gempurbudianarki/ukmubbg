@@ -349,7 +349,7 @@
                 <li>
                     <a href="{{ route('admin.divisions.index') }}" class="admin-nav-link {{ request()->routeIs('admin.divisions.*') ? 'active' : '' }}">
                         <i class="fas fa-layer-group"></i>
-                        <span>Biodata 4 Divisi</span>
+                        <span>Manajemen Divisi</span>
                     </a>
                 </li>
                 @if (auth()->user()->isSuperAdmin())
