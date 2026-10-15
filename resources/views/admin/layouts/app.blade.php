@@ -366,6 +366,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('admin.navigation.index') }}" class="admin-nav-link {{ request()->routeIs('admin.navigation.*') ? 'active' : '' }}">
+                            <i class="fas fa-bars-staggered"></i>
+                            <span>Navigasi & Menu Publik</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('admin.users.index') }}" class="admin-nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                             <i class="fas fa-user-shield"></i>
                             <span>Manajemen Pengguna</span>

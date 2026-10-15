@@ -63,31 +63,41 @@
                     Aktivitas & Ekosistem
                 </h4>
                 <ul class="footer-links">
+                    @if(\App\Models\Setting::get('nav_projects', '1') === '1')
                     <li>
                         <a href="{{ route('projects.index') }}">
                             Karya Mahasiswa
                         </a>
                     </li>
+                    @endif
+                    @if(\App\Models\Setting::get('nav_events', '1') === '1')
                     <li>
                         <a href="{{ route('events.index') }}">
                             Agenda & Workshop
                         </a>
                     </li>
+                    @endif
+                    @if(\App\Models\Setting::get('nav_officers', '1') === '1')
                     <li>
                         <a href="{{ route('officers.index') }}">
                             Struktur Pengurus
                         </a>
                     </li>
+                    @endif
+                    @if(\App\Models\Setting::get('nav_galleries', '1') === '1')
                     <li>
                         <a href="{{ route('galleries.index') }}">
                             Galeri Momen
                         </a>
                     </li>
+                    @endif
+                    @if(\App\Models\Setting::get('nav_verify', '1') === '1')
                     <li>
                         <a href="{{ route('certificates.verify') }}">
                             Verifikasi E-Sertifikat
                         </a>
                     </li>
+                    @endif
                     <li>
                         <a href="{{ route('developer') }}">
                             Tentang Developer
@@ -97,6 +107,7 @@
             </div>
 
             <!-- Oprec Column -->
+            @if(\App\Models\Setting::get('nav_recruitment', '1') === '1')
             <div>
                 <h4 class="footer-heading">
                     Pendaftaran Terpadu
@@ -113,6 +124,7 @@
                     </a>
                 </div>
             </div>
+            @endif
         </div>
 
         <!-- Footer Bottom Bar -->
@@ -128,10 +140,12 @@
                 <a href="{{ route('login') }}" style="color: #0284c7; font-weight: 700; text-decoration: none;">
                     Portal Pengurus CMS
                 </a>
+                @if(\App\Models\Setting::get('nav_verify', '1') === '1')
                 <span style="color: #cbd5e1;">|</span>
                 <a href="{{ route('certificates.verify') }}" style="color: #475569; text-decoration: none;">
                     Cek Validitas Sertifikat
                 </a>
+                @endif
                 <span style="color: #cbd5e1;">|</span>
                 <span style="color: #0c2340; font-weight: 700;">
                     Prodi Ilmu Komputer &bull; FSTIK UBBG

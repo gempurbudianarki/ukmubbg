@@ -155,4 +155,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/users/{user}/assign-role', [\App\Http\Controllers\Admin\UserAdminController::class, 'assignRole'])->name('users.assignRole');
     Route::post('/users/{user}/reset-password', [\App\Http\Controllers\Admin\UserAdminController::class, 'resetPassword'])->name('users.resetPassword');
     Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserAdminController::class, 'destroy'])->name('users.destroy');
+
+    // Public Navigation & Menu Control (Super Admin Only)
+    Route::get('/navigation', [\App\Http\Controllers\Admin\NavigationAdminController::class, 'index'])->name('navigation.index');
+    Route::post('/navigation', [\App\Http\Controllers\Admin\NavigationAdminController::class, 'update'])->name('navigation.update');
 });

@@ -21,14 +21,19 @@ class Setting extends Model
     public static function get(string $key, $default = null)
     {
         $setting = self::where('key_name', $key)->first();
-        return $setting ? $setting->value : $default;
+        return $setting !== null ? (string) $setting->value : (string) $default;
     }
 
     public static function set(string $key, $value)
     {
         return self::updateOrCreate(
             ['key_name' => $key],
-            ['value' => $value]
+            ['value' => (string) $value]
         );
+    }
+
+    public static function clearCache(): void
+    {
+        // No-op for interface consistency
     }
 }
