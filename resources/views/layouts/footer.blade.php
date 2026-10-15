@@ -44,7 +44,7 @@
                     @forelse($footerDivisions as $fdiv)
                         <li>
                             <a href="{{ route('divisions.show', $fdiv->slug) }}">
-                                {{ $fdiv->name }}
+                                {{ preg_replace('/^Divisi\s+/i', '', $fdiv->name) }}
                             </a>
                         </li>
                     @empty
