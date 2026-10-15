@@ -282,6 +282,89 @@ class AttendanceAdminController extends Controller
         return back()->with('success', 'Password / Kode Presensi berhasil diperbarui menjadi: ' . $newPasscode . ' (Berlaku ' . $durationMinutes . ' menit)');
     }
 
+    public function export(AttendanceSession $session)
+    {
+        $user = Auth::user();
+
+        if (!$user->isSuperAdmin() && !empty($session->division_id) && (int)$session->division_id !== (int)$user->division_id) {
+            abort(403, 'Akses terbatas untuk sesi divisi lain.');
+        }
+
+        $session->load(['division', 'creator', 'logs.member.division']);
+
+        $logs = $session->logs->sortBy(function ($log) {
+            return $log->member->name ?? '';
+        });
+
+        $filename = 'Rekap_Presensi_' . \Illuminate\Support\Str::slug($session->title) . '_' . date('Y-m-d') . '.xls';
+
+        $headers = [
+            'No',
+            'NIM',
+            'Nama Lengkap',
+            'Divisi Asal',
+            'Status Kehadiran',
+            'Metode Presensi',
+            'Waktu Masuk / Presensi',
+            'Keterangan / Alasan'
+        ];
+
+        $rows = [];
+        $idx = 1;
+        foreach ($logs as $log) {
+            $member = $log->member;
+            if (!$member) continue;
+
+            $badgeType = match ($log->status) {
+                'hadir' => 'badge-green',
+                'izin', 'sakit' => 'badge-amber',
+                default => 'badge-red',
+            };
+
+            $methodLabel = match ($log->checkin_type) {
+                'self' => 'Mandiri (Kode Passcode)',
+                'admin' => 'Manual Pengurus',
+                default => 'Sistem Auto',
+            };
+
+            $rows[] = [
+                ['value' => $idx++, 'type' => 'center'],
+                ['value' => $member->nim, 'type' => 'text'],
+                ['value' => $member->name, 'type' => 'left'],
+                ['value' => $member->division?->name ?? 'Umum', 'type' => 'left'],
+                ['value' => strtoupper($log->status), 'type' => $badgeType],
+                ['value' => $methodLabel, 'type' => 'center'],
+                ['value' => $log->checked_in_at ? $log->checked_in_at->format('d/m/Y H:i:s') : '-', 'type' => 'center'],
+                ['value' => $log->notes ?? '-', 'type' => 'left'],
+            ];
+        }
+
+        $metadata = [
+            'Judul Pertemuan' => $session->title,
+            'Divisi' => $session->division?->name ?? 'Agenda Pleno / Semua Divisi',
+            'Hari & Tanggal' => ($session->day_name ? $session->day_name . ', ' : '') . $session->session_date->format('d F Y'),
+            'Waktu Pelaksanaan' => substr($session->time_start, 0, 5) . ($session->time_end ? ' - ' . substr($session->time_end, 0, 5) : '') . ' WIB',
+            'Lokasi / Ruangan' => $session->location,
+            'Materi / Topik' => $session->topic_material,
+            'Pemateri / Instruktur' => $session->instructor_name,
+            'Waktu Ekspor' => now()->format('d F Y, H:i:s') . ' WIB',
+            'Operator' => $user->name,
+        ];
+
+        $hadirCount = $logs->where('status', 'hadir')->count();
+        $totalLogs = $logs->count();
+        $rate = $totalLogs > 0 ? round(($hadirCount / $totalLogs) * 100, 1) : 0;
+
+        return \App\Services\ExcelExportService::streamTable(
+            $filename,
+            'BERITA ACARA & REKAPITULASI PRESENSI PERTEMUAN UKM ILKOM',
+            $headers,
+            $rows,
+            $metadata,
+            "Total Peserta: {$totalLogs} orang | Hadir: {$hadirCount} ({$rate}%) | Izin/Sakit: " . ($logs->whereIn('status', ['izin', 'sakit'])->count()) . " | Alpa: " . ($logs->where('status', 'alpa')->count())
+        );
+    }
+
     public function destroy(AttendanceSession $session)
     {
         $user = Auth::user();

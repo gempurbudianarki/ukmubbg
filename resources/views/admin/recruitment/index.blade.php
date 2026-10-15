@@ -27,9 +27,9 @@
                 <span>Pengaturan Gelombang</span>
             </a>
         @endif
-        <a href="{{ route('admin.recruitment.export', request()->query()) }}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 0.45rem; background: #ffffff; box-shadow: var(--clay-btn); border-radius: 9999px; padding: 0.65rem 1.25rem;">
-            <i class="fas fa-file-csv" style="color: #059669;"></i>
-            <span>Export CSV</span>
+        <a href="{{ route('admin.recruitment.export', request()->query()) }}" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 0.45rem; background: #ffffff; box-shadow: var(--clay-btn); border-radius: 9999px; padding: 0.65rem 1.25rem; font-weight: 700; color: #166534;" title="Unduh data pendaftar format Excel rapi (.xls)">
+            <i class="fas fa-file-excel" style="color: #10b981;"></i>
+            <span>Export Excel (.xls)</span>
         </a>
     </div>
 </div>

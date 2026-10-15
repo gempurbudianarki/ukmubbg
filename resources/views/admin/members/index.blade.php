@@ -21,9 +21,9 @@
     </div>
 
     <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-        <a href="{{ route('admin.members.export', request()->query()) }}" class="btn btn-outline" style="background: #ffffff; box-shadow: var(--clay-btn); display: inline-flex; align-items: center; gap: 0.45rem; border-radius: 9999px; padding: 0.65rem 1.25rem;">
-            <i class="fas fa-file-csv" style="color: #059669;"></i>
-            <span>Export CSV</span>
+        <a href="{{ route('admin.members.export', request()->query()) }}" class="btn btn-outline" style="background: #ffffff; box-shadow: var(--clay-btn); display: inline-flex; align-items: center; gap: 0.45rem; border-radius: 9999px; padding: 0.65rem 1.25rem; font-weight: 700; color: #166534;" title="Unduh data anggota format Excel rapi (.xls)">
+            <i class="fas fa-file-excel" style="color: #10b981;"></i>
+            <span>Export Excel (.xls)</span>
         </a>
         <button type="button" onclick="openMemberModal()" class="btn btn-primary" style="box-shadow: var(--clay-btn); display: inline-flex; align-items: center; gap: 0.45rem; border-radius: 9999px; padding: 0.65rem 1.25rem;">
             <i class="fas fa-user-plus"></i>

@@ -211,32 +211,64 @@ class MemberAdminController extends Controller
         }
 
         $members = $query->get();
+        $filename = 'Data_Anggota_UKM_' . date('Y-m-d_His') . '.xls';
 
-        $filename = 'Data_Anggota_UKM_' . date('Y-m-d_His') . '.csv';
+        $headers = [
+            'No',
+            'NIM',
+            'Nama Lengkap',
+            'Email',
+            'No. WhatsApp / HP',
+            'Divisi',
+            'Angkatan',
+            'Status Anggota',
+            'Tanggal Bergabung'
+        ];
 
-        return response()->streamDownload(function () use ($members) {
-            $handle = fopen('php://output', 'w');
-            fputcsv($handle, ['No', 'NIM', 'Nama Lengkap', 'Email', 'No. WhatsApp / HP', 'Divisi', 'Angkatan', 'Status', 'Tanggal Gabung']);
+        $rows = [];
+        foreach ($members as $index => $m) {
+            $badgeType = match ($m->status) {
+                'aktif' => 'badge-green',
+                'alumni' => 'badge-blue',
+                default => 'badge-amber',
+            };
 
-            foreach ($members as $index => $m) {
-                fputcsv($handle, [
-                    $index + 1,
-                    $m->nim,
-                    $m->name,
-                    $m->email,
-                    $m->phone_number ?? '-',
-                    $m->division?->name ?? 'Umum',
-                    $m->batch_year,
-                    ucfirst($m->status),
-                    $m->join_date ? $m->join_date->format('d/m/Y') : '-',
-                ]);
-            }
+            $rows[] = [
+                ['value' => $index + 1, 'type' => 'center'],
+                ['value' => $m->nim, 'type' => 'text'],
+                ['value' => $m->name, 'type' => 'left'],
+                ['value' => $m->email, 'type' => 'left'],
+                ['value' => $m->phone_number ?? '-', 'type' => 'text'],
+                ['value' => $m->division?->name ?? 'Umum', 'type' => 'left'],
+                ['value' => $m->batch_year, 'type' => 'center'],
+                ['value' => ucfirst($m->status), 'type' => $badgeType],
+                ['value' => $m->join_date ? $m->join_date->format('d/m/Y') : '-', 'type' => 'center'],
+            ];
+        }
 
-            fclose($handle);
-        }, $filename, [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-        ]);
+        $divisionName = 'Semua Divisi';
+        if (!$user->isSuperAdmin() && $user->division) {
+            $divisionName = $user->division->name;
+        } elseif ($request->filled('division')) {
+            $divisionName = Division::find($request->division)?->name ?? 'Semua Divisi';
+        }
+
+        $metadata = [
+            'Laporan' => 'Daftar Induk Anggota Resmi UKM Ilmu Komputer',
+            'Lingkup Divisi' => $divisionName,
+            'Operator / Pengunduh' => $user->name . ' (' . ($user->isSuperAdmin() ? 'Super Admin' : 'Admin Divisi') . ')',
+            'Waktu Ekspor' => now()->format('d F Y, H:i:s') . ' WIB',
+            'Total Anggota' => count($rows) . ' Orang',
+        ];
+
+        return \App\Services\ExcelExportService::streamTable(
+            $filename,
+            'DAFTAR INDUK ANGGOTA RESMI UKM ILMU KOMPUTER',
+            $headers,
+            $rows,
+            $metadata,
+            'Total Anggota Terdata: ' . count($rows) . ' mahasiswa &bull; Universitas Bina Bangsa Getsempena'
+        );
     }
 
     public function updateStatus(Request $request, Member $member)

@@ -113,6 +113,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/attendance', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'store'])->name('attendance.store');
     Route::get('/attendance/{session}', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'show'])->name('attendance.show');
     Route::get('/attendance/{session}/bap', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'bap'])->name('attendance.bap');
+    Route::get('/attendance/{session}/export', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'export'])->name('attendance.export');
     Route::put('/attendance/{session}/logs', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'updateLogs'])->name('attendance.updateLogs');
     Route::post('/attendance/{session}/quick-mark', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'quickMark'])->name('attendance.quickMark');
     Route::post('/attendance/{session}/toggle-status', [\App\Http\Controllers\Admin\AttendanceAdminController::class, 'toggleStatus'])->name('attendance.toggleStatus');

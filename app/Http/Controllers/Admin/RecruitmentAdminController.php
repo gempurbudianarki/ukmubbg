@@ -149,54 +149,77 @@ class RecruitmentAdminController extends Controller
         }
 
         $applicants = $query->latest()->get();
-        $filename = 'Data_Pendaftar_UKM_Ilkom_' . date('Y-m-d_His') . '.csv';
+        $filename = 'Data_Pendaftar_UKM_Ilkom_' . date('Y-m-d_His') . '.xls';
 
-        return response()->streamDownload(function () use ($applicants) {
-            $handle = fopen('php://output', 'w');
-            // Add UTF-8 BOM for Excel compatibility
-            fputs($handle, "\xEF\xBB\xBF");
+        $headers = [
+            'No',
+            'Kode Registrasi',
+            'NIM',
+            'Nama Lengkap',
+            'Email',
+            'No WhatsApp',
+            'Semester',
+            'Kelas',
+            'Pilihan 1',
+            'Pilihan 2',
+            'Status Seleksi',
+            'Tanggal Daftar',
+            'Alasan Bergabung',
+            'Link Portofolio',
+            'Catatan Panitia'
+        ];
 
-            fputcsv($handle, [
-                'Kode Registrasi',
-                'NIM',
-                'Nama Lengkap',
-                'Email',
-                'No WhatsApp',
-                'Semester',
-                'Kelas',
-                'Pilihan 1',
-                'Pilihan 2',
-                'Alasan Bergabung',
-                'Link Portofolio',
-                'Status Seleksi',
-                'Catatan Admin',
-                'Tanggal Daftar'
-            ]);
+        $rows = [];
+        foreach ($applicants as $idx => $app) {
+            $badgeType = match ($app->status) {
+                'accepted' => 'badge-green',
+                'rejected' => 'badge-red',
+                'interview' => 'badge-blue',
+                default => 'badge-amber',
+            };
 
-            foreach ($applicants as $app) {
-                fputcsv($handle, [
-                    $app->registration_code,
-                    $app->nim,
-                    $app->full_name,
-                    $app->email,
-                    $app->phone_whatsapp,
-                    $app->semester,
-                    $app->class_group,
-                    $app->firstChoiceDivision?->name ?? '-',
-                    $app->secondChoiceDivision?->name ?? '-',
-                    $app->reason_to_join,
-                    $app->portfolio_url ?? '-',
-                    $app->status_label,
-                    $app->admin_notes ?? '-',
-                    $app->created_at->format('d/m/Y H:i')
-                ]);
-            }
+            $rows[] = [
+                ['value' => $idx + 1, 'type' => 'center'],
+                ['value' => $app->registration_code, 'type' => 'text'],
+                ['value' => $app->nim, 'type' => 'text'],
+                ['value' => $app->full_name, 'type' => 'left'],
+                ['value' => $app->email, 'type' => 'left'],
+                ['value' => $app->phone_whatsapp, 'type' => 'text'],
+                ['value' => $app->semester, 'type' => 'center'],
+                ['value' => $app->class_group ?? '-', 'type' => 'center'],
+                ['value' => $app->firstChoiceDivision?->name ?? '-', 'type' => 'left'],
+                ['value' => $app->secondChoiceDivision?->name ?? '-', 'type' => 'left'],
+                ['value' => $app->status_label, 'type' => $badgeType],
+                ['value' => $app->created_at->format('d/m/Y H:i'), 'type' => 'center'],
+                ['value' => $app->reason_to_join, 'type' => 'left'],
+                ['value' => $app->portfolio_url ?? '-', 'type' => 'left'],
+                ['value' => $app->admin_notes ?? '-', 'type' => 'left'],
+            ];
+        }
 
-            fclose($handle);
-        }, $filename, [
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-        ]);
+        $divisionName = 'Semua Divisi';
+        if (!$user->isSuperAdmin() && $user->division) {
+            $divisionName = $user->division->name;
+        } elseif ($request->filled('divisi')) {
+            $divisionName = Division::find($request->divisi)?->name ?? 'Semua Divisi';
+        }
+
+        $metadata = [
+            'Laporan' => 'Rekapitulasi Data Pendaftaran Anggota Baru UKM Ilmu Komputer',
+            'Lingkup Divisi' => $divisionName,
+            'Operator / Pengunduh' => $user->name . ' (' . ($user->isSuperAdmin() ? 'Super Admin' : 'Admin Divisi') . ')',
+            'Waktu Ekspor' => now()->format('d F Y, H:i:s') . ' WIB',
+            'Total Pendaftar' => count($rows) . ' Orang',
+        ];
+
+        return \App\Services\ExcelExportService::streamTable(
+            $filename,
+            'LAPORAN REKAPITULASI DATA PENDAFTARAN ANGGOTA BARU',
+            $headers,
+            $rows,
+            $metadata,
+            'Total Pendaftar Terdata: ' . count($rows) . ' calon anggota &bull; Unit Kegiatan Mahasiswa Ilmu Komputer UBBG'
+        );
     }
 
     public function settings()

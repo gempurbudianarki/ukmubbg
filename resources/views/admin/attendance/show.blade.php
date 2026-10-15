@@ -53,6 +53,10 @@
                 <i class="fas fa-print" style="margin-right: 0.35rem;"></i>
                 <span>Cetak BAP Resmi</span>
             </a>
+            <a href="{{ route('admin.attendance.export', $session) }}" class="btn btn-outline" style="background: #ffffff; border: 1.5px solid #cbd5e1; box-shadow: var(--clay-pill); color: #166534; font-weight: 700;" title="Unduh Rekap Presensi Format Excel Resmi (.xls)">
+                <i class="fas fa-file-excel" style="color: #10b981; margin-right: 0.35rem;"></i>
+                <span>Export Excel</span>
+            </a>
             <button type="button" onclick="markAllPresent()" class="btn btn-outline" style="color: #059669; border-color: rgba(16, 185, 129, 0.4); background: #ecfdf5;">
                 <i class="fas fa-check-double" style="margin-right: 0.35rem;"></i>
                 <span>Tandai Semua Hadir</span>
