@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Division extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'slug',
@@ -16,6 +17,7 @@ class Division extends Model
         'description',
         'focus_topics',
         'icon_svg',
+        'icon_class',
         'color_accent',
         'banner_image',
         'vision',
@@ -28,6 +30,7 @@ class Division extends Model
         'leader_photo',
         'leader_bio',
         'social_links',
+        'status',
         'is_recruitment_open',
         'recruitment_quota',
         'recruitment_notes',
@@ -39,6 +42,31 @@ class Division extends Model
         'is_recruitment_open' => 'boolean',
         'recruitment_quota' => 'integer',
     ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeOpenForRecruitment($query)
+    {
+        return $query->where('status', 'active')->where('is_recruitment_open', true);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    public function isSuspended(): bool
+    {
+        return $this->status === 'suspended';
+    }
+
+    public function getAdminsCountAttribute(): int
+    {
+        return $this->admins()->count();
+    }
 
     public function getRemainingQuotaAttribute(): ?int
     {
@@ -81,7 +109,7 @@ class Division extends Model
 
     public function admins()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class)->where('role', 'division_admin');
     }
 
     public function firstChoiceApplicants()
