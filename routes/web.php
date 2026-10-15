@@ -36,14 +36,14 @@ Route::get('/verifikasi', [\App\Http\Controllers\CertificateController::class, '
 
 // Recruitment Flow
 Route::get('/pendaftaran', [RecruitmentController::class, 'index'])->name('recruitment.index');
-Route::get('/pendaftaran/check-availability', [RecruitmentController::class, 'checkAvailability'])->name('recruitment.checkAvailability');
-Route::post('/pendaftaran', [RecruitmentController::class, 'store'])->name('recruitment.store');
+Route::get('/pendaftaran/check-availability', [RecruitmentController::class, 'checkAvailability'])->middleware('throttle:60,1')->name('recruitment.checkAvailability');
+Route::post('/pendaftaran', [RecruitmentController::class, 'store'])->middleware('throttle:30,1')->name('recruitment.store');
 Route::get('/pendaftaran/sukses/{code}', [RecruitmentController::class, 'success'])->name('recruitment.success');
 Route::get('/pendaftaran/cek-status', [RecruitmentController::class, 'status'])->name('recruitment.status');
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:20,1')->name('login.post');
 Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Student Portal Routes (Authenticated)
@@ -51,7 +51,7 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     Route::get('/dashboard', [\App\Http\Controllers\Student\StudentDashboardController::class, 'index'])->name('dashboard');
     Route::get('/kta', [\App\Http\Controllers\Student\StudentDashboardController::class, 'kta'])->name('kta');
     Route::get('/presensi', [\App\Http\Controllers\Student\StudentDashboardController::class, 'presensi'])->name('presensi');
-    Route::post('/presensi/checkin', [\App\Http\Controllers\Student\StudentDashboardController::class, 'selfCheckin'])->name('presensi.checkin');
+    Route::post('/presensi/checkin', [\App\Http\Controllers\Student\StudentDashboardController::class, 'selfCheckin'])->middleware('throttle:20,1')->name('presensi.checkin');
     Route::post('/presensi/permission', [\App\Http\Controllers\Student\StudentDashboardController::class, 'submitPermission'])->name('presensi.permission');
     Route::get('/silabus', [\App\Http\Controllers\Student\StudentDashboardController::class, 'silabus'])->name('silabus');
     Route::get('/profile', [\App\Http\Controllers\Student\StudentProfileController::class, 'edit'])->name('profile.edit');

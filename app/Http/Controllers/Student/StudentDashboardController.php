@@ -16,11 +16,11 @@ class StudentDashboardController extends Controller
         $recruitment = $user->recruitment()->with(['firstChoiceDivision', 'secondChoiceDivision'])->latest()->first();
         $member = $user->member()->with('division')->first();
 
-        // Division to focus on: member division or first choice division
-        $division = $member?->division ?? $recruitment?->firstChoiceDivision;
+        // Division to focus on: member division, recruitment choice, or user assigned division
+        $division = $member?->division ?? $recruitment?->firstChoiceDivision ?? ($user->division_id ? \App\Models\Division::find($user->division_id) : null);
 
-        // Acceptance status check
-        $isAccepted = ($member !== null) || ($recruitment?->status === 'accepted');
+        // Acceptance status check: accepted member/applicant or active administrator
+        $isAccepted = ($member !== null) || ($recruitment?->status === 'accepted') || $user->isDivisionAdmin() || $user->isSuperAdmin();
 
         // Attendance stats
         $attendanceStats = [

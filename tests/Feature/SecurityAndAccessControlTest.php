@@ -176,4 +176,121 @@ class SecurityAndAccessControlTest extends TestCase
 
         $response->assertSessionHasErrors(['password']);
     }
+
+    public function test_division_admin_cannot_edit_or_delete_post_of_other_division()
+    {
+        $postMultimedia = \App\Models\Post::create([
+            'division_id' => $this->divisiMultimedia->id,
+            'author_id' => $this->divisionAdmin2->id,
+            'title' => 'Tutorial Blender 3D Shading',
+            'slug' => 'tutorial-blender-3d-shading',
+            'excerpt' => 'Panduan teknik shading dasar pada Blender.',
+            'content' => 'Langkah-langkah membuat node shader.',
+            'category' => 'tutorial',
+            'status' => 'published',
+        ]);
+
+        // Admin Pemrograman mencoba mengedit artikel Multimedia -> HARUS 403
+        $editResponse = $this->actingAs($this->divisionAdmin1)->get(route('admin.posts.edit', $postMultimedia));
+        $editResponse->assertStatus(403);
+
+        $updateResponse = $this->actingAs($this->divisionAdmin1)->put(route('admin.posts.update', $postMultimedia), [
+            'title' => 'Hacked Title',
+            'excerpt' => 'Hacked excerpt',
+            'content' => 'Hacked content',
+            'category' => 'tutorial',
+            'status' => 'published',
+        ]);
+        $updateResponse->assertStatus(403);
+
+        $deleteResponse = $this->actingAs($this->divisionAdmin1)->delete(route('admin.posts.destroy', $postMultimedia));
+        $deleteResponse->assertStatus(403);
+    }
+
+    public function test_division_admin_cannot_manipulate_attendance_session_of_other_division()
+    {
+        $sessionMultimedia = \App\Models\AttendanceSession::create([
+            'title' => 'Workshop UI/UX Figma',
+            'division_id' => $this->divisiMultimedia->id,
+            'session_date' => now()->toDateString(),
+            'time_start' => '09:00',
+            'session_type' => 'workshop_teknis',
+            'location' => 'Lab Komputer 2',
+            'topic_material' => 'Figma Auto Layout',
+            'instructor_name' => 'Aulia Rahma',
+            'status' => 'open',
+            'passcode' => 'FIGMA1',
+            'created_by' => $this->divisionAdmin2->id,
+        ]);
+
+        // Admin Pemrograman mencoba melihat BAP dan mengutak-atik status sesi Multimedia -> HARUS 403
+        $viewResponse = $this->actingAs($this->divisionAdmin1)->get(route('admin.attendance.show', $sessionMultimedia));
+        $viewResponse->assertStatus(403);
+
+        $toggleResponse = $this->actingAs($this->divisionAdmin1)->post(route('admin.attendance.toggleStatus', $sessionMultimedia));
+        $toggleResponse->assertStatus(403);
+
+        $deleteResponse = $this->actingAs($this->divisionAdmin1)->delete(route('admin.attendance.destroy', $sessionMultimedia));
+        $deleteResponse->assertStatus(403);
+    }
+
+    public function test_division_admin_cannot_manipulate_member_of_other_division()
+    {
+        $memberMultimedia = \App\Models\Member::create([
+            'nim' => '230103555',
+            'name' => 'Budi Santoso',
+            'email' => 'budi@ukm.test',
+            'division_id' => $this->divisiMultimedia->id,
+            'batch_year' => '2023',
+            'status' => 'aktif',
+            'join_date' => now()->toDateString(),
+        ]);
+
+        // Admin Pemrograman mencoba melihat, mengedit, atau menghapus member divisi Multimedia -> HARUS 403
+        $showResponse = $this->actingAs($this->divisionAdmin1)->get(route('admin.members.show', $memberMultimedia));
+        $showResponse->assertStatus(403);
+
+        $editResponse = $this->actingAs($this->divisionAdmin1)->get(route('admin.members.edit', $memberMultimedia));
+        $editResponse->assertStatus(403);
+
+        $deleteResponse = $this->actingAs($this->divisionAdmin1)->delete(route('admin.members.destroy', $memberMultimedia));
+        $deleteResponse->assertStatus(403);
+    }
+
+    public function test_student_cannot_edit_or_delete_other_student_project()
+    {
+        $otherStudent = User::create([
+            'name' => 'Mahasiswa Lain',
+            'email' => 'other@ukm.test',
+            'password' => bcrypt('password123'),
+            'role' => 'member',
+            'division_id' => $this->divisiPemrograman->id,
+            'nim' => '220103001',
+        ]);
+
+        $project = \App\Models\Project::create([
+            'title' => 'Aplikasi Kasir Mobile',
+            'slug' => 'aplikasi-kasir-mobile',
+            'division_id' => $this->divisiPemrograman->id,
+            'user_id' => $otherStudent->id,
+            'description' => 'Aplikasi kasir berbasis Flutter.',
+            'author_names' => 'Mahasiswa Lain',
+            'tech_stack' => ['Flutter', 'Dart', 'Firebase'],
+            'submission_status' => 'published',
+        ]);
+
+        // MemberUser mencoba mengedit project milik OtherStudent -> HARUS 403
+        $editResponse = $this->actingAs($this->memberUser)->get(route('student.projects.edit', $project));
+        $editResponse->assertStatus(403);
+
+        $updateResponse = $this->actingAs($this->memberUser)->put(route('student.projects.update', $project), [
+            'title' => 'Hijacked App',
+            'description' => 'Hijacked description',
+            'author_names' => 'Attacker',
+        ]);
+        $updateResponse->assertStatus(403);
+
+        $deleteResponse = $this->actingAs($this->memberUser)->delete(route('student.projects.destroy', $project));
+        $deleteResponse->assertStatus(403);
+    }
 }
