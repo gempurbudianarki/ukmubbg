@@ -372,7 +372,11 @@
                         {{ auth()->user()->nim ?? 'Mahasiswa' }}
                     </div>
                     <div style="margin-top: 0.25rem;">
-                        @if (auth()->user()->member || optional(auth()->user()->recruitment)->status === 'accepted')
+                        @if (auth()->user()->isDivisionAdmin() || auth()->user()->isSuperAdmin())
+                            <span style="display: inline-block; font-size: 0.65rem; background: linear-gradient(135deg, #fef3c7, #fef08a); color: #92400e; border: 1px solid #fde047; box-shadow: var(--clay-pill); padding: 0.15rem 0.5rem; border-radius: 9999px; font-weight: 800;">
+                                <i class="fas fa-crown" style="margin-right: 0.2rem; color: #d97706;"></i> Pengurus Aktif
+                            </span>
+                        @elseif (auth()->user()->member || optional(auth()->user()->recruitment)->status === 'accepted')
                             <span style="display: inline-block; font-size: 0.65rem; background: #ecfdf5; color: #059669; box-shadow: var(--clay-pill); padding: 0.15rem 0.5rem; border-radius: 9999px; font-weight: 700;">
                                 <i class="fas fa-circle-check" style="margin-right: 0.2rem;"></i> Anggota Resmi
                             </span>
@@ -426,6 +430,16 @@
                         <span>Edit Profil & Foto</span>
                     </a>
                 </li>
+
+                @if (auth()->user()->isDivisionAdmin() || auth()->user()->isSuperAdmin())
+                    <li class="student-nav-heading" style="color: #2563eb;">Mode Manajemen</li>
+                    <li>
+                        <a href="{{ route('admin.dashboard') }}" class="student-nav-link" style="color: #2563eb; font-weight: 800;">
+                            <i class="fas fa-crown" style="color: #d97706;"></i>
+                            <span>Buka Panel Admin CMS</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
 
             <!-- Sidebar Bottom Footer -->
@@ -464,6 +478,16 @@
                 </div>
 
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    @if (auth()->user()->isDivisionAdmin() || auth()->user()->isSuperAdmin())
+                        <a href="{{ route('admin.dashboard') }}" 
+                           class="btn btn-primary btn-sm" 
+                           style="border-radius: 9999px; font-weight: 800; font-size: 0.775rem; padding: 0.45rem 1rem; display: inline-flex; align-items: center; gap: 0.45rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35); color: #ffffff; text-decoration: none;" 
+                           title="Buka Panel Manajemen Pengurus">
+                            <i class="fas fa-crown" style="color: #fde047;"></i>
+                            <span>Panel Admin CMS</span>
+                        </a>
+                    @endif
+
                     <div class="student-topbar-period" style="align-items: center; gap: 0.5rem; background: #ffffff; box-shadow: var(--clay-pill); padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.8rem; color: #475569; font-weight: 700;">
                         <i class="fas fa-calendar-day" style="color: #0284c7;"></i>
                         <span>Periode Ganjil 2026/2027</span>

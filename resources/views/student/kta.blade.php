@@ -579,9 +579,18 @@
 
                 <!-- Profile Information (Right) -->
                 <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 0.775rem; font-weight: 800; color: #009688; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.25rem;">
-                        PROFIL ANGGOTA
-                    </div>
+                    @if ($user->isDivisionAdmin() || $user->isSuperAdmin())
+                        <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: linear-gradient(135deg, #fef3c7, #fef08a); border: 1px solid #fde047; padding: 0.25rem 0.65rem; border-radius: 9999px; margin-bottom: 0.45rem; box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25);">
+                            <i class="fas fa-crown" style="color: #d97706; font-size: 0.75rem;"></i>
+                            <span style="font-size: 0.725rem; font-weight: 900; color: #92400e; letter-spacing: 0.04em;">
+                                Lencana Pengurus &bull; {{ $user->isSuperAdmin() ? 'SUPER ADMINISTRATOR' : ('Admin Divisi ' . ($user->division?->name ?? '')) }}
+                            </span>
+                        </div>
+                    @else
+                        <div style="font-size: 0.775rem; font-weight: 800; color: #009688; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.25rem;">
+                            PROFIL ANGGOTA
+                        </div>
+                    @endif
 
                     <!-- Dynamic Student Name -->
                     <div style="font-size: 1.65rem; font-weight: 900; color: #0c2340; line-height: 1.2; margin-bottom: 0.25rem; text-transform: capitalize; word-break: break-word;">
@@ -668,8 +677,14 @@
                                 <div style="font-size: 0.72rem; font-weight: 800; color: #0c2340; letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 2px;">
                                     JABATAN / DIVISI
                                 </div>
-                                <div style="font-size: 0.825rem; font-weight: 600; color: #475569; line-height: 1.4; padding-bottom: 3px; word-break: break-word;">
-                                    Anggota &bull; {{ $division?->name ?? 'Divisi Teknologi' }}
+                                <div style="font-size: 0.825rem; font-weight: 700; color: {{ ($user->isDivisionAdmin() || $user->isSuperAdmin()) ? '#b45309' : '#475569' }}; line-height: 1.4; padding-bottom: 3px; word-break: break-word;">
+                                    @if ($user->isSuperAdmin())
+                                        Super Administrator UKM
+                                    @elseif ($user->isDivisionAdmin())
+                                        Admin Divisi &bull; {{ $user->division?->name ?? ($division?->name ?? 'Divisi Spesialisasi') }}
+                                    @else
+                                        Anggota Tetap &bull; {{ $division?->name ?? 'Divisi Teknologi' }}
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -680,10 +695,16 @@
             <!-- Footer Card: Verification & QR -->
             <div class="kta-footer">
                 <div>
-                    <div style="display: flex; align-items: center; gap: 0.6rem;">
-                        <span class="badge badge-success" style="font-size: 0.725rem; font-weight: 700; background: #dcfce7; color: #15803d; border-color: #bbf7d0;">
-                            <i class="fas fa-shield-halved" style="margin-right: 0.25rem;"></i> ANGGOTA RESMI AKTIF
-                        </span>
+                    <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                        @if ($user->isDivisionAdmin() || $user->isSuperAdmin())
+                            <span class="badge" style="font-size: 0.725rem; font-weight: 800; background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; border: 1px solid #fcd34d; box-shadow: 0 2px 6px rgba(217, 119, 6, 0.2);">
+                                <i class="fas fa-crown" style="margin-right: 0.25rem; color: #d97706;"></i> PENGURUS & ADMIN AKTIF
+                            </span>
+                        @else
+                            <span class="badge badge-success" style="font-size: 0.725rem; font-weight: 700; background: #dcfce7; color: #15803d; border-color: #bbf7d0;">
+                                <i class="fas fa-shield-halved" style="margin-right: 0.25rem;"></i> ANGGOTA RESMI AKTIF
+                            </span>
+                        @endif
                         <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
                             Periode {{ $member?->batch_year ?? '2026/2027' }}
                         </span>

@@ -409,7 +409,16 @@
                     </div>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 1.25rem;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <!-- Dual-Mode Switcher: Portal Mahasiswa -->
+                    <a href="{{ route('student.dashboard') }}" 
+                       class="admin-quick-btn" 
+                       style="background: #ffffff; border: 1.5px solid #cbd5e1; color: #0284c7; font-weight: 800; font-size: 0.775rem; padding: 0.45rem 0.95rem; border-radius: 9999px; box-shadow: var(--clay-pill); display: inline-flex; align-items: center; gap: 0.45rem; text-decoration: none; transition: all 0.2s ease;"
+                       title="Buka Portal Mahasiswa (KTA Digital & Presensi)">
+                        <i class="fas fa-id-card" style="color: #0284c7;"></i>
+                        <span>Portal Mahasiswa</span>
+                    </a>
+
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
                         <div style="text-align: right;" class="admin-header-user-info">
                             <div style="font-size: 0.875rem; font-weight: 800; color: var(--slate-900);">

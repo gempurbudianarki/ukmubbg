@@ -275,11 +275,24 @@ class DivisionAdminController extends Controller
         ]);
 
         $targetUser = User::findOrFail($request->user_id);
+
+        if ($targetUser->isSuperAdmin()) {
+            return back()->with('error', "User '{$targetUser->name}' berstatus Super Administrator dan tidak dapat diubah menjadi Admin Divisi.");
+        }
+
+        // Audit Trail on Member Record: record appointment history
+        if ($targetUser->member) {
+            $prevNotes = $targetUser->member->notes ?? '';
+            $auditLog = "[" . now()->toDateString() . "] Ditunjuk sebagai Admin Divisi " . $division->name . ".";
+            $targetUser->member->notes = $prevNotes ? ($prevNotes . "\n" . $auditLog) : $auditLog;
+            $targetUser->member->save();
+        }
+
         $targetUser->role = 'division_admin';
         $targetUser->division_id = $division->id;
         $targetUser->save();
 
-        return back()->with('success', "User '{$targetUser->name}' resmi ditunjuk sebagai Admin Divisi untuk {$division->name}.");
+        return back()->with('success', "User '{$targetUser->name}' resmi ditunjuk sebagai Admin Divisi untuk {$division->name}. Histori keanggotaan dan KTA tetap aman.");
     }
 
     public function removeAdmin(Division $division, User $user)
@@ -289,12 +302,26 @@ class DivisionAdminController extends Controller
             abort(403, 'Akses terbatas untuk Super Administrator.');
         }
 
-        if ($user->division_id === $division->id && $user->role === 'division_admin') {
-            $user->role = 'member';
-            $user->save();
+        if ($currentUser->id === $user->id) {
+            return back()->with('error', "Anda tidak dapat mencopot hak akses akun Anda sendiri.");
         }
 
-        return back()->with('success', "Hak Admin Divisi '{$user->name}' dari {$division->name} telah dicopot (status kembali ke Member).");
+        if ($user->division_id === $division->id && $user->role === 'division_admin') {
+            $user->role = 'member';
+            // Safe Rollback: restore user division_id to their original home division in member record
+            $user->division_id = $user->member?->division_id ?? $division->id;
+            $user->save();
+
+            // Audit Trail on Member Record: record completion of service
+            if ($user->member) {
+                $prevNotes = $user->member->notes ?? '';
+                $auditLog = "[" . now()->toDateString() . "] Selesai masa tugas sebagai Admin " . $division->name . " (Kembali ke Anggota Tetap).";
+                $user->member->notes = $prevNotes ? ($prevNotes . "\n" . $auditLog) : $auditLog;
+                $user->member->save();
+            }
+        }
+
+        return back()->with('success', "Hak Admin Divisi '{$user->name}' dari {$division->name} telah dicopot (status kembali ke Anggota Tetap).");
     }
 
     public function destroy(Division $division)

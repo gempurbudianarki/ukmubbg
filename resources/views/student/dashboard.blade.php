@@ -237,9 +237,16 @@
     <div class="member-banner">
         <div style="position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
             <div>
-                <span class="badge" style="background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; box-shadow: var(--clay-pill); font-size: 0.78rem; font-weight: 800; padding: 0.45rem 1rem; border-radius: 9999px; margin-bottom: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem;">
-                    <i class="fas fa-shield-halved" style="color: #16a34a;"></i> STATUS: ANGGOTA AKTIF TERDAFTAR
-                </span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.85rem;">
+                    @if ($user->isDivisionAdmin() || $user->isSuperAdmin())
+                        <span class="badge" style="background: linear-gradient(135deg, #fef3c7, #fef08a); color: #92400e; border: 1px solid #fde047; box-shadow: var(--clay-pill); font-size: 0.78rem; font-weight: 800; padding: 0.45rem 1rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <i class="fas fa-crown" style="color: #d97706;"></i> PENGURUS &bull; {{ $user->isSuperAdmin() ? 'SUPER ADMINISTRATOR' : ('ADMIN ' . strtoupper($user->division?->name ?? 'DIVISI')) }}
+                        </span>
+                    @endif
+                    <span class="badge" style="background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; box-shadow: var(--clay-pill); font-size: 0.78rem; font-weight: 800; padding: 0.45rem 1rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem;">
+                        <i class="fas fa-shield-halved" style="color: #16a34a;"></i> STATUS: ANGGOTA AKTIF TERDAFTAR
+                    </span>
+                </div>
                 <h1 style="font-size: 1.95rem; font-weight: 900; color: #0c2340; margin: 0 0 0.5rem; letter-spacing: -0.02em;">
                     Selamat Datang, {{ $user->name }}!
                 </h1>
@@ -247,8 +254,13 @@
                     Portal resmi mahasiswa UKM Ilmu Komputer. Akses Kartu Tanda Anggota (KTA) Digital, rekap presensi per divisi, modul silabus pembelajaran, dan kelola biodata akun Anda secara terpusat.
                 </p>
                 <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
-                    <a href="{{ route('student.kta') }}" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #0284c7, #0369a1); border: none; font-weight: 700; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); padding: 0.65rem 1.25rem; border-radius: 9999px;">
-                        <i class="fas fa-id-card" style="margin-right: 0.4rem;"></i> Kartu Anggota (KTA)
+                    @if ($user->isDivisionAdmin() || $user->isSuperAdmin())
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; font-weight: 800; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); padding: 0.65rem 1.35rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.45rem;">
+                            <i class="fas fa-arrow-right-to-bracket" style="color: #fde047;"></i> Mode Pengurus CMS
+                        </a>
+                    @endif
+                    <a href="{{ route('student.kta') }}" class="btn btn-outline btn-sm" style="border: 1.5px solid #cbd5e1; background: #ffffff; color: #0c2340; font-weight: 700; box-shadow: var(--clay-pill); padding: 0.65rem 1.25rem; border-radius: 9999px;">
+                        <i class="fas fa-id-card" style="margin-right: 0.4rem; color: #0284c7;"></i> Kartu Anggota (KTA)
                     </a>
                     <a href="{{ route('student.presensi') }}" class="btn btn-outline btn-sm" style="background: #ffffff; color: #0f172a; border: 1.5px solid #cbd5e1; box-shadow: var(--clay-pill); padding: 0.65rem 1.15rem; border-radius: 9999px; font-weight: 700;">
                         <i class="fas fa-clipboard-check" style="margin-right: 0.4rem; color: #16a34a;"></i> Presensi Divisi
