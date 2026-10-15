@@ -61,6 +61,49 @@
                     </h2>
                 </div>
 
+                @if ($user->isSuperAdmin())
+                <div style="background: #f8fafc; border-radius: 14px; padding: 1.25rem; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
+                    <div style="font-size: 0.775rem; font-weight: 800; color: #2563eb; text-transform: uppercase; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+                        <i class="fas fa-sliders"></i> Pengaturan Khusus Super Admin
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="name" style="font-weight: 700; font-size: 0.85rem; color: var(--slate-700); margin-bottom: 0.4rem; display: block;">
+                                Nama Resmi Divisi *
+                            </label>
+                            <input type="text" id="name" name="name" value="{{ old('name', $division->name) }}" class="admin-filter-input" style="width: 100%; box-sizing: border-box; font-weight: 700;" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="recruitment_quota" style="font-weight: 700; font-size: 0.85rem; color: var(--slate-700); margin-bottom: 0.4rem; display: block;">
+                                Kuota Calon Pendaftar
+                            </label>
+                            <input type="number" id="recruitment_quota" name="recruitment_quota" value="{{ old('recruitment_quota', $division->recruitment_quota) }}" class="admin-filter-input" style="width: 100%; box-sizing: border-box;" min="0">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="color_accent" style="font-weight: 700; font-size: 0.85rem; color: var(--slate-700); margin-bottom: 0.4rem; display: block;">
+                                Warna Aksen Tema
+                            </label>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <input type="color" value="{{ old('color_accent', $division->color_accent ?: '#0284c7') }}" style="width: 40px; height: 40px; border-radius: 10px; border: 1.5px solid #e2e8f0; cursor: pointer; padding: 2px;" oninput="document.getElementById('color_accent').value = this.value.toUpperCase()">
+                                <input type="text" id="color_accent" name="color_accent" value="{{ old('color_accent', $division->color_accent ?: '#0284c7') }}" class="admin-filter-input font-mono" style="flex: 1; font-weight: 700;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="icon_class" style="font-weight: 700; font-size: 0.85rem; color: var(--slate-700); margin-bottom: 0.4rem; display: block;">
+                                Ikon FontAwesome
+                            </label>
+                            <input type="text" id="icon_class" name="icon_class" value="{{ old('icon_class', $division->icon_class ?: 'fa-laptop-code') }}" class="admin-filter-input" style="width: 100%; box-sizing: border-box;" placeholder="fa-laptop-code">
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 <div class="form-group" style="margin-bottom: 1.25rem;">
                     <label class="form-label" for="tagline" style="font-weight: 700; font-size: 0.85rem; color: var(--slate-700); margin-bottom: 0.4rem; display: block;">
                         Slogan / Tagline Resmi Divisi *
