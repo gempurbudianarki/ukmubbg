@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $divisions = Division::withCount('posts')->get();
+        $divisions = Division::where('status', 'active')->withCount('posts')->get();
         $latestPosts = Post::with(['division', 'author'])
             ->published()
             ->latest()
@@ -58,7 +58,7 @@ class HomeController extends Controller
 
     public function about()
     {
-        $divisions = Division::all();
+        $divisions = Division::where('status', 'active')->get();
         return view('home.about', compact('divisions'));
     }
 

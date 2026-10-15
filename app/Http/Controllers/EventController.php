@@ -10,7 +10,7 @@ class EventController extends Controller
 {
     public function index(Request $request)
     {
-        $divisions = Division::all();
+        $divisions = Division::where('status', 'active')->get();
         $upcomingEvents = Event::with('division')
             ->where('status', 'upcoming')
             ->orderBy('event_date')

@@ -28,8 +28,9 @@ class RecruitmentController extends Controller
         }
         $isOpen = ($status === 'open') && $isWithinSchedule;
 
-        // Retrieve only divisions where recruitment is open
-        $divisions = Division::where('is_recruitment_open', true)
+        // Retrieve only active divisions where recruitment is open
+        $divisions = Division::where('status', 'active')
+            ->where('is_recruitment_open', true)
             ->withCount('firstChoiceApplicants')
             ->get();
 
@@ -37,6 +38,7 @@ class RecruitmentController extends Controller
         $preselectedDivision = null;
         if ($request->filled('divisi')) {
             $preselectedDivision = Division::where('slug', $request->divisi)
+                ->where('status', 'active')
                 ->where('is_recruitment_open', true)
                 ->withCount('firstChoiceApplicants')
                 ->first();
@@ -144,6 +146,7 @@ class RecruitmentController extends Controller
 
         // Verify that selected divisions are currently open for recruitment and have available quota
         $firstDiv = Division::where('id', $validated['first_choice_division_id'])
+            ->where('status', 'active')
             ->where('is_recruitment_open', true)
             ->withCount('firstChoiceApplicants')
             ->first();
@@ -158,6 +161,7 @@ class RecruitmentController extends Controller
 
         if (!empty($validated['second_choice_division_id'])) {
             $secondDiv = Division::where('id', $validated['second_choice_division_id'])
+                ->where('status', 'active')
                 ->where('is_recruitment_open', true)
                 ->withCount('firstChoiceApplicants')
                 ->first();

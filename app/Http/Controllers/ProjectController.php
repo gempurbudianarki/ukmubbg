@@ -10,7 +10,7 @@ class ProjectController extends Controller
 {
     public function index(Request $request)
     {
-        $divisions = Division::all();
+        $divisions = Division::where('status', 'active')->get();
         $query = Project::with('division')->published()->latest();
 
         if ($request->filled('division')) {

@@ -32,7 +32,7 @@ class PostController extends Controller
         }
 
         $posts = $query->latest()->paginate(9)->withQueryString();
-        $divisions = Division::all();
+        $divisions = Division::where('status', 'active')->get();
 
         return view('posts.index', compact('posts', 'divisions'));
     }

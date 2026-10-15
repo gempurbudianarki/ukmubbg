@@ -662,24 +662,9 @@
                         <div class="division-cards-grid">
                             @foreach ($divisions as $d)
                                 @php
-                                    $slug = strtolower($d->slug ?? '');
-                                    $themeClass = 'div-theme-pemrograman';
-                                    $divIcon = 'fa-laptop-code';
-                                    $defaultDesc = 'Rekayasa perangkat lunak, web architecture, dan cloud deployment.';
-
-                                    if (str_contains($slug, 'multi') || str_contains($slug, 'desain')) {
-                                        $themeClass = 'div-theme-multimedia';
-                                        $divIcon = 'fa-palette';
-                                        $defaultDesc = 'UI/UX design, visual identity, 3D modelling, dan motion graphic.';
-                                    } elseif (str_contains($slug, 'iot') || str_contains($slug, 'hardware') || str_contains($slug, 'robot')) {
-                                        $themeClass = 'div-theme-iot';
-                                        $divIcon = 'fa-microchip';
-                                        $defaultDesc = 'Sistem embedded, mikrokontroler ESP32, sensor, dan automasi cerdas.';
-                                    } elseif (str_contains($slug, 'cyber') || str_contains($slug, 'security')) {
-                                        $themeClass = 'div-theme-cyber';
-                                        $divIcon = 'fa-shield-halved';
-                                        $defaultDesc = 'Keamanan siber, ethical hacking, CTF challenges, dan threat audit.';
-                                    }
+                                    $accentColor = $d->color_accent ?: '#0284c7';
+                                    $iconClass = $d->icon_class ?: 'fa-laptop-code';
+                                    $defaultDesc = 'Pengembangan kompetensi, riset terapan, dan inovasi teknologi terpadu.';
 
                                     $quota = $d->recruitment_quota;
                                     $remainingQuota = $d->remaining_quota;
@@ -688,21 +673,22 @@
                                     $isSelected = !$isFull && (old('first_choice_division_id', optional($preselectedDivision)->id) == $d->id);
                                     $percentage = ($quota && $quota > 0) ? min(100, round(($registeredCount / $quota) * 100)) : null;
                                 @endphp
-                                <div class="division-select-card {{ $themeClass }} {{ $isSelected ? 'selected' : '' }} {{ $isFull ? 'is-full disabled' : '' }}" 
+                                <div class="division-select-card {{ $isSelected ? 'selected' : '' }} {{ $isFull ? 'is-full disabled' : '' }}" 
                                      id="divCardPrimary_{{ $d->id }}" 
+                                     style="--div-accent: {{ $accentColor }}; --div-accent-bg: {{ $accentColor }}14; --div-accent-border: {{ $accentColor }}40;"
                                      data-id="{{ $d->id }}" 
                                      data-name="{{ $d->name }}" 
                                      data-is-full="{{ $isFull ? '1' : '0' }}"
                                      onclick="selectPrimaryDivision('{{ $d->id }}', '{{ addslashes($d->name) }}', {{ $isFull ? 'true' : 'false' }})">
                                     <div class="division-card-header">
-                                        <div class="division-card-icon" style="{{ $isFull ? 'background: #fee2e2; color: #ef4444;' : '' }}">
-                                            <i class="fas {{ $divIcon }}"></i>
+                                        <div class="division-card-icon" style="background: {{ $isFull ? '#fee2e2' : 'var(--div-accent-bg)' }}; color: {{ $isFull ? '#ef4444' : 'var(--div-accent)' }};">
+                                            <i class="fas {{ $iconClass }}"></i>
                                         </div>
                                         <div class="division-card-radio"></div>
                                     </div>
                                     <h4 class="division-card-title">{{ $d->name }}</h4>
                                     <p class="division-card-desc">
-                                        {{ $d->description ?: $defaultDesc }}
+                                        {{ $d->description ?: ($d->tagline ?: $defaultDesc) }}
                                     </p>
 
                                     @if ($percentage !== null)
@@ -712,7 +698,7 @@
                                                 <span>{{ $registeredCount }} / {{ $quota }} ({{ $percentage }}%)</span>
                                             </div>
                                             <div style="width: 100%; background: #e2e8f0; height: 6px; border-radius: 999px; overflow: hidden;">
-                                                <div style="width: {{ $percentage }}%; background: {{ $isFull ? '#ef4444' : ($percentage >= 80 ? '#f59e0b' : '#3b82f6') }}; height: 100%; border-radius: 999px; transition: width 0.3s ease;"></div>
+                                                <div style="width: {{ $percentage }}%; background: {{ $isFull ? '#ef4444' : ($percentage >= 80 ? '#f59e0b' : 'var(--div-accent)') }}; height: 100%; border-radius: 999px; transition: width 0.3s ease;"></div>
                                             </div>
                                         </div>
                                     @endif
@@ -726,7 +712,7 @@
                                                 <i class="fas fa-circle-xmark"></i> Ditutup
                                             </span>
                                         @elseif ($quota !== null)
-                                            <span class="badge" style="background: rgba(37,99,235,0.08); color: #2563eb; font-weight: 700;">
+                                            <span class="badge" style="background: var(--div-accent-bg); color: var(--div-accent); font-weight: 700;">
                                                 <i class="fas fa-users" style="margin-right: 0.3rem;"></i> Sisa: {{ $remainingQuota }} Kursi
                                             </span>
                                             <span style="font-weight: 600; color: #10b981; font-size: 0.75rem;">

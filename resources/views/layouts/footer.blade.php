@@ -35,29 +35,25 @@
             <!-- Divisi Column -->
             <div>
                 <h4 class="footer-heading">
-                    4 Bidang Divisi
+                    Bidang Divisi
                 </h4>
                 <ul class="footer-links">
-                    <li>
-                        <a href="{{ route('divisions.show', 'pemrograman') }}">
-                            Pemrograman (Software)
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('divisions.show', 'multimedia') }}">
-                            Multimedia (Design/VFX)
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('divisions.show', 'iot') }}">
-                            Internet of Things (IoT)
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('divisions.show', 'cyber-security') }}">
-                            Cyber Security (Defense)
-                        </a>
-                    </li>
+                    @php
+                        $footerDivisions = \App\Models\Division::where('status', 'active')->orderBy('id', 'asc')->get();
+                    @endphp
+                    @forelse($footerDivisions as $fdiv)
+                        <li>
+                            <a href="{{ route('divisions.show', $fdiv->slug) }}">
+                                {{ $fdiv->name }}
+                            </a>
+                        </li>
+                    @empty
+                        <li>
+                            <a href="{{ route('divisions.index') }}">
+                                Eksplorasi Divisi
+                            </a>
+                        </li>
+                    @endforelse
                 </ul>
             </div>
 

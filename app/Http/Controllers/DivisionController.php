@@ -10,7 +10,7 @@ class DivisionController extends Controller
 {
     public function index()
     {
-        $divisions = Division::withCount('projects')->get();
+        $divisions = Division::where('status', 'active')->withCount('projects')->get();
         return view('divisions.index', compact('divisions'));
     }
 
@@ -22,7 +22,7 @@ class DivisionController extends Controller
             ->latest()
             ->paginate(6);
 
-        $otherDivisions = Division::where('id', '!=', $division->id)->get();
+        $otherDivisions = Division::where('status', 'active')->where('id', '!=', $division->id)->get();
 
         return view('divisions.show', compact('division', 'projects', 'otherDivisions'));
     }

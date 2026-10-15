@@ -45,12 +45,14 @@ class Event extends Model
         }
 
         $slug = $this->division?->slug ?? '';
-        return match ($slug) {
-            'pemrograman' => asset('images/event_hackathon.jpg'),
-            'multimedia' => asset('images/project_multimedia.jpg'),
-            'cyber-security' => asset('images/project_cyber.jpg'),
-            'iot' => asset('images/project_iot.jpg'),
-            default => asset('images/event_hackathon.jpg'),
-        };
+        if (str_contains($slug, 'multi') || str_contains($slug, 'desain')) {
+            return asset('images/project_multimedia.jpg');
+        } elseif (str_contains($slug, 'cyber') || str_contains($slug, 'sec')) {
+            return asset('images/project_cyber.jpg');
+        } elseif (str_contains($slug, 'iot') || str_contains($slug, 'robot') || str_contains($slug, 'hardware')) {
+            return asset('images/project_iot.jpg');
+        }
+
+        return asset('images/event_hackathon.jpg');
     }
 }
